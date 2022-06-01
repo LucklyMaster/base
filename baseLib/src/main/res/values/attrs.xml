@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="mc_useRipple" format="boolean" />
+    <attr name="mc_rippleColor" format="reference|color" />
+    <attr name="mc_radius" format="dimension" />
+    <attr name="mc_leftTopRadius" format="dimension" />
+    <attr name="mc_leftBottomRadius" format="dimension" />
+    <attr name="mc_rightTopRadius" format="dimension" />
+    <attr name="mc_rightBottomRadius" format="dimension" />
+    <attr name="mc_strokeWidth" format="dimension" />
+    <attr name="mc_strokeColor" format="reference|color" />
+    <attr name="mc_normalColor" format="reference|color" />
+    <attr name="mc_pressedColor" format="reference|color" />
+    <attr name="mc_disableColor" format="reference|color" />
+    <attr name="mc_circle" format="boolean" />
+
+    <attr name="mc_icon" format="reference" />
+    <attr name="mc_iconColor" format="reference|color" />
+    <attr name="mc_iconWidth" format="dimension" />
+    <attr name="mc_iconHeight" format="dimension" />
+    <attr name="mc_text" format="reference|string" />
+    <attr name="mc_textColor" format="reference|color" />
+    <attr name="mc_textSize" format="dimension" />
+    <attr name="mc_textMaxWidth" format="dimension" />
+    <attr name="mc_textMinWidth" format="dimension" />
+    <attr name="mc_iconPadding" format="dimension" />
+    <attr name="mc_iconGravity" format="enum">
+        <enum name="start" value="0" />
+        <enum name="top" value="1" />
+        <enum name="end" value="2" />
+        <enum name="bottom" value="3" />
+    </attr>
+    <attr name="mc_textGravity" format="enum">
+        <enum name="start" value="0" />
+        <enum name="end" value="1" />
+        <enum name="center" value="2" />
+    </attr>
+    <attr name="mc_ellipsize" format="enum">
+        <enum name="start" value="1" />
+        <enum name="middle" value="2" />
+        <enum name="end" value="3" />
+        <enum name="marquee" value="4" />
+    </attr>
+    <attr name="mc_editable" format="boolean" />
+
+    <attr name="mc_windowColor" format="color" />
+    <attr name="mc_windowRadius" format="dimension" />
+    <attr name="mc_windowDrawable" format="reference" />
+    <attr name="mc_windowAmount" format="float" />
+    <attr name="mc_windowWidth" format="dimension" />
+    <attr name="mc_windowHeight" format="dimension" />
+    <attr name="mc_windowGravity" format="enum">
+        <enum name="start" value="0" />
+        <enum name="top" value="1" />
+        <enum name="end" value="2" />
+        <enum name="bottom" value="3" />
+        <enum name="center" value="4" />
+    </attr>
+
+    <declare-styleable name="ShapeTextView">
+        <attr name="mc_useRipple" />
+        <attr name="mc_rippleColor" />
+        <attr name="mc_radius" />
+        <attr name="mc_leftTopRadius" />
+        <attr name="mc_leftBottomRadius" />
+        <attr name="mc_rightTopRadius" />
+        <attr name="mc_rightBottomRadius" />
+        <attr name="mc_strokeWidth" />
+        <attr name="mc_strokeColor" />
+        <attr name="mc_normalColor" />
+        <attr name="mc_pressedColor" />
+        <attr name="mc_disableColor" />
+        <attr name="mc_circle" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeLinearLayout">
+        <attr name="mc_useRipple" />
+        <attr name="mc_rippleColor" />
+        <attr name="mc_radius" />
+        <attr name="mc_leftTopRadius" />
+        <attr name="mc_leftBottomRadius" />
+        <attr name="mc_rightTopRadius" />
+        <attr name="mc_rightBottomRadius" />
+        <attr name="mc_strokeWidth" />
+        <attr name="mc_strokeColor" />
+        <attr name="mc_normalColor" />
+        <attr name="mc_pressedColor" />
+        <attr name="mc_disableColor" />
+        <attr name="mc_circle" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeFrameLayout">
+        <attr name="mc_useRipple" />
+        <attr name="mc_rippleColor" />
+        <attr name="mc_radius" />
+        <attr name="mc_leftTopRadius" />
+        <attr name="mc_leftBottomRadius" />
+        <attr name="mc_rightTopRadius" />
+        <attr name="mc_rightBottomRadius" />
+        <attr name="mc_strokeWidth" />
+        <attr name="mc_strokeColor" />
+        <attr name="mc_normalColor" />
+        <attr name="mc_pressedColor" />
+        <attr name="mc_disableColor" />
+        <attr name="mc_circle" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeConstraintLayout">
+        <attr name="mc_useRipple" />
+        <attr name="mc_rippleColor" />
+        <attr name="mc_radius" />
+        <attr name="mc_leftTopRadius" />
+        <attr name="mc_leftBottomRadius" />
+        <attr name="mc_rightTopRadius" />
+        <attr name="mc_rightBottomRadius" />
+        <attr name="mc_strokeWidth" />
+        <attr name="mc_strokeColor" />
+        <attr name="mc_normalColor" />
+        <attr name="mc_pressedColor" />
+        <attr name="mc_disableColor" />
+        <attr name="mc_circle" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeRelativeLayout">
+        <attr name="mc_useRipple" />
+        <attr name="mc_rippleColor" />
+        <attr name="mc_radius" />
+        <attr name="mc_leftTopRadius" />
+        <attr name="mc_leftBottomRadius" />
+        <attr name="mc_rightTopRadius" />
+        <attr name="mc_rightBottomRadius" />
+        <attr name="mc_strokeWidth" />
+        <attr name="mc_strokeColor" />
+        <attr name="mc_normalColor" />
+        <attr name="mc_pressedColor" />
+        <attr name="mc_disableColor" />
+        <attr name="mc_circle" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeImageView">
+        <attr name="mc_radius" />
+        <attr name="mc_leftTopRadius" />
+        <attr name="mc_leftBottomRadius" />
+        <attr name="mc_rightTopRadius" />
+        <attr name="mc_rightBottomRadius" />
+        <attr name="mc_strokeWidth" />
+        <attr name="mc_strokeColor" />
+        <attr name="mc_disableColor" />
+        <attr name="mc_circle" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeItemView">
+        <attr name="mc_useRipple" />
+        <attr name="mc_rippleColor" />
+        <attr name="mc_radius" />
+        <attr name="mc_leftTopRadius" />
+        <attr name="mc_leftBottomRadius" />
+        <attr name="mc_rightTopRadius" />
+        <attr name="mc_rightBottomRadius" />
+        <attr name="mc_strokeWidth" />
+        <attr name="mc_strokeColor" />
+        <attr name="mc_normalColor" />
+        <attr name="mc_pressedColor" />
+        <attr name="mc_disableColor" />
+        <attr name="mc_circle" />
+        <attr name="mc_leftEditable" format="boolean" />
+        <attr name="mc_middleEditable" format="boolean" />
+        <attr name="mc_rightEditable" format="boolean" />
+        <attr name="android:background" />
+    </declare-styleable>
+    <attr name="mc_shapeItemViewDefaultStyle" format="reference" />
+
+    <declare-styleable name="MenuItem">
+        <attr name="mc_icon" />
+        <attr name="mc_iconColor" />
+        <attr name="mc_iconWidth" />
+        <attr name="mc_iconHeight" />
+        <attr name="mc_text" />
+        <attr name="mc_textColor" />
+        <attr name="mc_textSize" />
+        <attr name="mc_ellipsize" />
+        <attr name="mc_textMaxWidth" />
+        <attr name="mc_iconPadding" />
+        <attr name="mc_iconGravity" />
+        <attr name="mc_editable" />
+    </declare-styleable>
+
+    <declare-styleable name="TitleBar">
+        <!--iconGravity-->
+        <attr name="mc_iconGravity" />
+        <attr name="mc_leftIconGravity" format="enum">
+            <enum name="start" value="0" />
+            <enum name="top" value="1" />
+            <enum name="end" value="2" />
+            <enum name="bottom" value="3" />
+        </attr>
+        <attr name="mc_middleIconGravity" format="enum">
+            <enum name="start" value="0" />
+            <enum name="top" value="1" />
+            <enum name="end" value="2" />
+            <enum name="bottom" value="3" />
+        </attr>
+        <attr name="mc_rightIconGravity" format="enum">
+            <enum name="start" value="0" />
+            <enum name="top" value="1" />
+            <enum name="end" value="2" />
+            <enum name="bottom" value="3" />
+        </attr>
+        <!--icon-->
+        <attr name="mc_leftIcon" format="reference" />
+        <attr name="mc_middleIcon" format="reference" />
+        <attr name="mc_rightIcon" format="reference" />
+        <!--icon color-->
+        <attr name="mc_iconColor" />
+        <attr name="mc_leftIconColor" format="reference|color" />
+        <attr name="mc_middleIconColor" format="reference|color" />
+        <attr name="mc_rightIconColor" format="reference|color" />
+        <!--icon width-->
+        <attr name="mc_iconWidth" />
+        <attr name="mc_leftIconWidth" format="dimension" />
+        <attr name="mc_middleIconWidth" format="dimension" />
+        <attr name="mc_rightIconWidth" format="dimension" />
+        <!--icon height-->
+        <attr name="mc_iconHeight" />
+        <attr name="mc_leftIconHeight" format="dimension" />
+        <attr name="mc_middleIconHeight" format="dimension" />
+        <attr name="mc_rightIconHeight" format="dimension" />
+        <!--text-->
+        <attr name="mc_leftText" format="reference|string" />
+        <attr name="mc_middleText" format="reference|string" />
+        <attr name="mc_rightText" format="reference|string" />
+        <!--text gravity-->
+        <attr name="mc_textGravity" />
+        <attr name="mc_leftTextGravity" format="enum">
+            <enum name="start" value="0" />
+            <enum name="end" value="1" />
+            <enum name="center" value="2" />
+        </attr>
+        <attr name="mc_middleTextGravity" format="enum">
+            <enum name="start" value="0" />
+            <enum name="end" value="1" />
+            <enum name="center" value="2" />
+        </attr>
+        <attr name="mc_rightTextGravity" format="enum">
+            <enum name="start" value="0" />
+            <enum name="end" value="1" />
+            <enum name="center" value="2" />
+        </attr>
+        <!--text size-->
+        <attr name="mc_textSize" />
+        <attr name="mc_leftTextSize" format="dimension" />
+        <attr name="mc_middleTextSize" format="dimension" />
+        <attr name="mc_rightTextSize" format="dimension" />
+        <!--text color-->
+        <attr name="mc_textColor" />
+        <attr name="mc_leftTextColor" format="reference|color" />
+        <attr name="mc_middleTextColor" format="reference|color" />
+        <attr name="mc_rightTextColor" format="reference|color" />
+
+        <!--text hint-->
+        <attr name="mc_hintTextColor" format="color" />
+        <attr name="mc_leftTextHint" format="reference|string" />
+        <attr name="mc_middleTextHint" format="reference|string" />
+        <attr name="mc_rightTextHint" format="reference|string" />
+
+        <!--text maxWidth-->
+        <attr name="mc_textMaxWidth" />
+        <attr name="mc_leftTextMaxWidth" format="dimension" />
+        <attr name="mc_middleTextMaxWidth" format="dimension" />
+        <attr name="mc_rightTextMaxWidth" format="dimension" />
+        <!--text minWidth-->
+        <attr name="mc_textMinWidth" />
+        <attr name="mc_leftTextMinWidth" format="dimension" />
+        <attr name="mc_middleTextMinWidth" format="dimension" />
+        <attr name="mc_rightTextMinWidth" format="dimension" />
+        <!--text ellipsize-->
+        <attr name="mc_ellipsize" />
+        <!--item margin-->
+        <attr name="mc_leftMarginStart" format="dimension" />
+        <attr name="mc_leftMarginTop" format="dimension" />
+        <attr name="mc_leftMarginBottom" format="dimension" />
+        <attr name="mc_middleMarginStart" format="dimension" />
+        <attr name="mc_middleMarginTop" format="dimension" />
+        <attr name="mc_middleMarginBottom" format="dimension" />
+        <attr name="mc_middleMarginEnd" format="dimension" />
+        <attr name="mc_rightMarginEnd" format="dimension" />
+        <attr name="mc_rightMarginTop" format="dimension" />
+        <attr name="mc_rightMarginBottom" format="dimension" />
+        <!--item space-->
+        <attr name="mc_iconPadding" />
+        <attr name="mc_leftIconPadding" format="dimension" />
+        <attr name="mc_middleIconPadding" format="dimension" />
+        <attr name="mc_rightIconPadding" format="dimension" />
+
+        <attr name="mc_iconUseRipple" format="boolean" />
+        <attr name="mc_iconRippleColor" format="color" />
+        <attr name="mc_iconPressedColor" format="color" />
+        <attr name="mc_userIconTint" format="boolean" />
+        <attr name="mc_dividerVisible" format="boolean" />
+        <attr name="mc_dividerColor" format="color" />
+        <attr name="mc_dividerHeight" format="dimension" />
+        <attr name="mc_dividerMarginStart" format="dimension" />
+        <attr name="mc_dividerMarginEnd" format="dimension" />
+        <attr name="mc_clickLeftFinish" format="boolean" />
+        <attr name="mc_middleItemLayoutGravity" format="enum">
+            <enum name="start" value="0" />
+            <enum name="center" value="1" />
+            <enum name="end" value="2" />
+        </attr>
+        <attr name="android:background" />
+        <attr name="mc_excludePaddingHeight" format="dimension" />
+    </declare-styleable>
+
+    <attr name="mc_titleBarDefaultStyle" format="reference" />
+
+    <declare-styleable name="AlertDialog">
+        <attr name="mc_titleTextColor" format="color|reference" />
+        <attr name="mc_titleTextSize" format="dimension" />
+        <attr name="mc_messageTextColor" format="color|reference" />
+        <attr name="mc_messageTextSize" format="dimension" />
+        <attr name="mc_titleGravity" format="enum">
+            <enum name="start" value="0" />
+            <enum name="top" value="1" />
+            <enum name="end" value="2" />
+            <enum name="bottom" value="3" />
+            <enum name="center" value="4" />
+        </attr>
+
+        <attr name="mc_btnTextColor" format="color|reference" />
+        <attr name="mc_positiveTextColor" format="color|reference" />
+        <attr name="mc_negativeTextColor" format="color|reference" />
+        <attr name="mc_neutralTextColor" format="color|reference" />
+
+        <attr name="mc_btnTextSize" format="dimension" />
+        <attr name="mc_positiveTextSize" format="dimension" />
+        <attr name="mc_negativeTextSize" format="dimension" />
+        <attr name="mc_neutralTextSize" format="dimension" />
+
+        <attr name="mc_positiveText" format="string" />
+        <attr name="mc_negativeText" format="string" />
+        <attr name="mc_neutralText" format="string" />
+
+        <attr name="mc_btnBackground" format="color|reference" />
+        <attr name="mc_positiveBackground" format="color|reference" />
+        <attr name="mc_negativeBackground" format="color|reference" />
+        <attr name="mc_neutralBackground" format="color|reference" />
+
+        <attr name="mc_listItemRes" format="reference" />
+        <attr name="mc_listTextColor" format="color|reference" />
+        <attr name="mc_listTextSize" format="dimension" />
+        <attr name="mc_listDividerVisible" format="boolean" />
+        <attr name="mc_listDividerHeight" format="dimension" />
+        <attr name="mc_listDividerColor" format="color" />
+
+        <attr name="mc_windowColor" />
+        <attr name="mc_windowRadius" />
+        <attr name="mc_windowDrawable" />
+        <attr name="mc_windowAmount" />
+        <attr name="mc_windowWidth" />
+        <attr name="mc_windowHeight" />
+        <attr name="mc_windowGravity" />
+    </declare-styleable>
+
+    <attr name="mc_AlertDialogDefaultStyle" format="reference" />
+
+    <declare-styleable name="LoadingDialog">
+        <attr name="mc_text" />
+        <attr name="mc_textSize" />
+        <attr name="mc_textColor" />
+        <attr name="mc_progressColor" format="color|reference" />
+        <attr name="mc_progressDrawable" format="reference" />
+        <attr name="mc_windowColor" />
+        <attr name="mc_windowRadius" />
+        <attr name="mc_windowDrawable" />
+        <attr name="mc_windowAmount" />
+        <attr name="mc_windowWidth" />
+        <attr name="mc_windowHeight" />
+    </declare-styleable>
+    <attr name="mc_LoadingDialogDefaultStyle" format="reference" />
+</resources>

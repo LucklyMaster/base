@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="mc_TitleBar">
+        <item name="mc_iconGravity">start</item>
+        <item name="mc_leftIconWidth">40dp</item>
+        <item name="mc_leftIconHeight">40dp</item>
+        <item name="mc_iconColor">?android:attr/textColorPrimary</item>
+        <item name="mc_leftIcon">@drawable/ic_arrow_left_black</item>
+        <item name="mc_textColor">?android:attr/textColorPrimary</item>
+        <item name="mc_textSize">16sp</item>
+        <item name="mc_leftMarginStart">4dp</item>
+        <item name="mc_leftMarginTop">0dp</item>
+        <item name="mc_leftMarginBottom">0dp</item>
+        <item name="mc_middleMarginStart">0dp</item>
+        <item name="mc_middleMarginTop">0dp</item>
+        <item name="mc_middleMarginBottom">0dp</item>
+        <item name="mc_middleMarginEnd">0dp</item>
+        <item name="mc_rightMarginEnd">10dp</item>
+        <item name="mc_rightMarginTop">0dp</item>
+        <item name="mc_rightMarginBottom">0dp</item>
+        <item name="mc_iconPadding">0dp</item>
+        <item name="mc_textMaxWidth">100dp</item>
+        <item name="mc_ellipsize">end</item>
+        <item name="mc_iconUseRipple">true</item>
+        <item name="mc_iconRippleColor">?android:attr/colorControlHighlight</item>
+        <item name="mc_userIconTint">true</item>
+        <item name="mc_iconPressedColor">?android:attr/colorControlHighlight</item>
+        <item name="mc_dividerVisible">false</item>
+        <item name="mc_dividerColor">@color/dividerColor</item>
+        <item name="mc_dividerHeight">0.5dp</item>
+        <item name="mc_clickLeftFinish">true</item>
+        <item name="mc_excludePaddingHeight">50dp</item>
+        <item name="android:background">?attr/colorPrimary</item>
+    </style>
+
+    <style name="mc_ShapeItemView" parent="mc_TitleBar">
+        <item name="mc_leftIcon">@null</item>
+        <item name="mc_iconWidth">-1dp</item>
+        <item name="mc_iconHeight">-1dp</item>
+        <item name="mc_middleItemLayoutGravity">start</item>
+        <item name="mc_leftIconGravity">start</item>
+        <item name="mc_middleIconGravity">start</item>
+        <item name="mc_rightIconGravity">end</item>
+        <item name="mc_useRipple">true</item>
+        <item name="rippleColor">?attr/colorPrimary</item>
+        <item name="mc_iconUseRipple">false</item>
+        <item name="mc_iconPressedColor">@color/transparent</item>
+        <item name="mc_userIconTint">false</item>
+        <item name="mc_dividerVisible">false</item>
+        <item name="mc_leftMarginStart">16dp</item>
+        <item name="mc_middleMarginStart">26dp</item>
+        <item name="mc_rightMarginEnd">16dp</item>
+        <item name="mc_clickLeftFinish">false</item>
+        <item name="mc_iconPadding">10dp</item>
+    </style>
+
+    <style name="mc_AlertDialog">
+        <item name="mc_titleGravity">start</item>
+        <item name="mc_btnTextSize">16sp</item>
+        <item name="mc_btnTextColor">?android:attr/colorPrimary</item>
+        <item name="mc_titleTextColor">?android:attr/textColorPrimary</item>
+        <item name="mc_titleTextSize">18sp</item>
+        <item name="mc_messageTextColor">?android:attr/textColorPrimary</item>
+        <item name="mc_messageTextSize">16sp</item>
+        <item name="mc_btnBackground">@drawable/ripple_active</item>
+        <item name="mc_windowAmount">0.5</item>
+        <item name="mc_windowColor">@color/white</item>
+        <item name="mc_windowRadius">6dp</item>
+    </style>
+
+    <style name="mc_LoadingDialog">
+        <item name="mc_text">@string/mc_loading</item>
+        <item name="mc_textColor">@color/mc_32</item>
+        <item name="mc_textSize">14dp</item>
+        <item name="mc_windowRadius">6dp</item>
+        <item name="mc_windowWidth">160dp</item>
+        <item name="mc_windowHeight">160dp</item>
+    </style>
+</resources>
