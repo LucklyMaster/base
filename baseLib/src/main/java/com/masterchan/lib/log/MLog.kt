@@ -66,10 +66,7 @@ object MLog {
             printStrategy.println(priority, tag, content, tr)
         }
         if (saveLog) {
-            if (logManager == null) {
-                logManager = MLogManagement()
-            }
-            logManager!!.saveLog(content)
+            logManager?.saveLog(content)
         }
     }
 

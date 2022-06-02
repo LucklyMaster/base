@@ -19,7 +19,7 @@ open class MLogManagement : ILogManager {
         if (!FileUtils.isFileExist(filePath)) {
             FileUtils.createFile(filePath)
         }
-        val handle = mpFile.open(filePath,)
+        val handle = mpFile.open(filePath)
         if (handle != -1L) {
             mpFileHandle = handle
         }

@@ -18,16 +18,24 @@ class MPFile {
     string path_log;
     int fd_cache;
     char* ptr_cache;
-    int page_size = getpagesize();
+    const int page_size = getpagesize();
     //定义cache文件开头用于标识path_log存储路径长度的字节数量
     const int cache_head_size_byte_count = 3;
+    size_t header_size;
+    size_t ptr_cache_append_offset;
 
-    int get_cache_head_size();
+    bool check_cache_ptr();
+
+    string get_cache_header();
 
  public:
     long init(string& cache_path, string& log_path);
 
-    void write(string& text, bool append);
+    void writeCache(const string& text, bool append = false);
+
+    string readCache(size_t offset = 0);
+
+    void flush2File(const string& text);
 };
 
 

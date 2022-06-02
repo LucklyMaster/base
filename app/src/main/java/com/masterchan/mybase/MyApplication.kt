@@ -2,6 +2,7 @@ package com.masterchan.mybase
 
 import android.app.Application
 import com.masterchan.lib.MCLib
+import com.masterchan.lib.log.MLogManagement
 
 /**
  * @author: MasterChan
@@ -17,7 +18,9 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        MCLib.init(this).setLogConfig { }
+        MCLib.init(this).setLogConfig {
+            setLogManager(MLogManagement())
+        }
     }
 
 }

@@ -87,12 +87,7 @@ class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener
             else -> MainActivity::class.java
         }
         // startActivity(clazz)
-        MLog.d("我们都有一个家")
-
-        // MLog.d("返回结果为空，请检查网络，the result is error，please check you network")
-        // MLog.e("返回结果为空，请检查网络，the result is error，please check you network",NullPointerException())
-        // MLog.d(msg)
-        // MLog.d(msg2)
+//        MLog.d("我们都有一个家")
     }
 
     override fun getViewBinding(): ActivityMainBinding {
