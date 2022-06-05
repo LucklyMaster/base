@@ -2,8 +2,8 @@ package com.masterchan.mybase
 
 import android.os.Bundle
 import android.view.View
+import com.masterchan.lib.ext.Log
 import com.masterchan.lib.ext.setOnClickListeners
-import com.masterchan.lib.log.MLog
 import com.masterchan.mybase.databinding.ActivityMainBinding
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
@@ -87,7 +87,7 @@ class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener
             else -> MainActivity::class.java
         }
         // startActivity(clazz)
-//        MLog.d("我们都有一个家")
+        Log.d(msg)
     }
 
     override fun getViewBinding(): ActivityMainBinding {

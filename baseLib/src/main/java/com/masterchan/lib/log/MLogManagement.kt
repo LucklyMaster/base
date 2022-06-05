@@ -2,7 +2,7 @@ package com.masterchan.lib.log
 
 import android.util.Log
 import com.masterchan.lib.utils.FileUtils
-import com.masterchan.mmap.MPFile
+import com.masterchan.mmap.MPLog
 
 /**
  * @author: MasterChan
@@ -11,15 +11,19 @@ import com.masterchan.mmap.MPFile
  */
 open class MLogManagement : ILogManager {
 
-    private var mpFile = MPFile()
+    private var mpFile = MPLog()
     private var mpFileHandle: Long? = null
 
     init {
         val filePath = "$fileDir/a.$fileSuffix"
+        val filePath2 = "$fileDir/b.$fileSuffix"
         if (!FileUtils.isFileExist(filePath)) {
             FileUtils.createFile(filePath)
         }
-        val handle = mpFile.open(filePath)
+        if (!FileUtils.isFileExist(filePath2)) {
+            FileUtils.createFile(filePath2)
+        }
+        val handle = mpFile.init(filePath, filePath2, 4096 * 4)
         if (handle != -1L) {
             mpFileHandle = handle
         }

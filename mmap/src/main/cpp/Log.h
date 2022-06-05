@@ -9,8 +9,8 @@
 #include <mutex>
 #include <string>
 
-#define LOG_E(...) __android_log_print(ANDROID_LOG_ERROR,"MPFile",__VA_ARGS__);
-#define LOG_D(...) __android_log_print(ANDROID_LOG_DEBUG,"MPFile",__VA_ARGS__);
+#define LOG_E(...) __android_log_print(ANDROID_LOG_ERROR,"MPLog",__VA_ARGS__);
+#define LOG_D(...) __android_log_print(ANDROID_LOG_DEBUG,"MPLog",__VA_ARGS__);
 
 class Timer {
     std::chrono::system_clock::time_point _start;

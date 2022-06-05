@@ -3,20 +3,20 @@
 //
 #include <jni.h>
 #include "MPFile.h"
-#include "Log.h"
+#include <jni.h>
 
 extern "C"
-JNIEXPORT jlong JNICALL
-Java_com_masterchan_mmap_MPFile_open(JNIEnv* env, jobject thiz, jstring _cachePath, jstring _logPath)
+JNIEXPORT jlong
+
+extern "C" jlong
+Java_com_masterchan_mmap_MPLog_init(JNIEnv* env, jobject thiz, jstring _cachePath, jstring _logPath,jint _cacheSize)
 {
-    const char* path = env->GetStringUTFChars(_cachePath, nullptr);
+    const char* path_cache = env->GetStringUTFChars(_cachePath, nullptr);
+    const char* path_log = env->GetStringUTFChars(_logPath, nullptr);
     auto* mp_file = new MPFile();
-    string a = path;
-    string b = path;
-    START_TIMER
-    long code = mp_file->init(a, b);
-    END_TIMER("初始化耗时")
-    env->ReleaseStringUTFChars(_cachePath, path);
+    long code = mp_file->init(path_cache, path_log, _cacheSize);
+    env->ReleaseStringUTFChars(_cachePath, path_cache);
+    env->ReleaseStringUTFChars(_cachePath, path_log);
     if (code != 0) {
         return code;
     }
@@ -25,11 +25,20 @@ Java_com_masterchan_mmap_MPFile_open(JNIEnv* env, jobject thiz, jstring _cachePa
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_masterchan_mmap_MPFile_write(JNIEnv* env, jobject thiz, jlong handle, jstring _text, jboolean append)
+Java_com_masterchan_mmap_MPLog_write(JNIEnv* env, jobject thiz, jlong handle, jstring _text, jboolean append)
 {
     const char* text = env->GetStringUTFChars(_text, nullptr);
     auto* mp_file = (MPFile*) handle;
-    string a = text;
-    mp_file->writeCache(a, append);
+    if (mp_file->writeable_size() < strlen(text)) {
+        mp_file->flush();
+    }
+    mp_file->write_cache(text, false);
     env->ReleaseStringUTFChars(_text, text);
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_masterchan_mmap_MPLog_release(JNIEnv* env, jobject thiz, jlong handle) {
+    auto* mp_file = (MPFile*) handle;
+    mp_file->release();
 }
