@@ -1,6 +1,6 @@
 
-#ifndef MYBASE_MMAP_SRC_MAIN_CPP_LOG_H_
-#define MYBASE_MMAP_SRC_MAIN_CPP_LOG_H_
+#ifndef MYBASE_MPLOG_SRC_MAIN_CPP_LOG_H_
+#define MYBASE_MPLOG_SRC_MAIN_CPP_LOG_H_
 
 #define __DEBUG
 #ifdef __DEBUG
@@ -45,4 +45,4 @@ static Timer gtm;
 #endif
 
 
-#endif //MYBASE_MMAP_SRC_MAIN_CPP_LOG_H_
+#endif //MYBASE_MPLOG_SRC_MAIN_CPP_LOG_H_

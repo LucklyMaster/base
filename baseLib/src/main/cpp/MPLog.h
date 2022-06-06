@@ -2,8 +2,8 @@
 // Created by MasterChan on 2022-5-30.
 //
 
-#ifndef MYBASE_MMAP_SRC_MAIN_CPP_MPFILE_H_
-#define MYBASE_MMAP_SRC_MAIN_CPP_MPFILE_H_
+#ifndef MYBASE_MPLOG_SRC_MAIN_CPP_MPLOG_H_
+#define MYBASE_MPLOG_SRC_MAIN_CPP_MPLOG_H_
 
 #include <string>
 #include <sys/mman.h>
@@ -11,12 +11,12 @@
 
 using namespace std;
 
-class MPFile {
+class MPLog {
 
  private:
     string path_cache;
     string path_log;
-    size_t cache_size;
+    size_t size_cache;
     int fd_cache;
     char* ptr_cache;
     //定义cache文件开头用于标识path_log存储路径长度的字节数量
@@ -24,7 +24,7 @@ class MPFile {
     size_t header_size;
     size_t write_content_size;
 
-    ~MPFile();
+    ~MPLog();
 
     bool check_cache_ptr();
 
@@ -45,4 +45,4 @@ class MPFile {
 };
 
 
-#endif //MYBASE_MMAP_SRC_MAIN_CPP_MPFILE_H_
+#endif //MYBASE_MPLOG_SRC_MAIN_CPP_MPLOG_H_

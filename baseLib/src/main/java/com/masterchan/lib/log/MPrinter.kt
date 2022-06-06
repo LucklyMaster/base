@@ -9,11 +9,7 @@ import android.util.Log
  */
 open class MPrinter : IPrinter {
 
-    override fun println(priority: Int, tag: String, content: String?) {
-        Log.println(priority, tag, safeMsg(content))
-    }
-
-    private fun safeMsg(msg: String?): String {
-        return msg ?: "the print content is null"
+    override fun println(priority: Int, tag: String, content: String) {
+        Log.println(priority, tag, content)
     }
 }

@@ -2,18 +2,16 @@
 // Created by MasterChan on 2022-5-30.
 //
 #include <jni.h>
-#include "MPFile.h"
+#include "MPLog.h"
 #include <jni.h>
 
 extern "C"
-JNIEXPORT jlong
-
-extern "C" jlong
-Java_com_masterchan_mmap_MPLog_init(JNIEnv* env, jobject thiz, jstring _cachePath, jstring _logPath,jint _cacheSize)
+JNIEXPORT jlong JNICALL
+Java_com_masterchan_lib_MPLog_init(JNIEnv* env, jobject thiz, jstring _cachePath, jstring _logPath, jint _cacheSize)
 {
     const char* path_cache = env->GetStringUTFChars(_cachePath, nullptr);
     const char* path_log = env->GetStringUTFChars(_logPath, nullptr);
-    auto* mp_file = new MPFile();
+    auto* mp_file = new MPLog();
     long code = mp_file->init(path_cache, path_log, _cacheSize);
     env->ReleaseStringUTFChars(_cachePath, path_cache);
     env->ReleaseStringUTFChars(_cachePath, path_log);
@@ -25,10 +23,10 @@ Java_com_masterchan_mmap_MPLog_init(JNIEnv* env, jobject thiz, jstring _cachePat
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_masterchan_mmap_MPLog_write(JNIEnv* env, jobject thiz, jlong handle, jstring _text, jboolean append)
+Java_com_masterchan_lib_MPLog_write(JNIEnv* env, jobject thiz, jlong handle, jstring _text, jboolean append)
 {
     const char* text = env->GetStringUTFChars(_text, nullptr);
-    auto* mp_file = (MPFile*) handle;
+    auto* mp_file = (MPLog*) handle;
     if (mp_file->writeable_size() < strlen(text)) {
         mp_file->flush();
     }
@@ -38,7 +36,8 @@ Java_com_masterchan_mmap_MPLog_write(JNIEnv* env, jobject thiz, jlong handle, js
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_masterchan_mmap_MPLog_release(JNIEnv* env, jobject thiz, jlong handle) {
-    auto* mp_file = (MPFile*) handle;
+Java_com_masterchan_lib_MPLog_release(JNIEnv* env, jobject thiz, jlong handle)
+{
+    auto* mp_file = (MPLog*) handle;
     mp_file->release();
 }

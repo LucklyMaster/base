@@ -12,5 +12,5 @@ interface IPrinter {
      * @param tag TAG
      * @param content 需要打印的信息
      */
-    fun println(priority: Int, tag: String, content: String?)
+    fun println(priority: Int, tag: String, content: String)
 }

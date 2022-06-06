@@ -1,4 +1,4 @@
-package com.masterchan.mmap
+package com.masterchan.lib
 
 /**
  * @author: MasterChan

@@ -53,7 +53,7 @@ open class MPrintStrategy(private val printer: IPrinter) : IPrintStrategy {
      */
     private val borderByteSize by lazy { normalBorder.toByteArray(Charsets.UTF_16BE).size }
 
-    override fun println(priority: Int, tag: String, content: String?, tr: Throwable?) {
+    override fun println(priority: Int, tag: String, content: String, tr: Throwable?) {
         //打印顶部
         printLog(priority, tag, topBorder)
         //打印调用栈
@@ -61,12 +61,13 @@ open class MPrintStrategy(private val printer: IPrinter) : IPrintStrategy {
         //打印分割线
         printLog(priority, tag, leftBorder.plus(divider))
         //打印content和tr
-        printContentWithTr(priority, tag, content, tr)
+        printContent(priority, tag, content)
+        tr?.let { printTr(priority, tag, tr) }
         //打印底部
         printLog(priority, tag, bottomBorder)
     }
 
-    private fun printLog(priority: Int, tag: String, content: String?) {
+    private fun printLog(priority: Int, tag: String, content: String) {
         printer.println(priority, tag, content)
     }
 
@@ -106,19 +107,6 @@ open class MPrintStrategy(private val printer: IPrinter) : IPrintStrategy {
             shouldTrace = isLogMethod
         }
         return traceElement
-    }
-
-    protected fun printContentWithTr(priority: Int, tag: String, content: String?, tr: Throwable?) {
-        if (content == null) {
-            if (tr == null) {
-                printLog(priority, tag, null)
-            } else {
-                printTr(priority, tag, tr)
-            }
-            return
-        }
-        printContent(priority, tag, content)
-        tr?.let { printTr(priority, tag, tr) }
     }
 
     protected fun printContent(priority: Int, tag: String, content: String) {

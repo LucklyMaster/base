@@ -2,23 +2,23 @@
 // Created by MasterChan on 2022-5-30.
 //
 
-#include "MPFile.h"
+#include "MPLog.h"
 #include <fcntl.h>
 #include <jni.h>
 #include "Log.h"
 #include <sys/stat.h>
 
-MPFile::~MPFile()
+MPLog::~MPLog()
 {
-    munmap(ptr_cache, cache_size);
+    munmap(ptr_cache, size_cache);
     close(fd_cache);
 }
 
-long MPFile::init(const string& cache_path, const string& log_path, size_t cache_size)
+long MPLog::init(const string& cache_path, const string& log_path, size_t cache_size)
 {
     path_cache = cache_path;
     path_log = log_path;
-    this->cache_size = cache_size;
+    size_cache = cache_size;
     header_size = cache_head_size_byte_count + path_cache.size();
     //打开缓存文件
     fd_cache = open(path_cache.data(), O_CREAT | O_RDWR, S_IRWXU);
@@ -44,7 +44,7 @@ long MPFile::init(const string& cache_path, const string& log_path, size_t cache
     return 0;
 }
 
-void MPFile::write_cache(const string& text, bool append)
+void MPLog::write_cache(const string& text, bool append)
 {
     if (!check_cache_ptr()) {
         return;
@@ -59,7 +59,7 @@ void MPFile::write_cache(const string& text, bool append)
     write_content_size += text.size();
 }
 
-string MPFile::get_cache_header()
+string MPLog::get_cache_header()
 {
     auto path_log_size = path_log.size();
     string log_byte_size = to_string(path_log_size);
@@ -72,27 +72,27 @@ string MPFile::get_cache_header()
     return log_byte_size + path_log;
 }
 
-string MPFile::read_cache(size_t offset)
+string MPLog::read_cache(size_t offset)
 {
     if (!check_cache_ptr()) {
         return "";
     }
-    char buffer[cache_size];
-    memcpy(buffer, ptr_cache + offset, cache_size);
+    char buffer[size_cache];
+    memcpy(buffer, ptr_cache + offset, size_cache);
     return buffer;
 }
 
-bool MPFile::check_cache_ptr()
+bool MPLog::check_cache_ptr()
 {
     return ptr_cache != nullptr;
 }
 
-size_t MPFile::writeable_size()
+size_t MPLog::writeable_size()
 {
-    return cache_size - write_content_size;
+    return size_cache - write_content_size;
 }
 
-void MPFile::flush(size_t offset)
+void MPLog::flush(size_t offset)
 {
     START_TIMER
     auto file = fopen(path_log.data(), "ab+");
@@ -104,7 +104,7 @@ void MPFile::flush(size_t offset)
     END_TIMER("写出文件到磁盘：")
 }
 
-void MPFile::release()
+void MPLog::release()
 {
     flush();
     delete this;

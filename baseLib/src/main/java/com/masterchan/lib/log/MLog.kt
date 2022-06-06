@@ -13,8 +13,10 @@ object MLog {
     private var tag = "MLog"
     private var debug = true
     private var saveLog = BuildConfig.DEBUG
-    private var printStrategy: IPrintStrategy = MPrintStrategy(MPrinter())
+    private val printer = MPrinter()
+    private var printStrategy: IPrintStrategy = MPrintStrategy(printer)
     private var logManager: ILogManager? = null
+    private var logManagerConfig: LogManagerConfig? = null
 
     fun setTag(tag: String) = apply {
         this.tag = tag
@@ -36,43 +38,83 @@ object MLog {
         this.logManager = logManager
     }
 
-    fun v(any: Any?, tr: Throwable? = null) {
-        printLog(Priority.VERBOSE, any, tr)
+    fun setLogManagerConfig(config: LogManagerConfig) = apply {
+        this.logManagerConfig = config
     }
 
-    fun d(any: Any?, tr: Throwable? = null) {
-        printLog(Priority.DEBUG, any, tr)
+    fun setLogManagerConfig(method: LogManagerConfig?.() -> Unit) = apply {
+        method.invoke(logManagerConfig)
     }
 
-    fun i(any: Any?, tr: Throwable? = null) {
-        printLog(Priority.INFO, any, tr)
+    fun v(any: Any?) {
+        print(Priority.VERBOSE, tag, any, null)
     }
 
-    fun w(any: Any?, tr: Throwable? = null) {
-        printLog(Priority.WARN, any, tr)
+    fun v(tag: String, any: Any?, tr: Throwable? = null) {
+        print(Priority.VERBOSE, tag, any, tr)
     }
 
-    fun e(any: Any?, tr: Throwable? = null) {
-        printLog(Priority.ERROR, any, tr)
+    fun d(any: Any?) {
+        print(Priority.DEBUG, tag, any, null)
     }
 
-    fun wtf(any: Any?, tr: Throwable? = null) {
-        printLog(Priority.ASSERT, any, tr)
+    fun d(tag: String, any: Any?, tr: Throwable? = null) {
+        print(Priority.DEBUG, tag, any, tr)
     }
 
-    private fun printLog(priority: Int, any: Any?, tr: Throwable?) {
-        val content = getContent(any)
+    fun i(any: Any?) {
+        print(Priority.INFO, tag, any, null)
+    }
+
+    fun i(tag: String, any: Any?, tr: Throwable? = null) {
+        print(Priority.INFO, tag, any, tr)
+    }
+
+    fun w(any: Any?) {
+        print(Priority.WARN, tag, any, null)
+    }
+
+    fun w(tag: String, any: Any?, tr: Throwable? = null) {
+        print(Priority.WARN, tag, any, tr)
+    }
+
+    fun e(any: Any?) {
+        print(Priority.ERROR, tag, any, null)
+    }
+
+    fun e(tag: String, any: Any?, tr: Throwable? = null) {
+        print(Priority.ERROR, tag, any, tr)
+    }
+
+    fun wtf(any: Any?) {
+        print(Priority.ASSERT, tag, any, null)
+    }
+
+    fun wtf(tag: String, any: Any?, tr: Throwable? = null) {
+        print(Priority.ASSERT, tag, any, tr)
+    }
+
+    private fun print(priority: Int, tag: String, any: Any?, tr: Throwable?) {
+        val content = getContent(any, tr)
         if (debug) {
             printStrategy.println(priority, tag, content, tr)
         }
         if (saveLog) {
+            if (logManager?.isInit != true) {
+                if (logManagerConfig == null) {
+                    logManagerConfig = LogManagerConfig()
+                }
+                logManager?.config = logManagerConfig!!
+                logManager?.printer = printer
+                logManager?.init()
+            }
             logManager?.saveLog(content)
         }
     }
 
-    private fun getContent(any: Any?): String? {
+    private fun getContent(any: Any?, tr: Throwable?): String {
         if (any == null) {
-            return null
+            return if (tr == null) "Notice! The print content is null." else ""
         }
         return when (any) {
             is String -> parseString(any)

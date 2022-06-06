@@ -15,4 +15,3 @@ dependencyResolutionManagement {
 rootProject.name = "MyBase"
 include ':app'
 include ':baseLib'
-include ':mmap'
