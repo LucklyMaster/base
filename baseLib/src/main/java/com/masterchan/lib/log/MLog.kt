@@ -15,7 +15,7 @@ object MLog {
     private var saveLog = BuildConfig.DEBUG
     private val printer = MPrinter()
     private var printStrategy: IPrintStrategy = MPrintStrategy(printer)
-    private var logManager: ILogManager? = null
+    private var logManager: AbsLogManager? = null
     private var logManagerConfig: LogManagerConfig? = null
 
     fun setTag(tag: String) = apply {
@@ -34,16 +34,19 @@ object MLog {
         this.printStrategy = printStrategy
     }
 
-    fun setLogManager(logManager: ILogManager) = apply {
+    fun setLogManager(logManager: AbsLogManager) = apply {
         this.logManager = logManager
+        logManagerConfig?.let { logManager.config = it }
     }
 
     fun setLogManagerConfig(config: LogManagerConfig) = apply {
         this.logManagerConfig = config
+        logManager?.config = config
     }
 
     fun setLogManagerConfig(method: LogManagerConfig?.() -> Unit) = apply {
         method.invoke(logManagerConfig)
+        logManagerConfig?.let { logManager?.config = it }
     }
 
     fun v(any: Any?) {
@@ -100,15 +103,7 @@ object MLog {
             printStrategy.println(priority, tag, content, tr)
         }
         if (saveLog) {
-            if (logManager?.isInit != true) {
-                if (logManagerConfig == null) {
-                    logManagerConfig = LogManagerConfig()
-                }
-                logManager?.config = logManagerConfig!!
-                logManager?.printer = printer
-                logManager?.init()
-            }
-            logManager?.saveLog(content)
+            logManager?.onPrint(content)
         }
     }
 

@@ -1,14 +1,13 @@
 cmake_minimum_required(VERSION 3.18.1)
 project("mmapLog")
 
-set(sourceSrc ${CMAKE_SOURCE_DIR})
+set(mpLogDir ${CMAKE_SOURCE_DIR}/mplog)
 set(libPath ${CMAKE_SOURCE_DIR}/../jniLibs/${ANDROID_ABI})
 
-include_directories(${sourceSrc})
+include_directories(${mpLogDir})
 
-file(GLOB srcs ${sourceSrc}/*.cpp ${sourceSrc}/*.c)
-file(GLOB hdrs ${sourceSrc}/*.hpp ${sourceSrc}/*.h)
-add_library(mpLog SHARED ${srcs} ${hdrs})
+file(GLOB mpLogSrc ${mpLogDir}/*.cpp ${mpLogDir}/*.c ${mpLogDir}/*.hpp ${mpLogDir}/*.h)
+add_library(mpLog SHARED ${mpLogSrc})
 
 find_library(log-lib log)
 find_library(android-lib android)

@@ -1,5 +1,6 @@
 package com.masterchan.lib.log
 
+import android.util.Log
 import com.masterchan.lib.utils.DateUtils.toString
 import com.masterchan.lib.utils.FileUtils
 import java.util.*
@@ -9,16 +10,22 @@ import java.util.*
  * @date: 2022-05-29 22:42
  * @describe:实现日志管理
  */
-open class MLogManagement : ILogManager {
+open class DiskLogManager : AbsLogManager() {
 
-    override lateinit var printer: IPrinter
-    override lateinit var config: LogManagerConfig
-    override var isInit = false
-    private var mpLog = MPLog()
     private var mpHandle: Long? = null
 
+    companion object {
+        init {
+            System.loadLibrary("mpLog")
+        }
+    }
+
+    init {
+        init()
+    }
+
     override fun init() {
-        val fileName = "${Date().toString("yyyyMMddHHmmss")}.${config.fileSuffix}"
+        val fileName = "${Date().toString("yyyyMMdd")}.${config.fileSuffix}"
         val cachePath = "${config.cacheDir}/$fileName"
         val logPath = "${config.logDir}/$fileName"
         if (!FileUtils.isFileExist(cachePath)) {
@@ -27,27 +34,28 @@ open class MLogManagement : ILogManager {
         if (!FileUtils.isFileExist(logPath)) {
             FileUtils.createFile(logPath)
         }
-        val handle = mpLog.init(cachePath, logPath, getCacheSize())
+        val handle = init(cachePath, logPath, getCacheSize())
         if (handle != -1L) {
             isInit = true
             mpHandle = handle
         }
+        Log.d("MLog", "DiskLogManager init ${if (isInit) "success" else "failed"}")
     }
 
-    open fun getCacheSize() = 4096 * 4
+    protected open fun getCacheSize() = 4096 * 4
 
-    override fun saveLog(content: String) {
+    override fun onPrint(content: String) {
         mpHandle?.let {
-            mpLog.write(it, getLog(content), true)
+            write(it, getLog(content), true)
         }
     }
 
-    open protected fun getLog(content: String): String {
+    protected open fun getLog(content: String): String {
         var newContent = content
         if (!content.endsWith("\n") && !content.endsWith("\n\r")) {
             newContent += "\n"
         }
-        newContent.plus("-------------------------------------------------\n")
+        newContent += "-------------------------------------------------\n"
 
         var header = Date().toString("yyyy-MM-dd HH:mm:ss:SS ")
         val element = getTargetStackTraceElement() ?: return header.plus("\n").plus(newContent)
@@ -60,7 +68,7 @@ open class MLogManagement : ILogManager {
      * 获取当前的调用堆栈
      * @return StackTraceElement?
      */
-    protected fun getTargetStackTraceElement(): StackTraceElement? {
+    protected open fun getTargetStackTraceElement(): StackTraceElement? {
         var traceElement: StackTraceElement? = null
         var shouldTrace = false
         val stackTrace = Thread.currentThread().stackTrace
@@ -76,6 +84,33 @@ open class MLogManagement : ILogManager {
     }
 
     override fun release() {
-        mpHandle?.let { mpLog.release(it) }
+        mpHandle?.let {
+            isInit = false
+            mpHandle = null
+            release(it)
+        }
     }
+
+    /**
+     * 初始化
+     * @param cachePath 日志路径
+     * @param logPath 日志路径
+     * @param cacheSize 缓存大小，必须是4096的整数倍
+     * @return handle
+     */
+    private external fun init(cachePath: String, logPath: String, cacheSize: Int): Long
+
+    /**
+     * 将日志写入到缓存中，当缓存文件大小超过cacheSize时，同步到磁盘
+     * @param handle 句柄
+     * @param text 日志
+     * @param append 是否是追加写入
+     */
+    private external fun write(handle: Long, text: String, append: Boolean = true)
+
+    /**
+     * 释放资源，同时会将缓存文件同步到磁盘
+     * @param handle Long
+     */
+    private external fun release(handle: Long)
 }

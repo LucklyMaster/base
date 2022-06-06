@@ -2,7 +2,7 @@ package com.masterchan.mybase
 
 import android.app.Application
 import com.masterchan.lib.MCLib
-import com.masterchan.lib.log.MLogManagement
+import com.masterchan.lib.log.DiskLogManager
 
 /**
  * @author: MasterChan
@@ -19,7 +19,7 @@ class MyApplication : Application() {
         super.onCreate()
         instance = this
         MCLib.init(this).setLogConfig {
-            setLogManager(MLogManagement())
+            setLogManager(DiskLogManager())
         }
     }
 
