@@ -36,9 +36,12 @@ long MPLog::init(const string &cache_path, const string &log_path, size_t cache_
 		return -10001;
 	}
 	//判断缓存中是否有脏数据
-	const string &dirty_data = read_cache(header_size);
-	if (!dirty_data.empty()) {
-		flush(dirty_data);
+	const string &cache_data = read_cache();
+	if (cache_data.size() > header_size) {
+		string dirty_data = cache_data.substr(header_size, cache_data.size());
+		if (!dirty_data.empty()) {
+			flush(dirty_data);
+		}
 	}
 	//清空cache，并写入log_path
 	memset(ptr_cache, '\0', cache_size);
@@ -82,8 +85,7 @@ string MPLog::read_cache(size_t offset) {
 	char buffer[size_cache];
 	try {
 		memcpy(buffer, ptr_cache + offset, size_cache);
-	}
-	catch (...) {
+	} catch (...) {
 	}
 	return buffer;
 }
