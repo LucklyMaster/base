@@ -15,7 +15,8 @@ class ImageUtilsActivity : MyBaseActivity<ActivityImageUtilsBinding>() {
     }
 
     fun toast(view: View) {
-        ActivityStack.instance.inStack(this::class.java)
+        throw ArithmeticException("空指针异常")
+        // ActivityStack.instance.inStack(this::class.java)
     }
 
     fun setText(view: View) {

@@ -18,9 +18,11 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        MCLib.init(this).setLogConfig {
-            setLogManager(DiskLogManager())
-        }
+        MCLib.init(this)
+            .setLog { setLogManager(DiskLogManager()) }
+            .setCrashHandler {
+                saveCrash(true).init()
+            }
     }
 
 }

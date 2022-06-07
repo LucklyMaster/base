@@ -9,14 +9,6 @@ import com.masterchan.lib.MCLib
 
 var application: Application = MCLib.application
 
-fun dp2px(dp: Float): Float = (dp * application.resources.displayMetrics.density + 0.5f)
-
-fun px2dp(px: Float): Float = (px / application.resources.displayMetrics.density + 0.5f)
-
-fun dp2pxi(dp: Float): Int = (dp * application.resources.displayMetrics.density + 0.5f).toInt()
-
-fun px2dpi(px: Float): Int = (px / application.resources.displayMetrics.density + 0.5f).toInt()
-
 /**
  * 当前是否是主线程
  */

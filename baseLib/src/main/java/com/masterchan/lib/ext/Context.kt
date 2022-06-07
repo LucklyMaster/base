@@ -4,73 +4,100 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.res.Configuration
+import android.os.Build
 import androidx.annotation.StringRes
+
+fun dp2px(dp: Float): Float = (dp * application.resources.displayMetrics.density + 0.5f)
+
+fun px2dp(px: Float): Float = (px / application.resources.displayMetrics.density + 0.5f)
+
+fun dp2pxi(dp: Float): Int = (dp * application.resources.displayMetrics.density + 0.5f).toInt()
+
+fun px2dpi(px: Float): Int = (px / application.resources.displayMetrics.density + 0.5f).toInt()
 
 /**
  * 屏幕宽度
  */
-val Context.screenWidth: Int
+val screenWidth: Int
     get() {
-        return resources.displayMetrics.widthPixels
+        Log.d("获取一次")
+        return application.resources.displayMetrics.widthPixels
     }
 
 /**
  * 屏幕高度
  */
-val Context.screenHeight: Int
+val screenHeight: Int
     get() {
-        return resources.displayMetrics.heightPixels
+        return application.resources.displayMetrics.heightPixels
     }
 
 /**
  * 状态栏高度
  */
-val Context.statusBarHeight: Int
+val statusBarHeight: Int
     get() {
-        val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
-        return resources.getDimensionPixelSize(resourceId)
+        val resourceId = application.resources.getIdentifier(
+            "status_bar_height", "dimen", "android"
+        )
+        return application.resources.getDimensionPixelSize(resourceId)
     }
 
 /**
  * 导航栏高度
  */
-val Context.navigationBarHeight: Int
+val navigationBarHeight: Int
     get() {
-        val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
-        return resources.getDimensionPixelSize(resourceId)
+        val resourceId = application.resources.getIdentifier(
+            "navigation_bar_height", "dimen", "android"
+        )
+        return application.resources.getDimensionPixelSize(resourceId)
     }
 
 /**
  * 屏幕方向，取值为[Configuration.ORIENTATION_LANDSCAPE]、[Configuration.ORIENTATION_PORTRAIT]、
  * [Configuration.ORIENTATION_UNDEFINED]
  */
-val Context.orientation: Int?
+val orientation: Int
     get() {
-        return resources?.configuration?.orientation
+        return application.resources.configuration.orientation
     }
 
 /**
  * 是否是竖屏
  */
-val Context.isPortrait: Boolean
+val isPortrait: Boolean
     get() {
         return orientation == Configuration.ORIENTATION_PORTRAIT
     }
 
 /**
+ * 是否是横屏
+ */
+val isLandscape: Boolean
+    get() {
+        return orientation == Configuration.ORIENTATION_LANDSCAPE
+    }
+
+/**
  * 版本号
  */
-val Context.versionCode: Long
+val versionCode: Long
     get() {
-        return packageManager.getPackageInfo(packageName, 0).versionCode.toLong()
+        val packageInfo = application.packageManager.getPackageInfo(application.packageName, 0)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            packageInfo.longVersionCode
+        } else {
+            packageInfo.versionCode.toLong()
+        }
     }
 
 /**
  * 版本名
  */
-val Context.versionName: String
+val versionName: String
     get() {
-        return packageManager.getPackageInfo(packageName, 0).versionName
+        return application.packageManager.getPackageInfo(application.packageName, 0).versionName
     }
 
 /**

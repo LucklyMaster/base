@@ -115,6 +115,7 @@ object MLog {
         return when (any) {
             is String -> parseString(any)
             is Array<*> -> any.contentToString()
+            is Map<*, *> -> parseString(JSONObject(any).toString())
             else -> any.toString()
         }
     }

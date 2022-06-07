@@ -24,12 +24,21 @@ class MCLib {
     }
 
     /**
-     * 设置MLog的配置
+     * 设置[MLog]的配置
      * @param method
      * @return MCLib
      */
-    fun setLogConfig(method: MLog.() -> Unit) = apply {
+    fun setLog(method: MLog.() -> Unit) = apply {
         method.invoke(MLog)
+    }
+
+    /**
+     * 设置[CrashHandler]的配置
+     * @param method [@kotlin.ExtensionFunctionType] Function1<CrashHandler, Unit>
+     * @return MCLib
+     */
+    fun setCrashHandler(method: CrashHandler.() -> Unit) = apply {
+        method.invoke(CrashHandler.instance)
     }
 
 }

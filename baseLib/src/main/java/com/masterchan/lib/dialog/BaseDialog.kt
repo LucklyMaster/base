@@ -71,8 +71,8 @@ open class BaseDialog(private var contentView: View?) : DialogFragment() {
         val attributes = dialog?.window?.attributes
         //根据横竖屏不同，设置不同的宽度
         if (mWindowWidth == ViewGroup.LayoutParams.WRAP_CONTENT) {
-            val widthScale = if (requireContext().isPortrait) 0.85f else 0.6f
-            attributes?.width = (requireContext().screenWidth * widthScale).toInt()
+            val widthScale = if (isPortrait) 0.85f else 0.6f
+            attributes?.width = (screenWidth * widthScale).toInt()
         } else {
             attributes?.width = mWindowWidth
         }

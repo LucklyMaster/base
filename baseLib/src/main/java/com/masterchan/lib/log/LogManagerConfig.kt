@@ -11,11 +11,11 @@ data class LogManagerConfig(
     /**
      * 日志缓存目录
      */
-    var cacheDir: String = "${application.cacheDir.absolutePath}/MLog",
+    var cacheDir: String = "${application.cacheDir.absolutePath}/MCLib/MLog",
     /**
      * 日志保存目录
      */
-    val logDir: String = "${application.filesDir.absolutePath}/MLog",
+    val logDir: String = "${application.filesDir.absolutePath}/MCLib/MLog",
     /**
      * 日志文件后缀名
      */

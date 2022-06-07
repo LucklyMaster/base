@@ -2,7 +2,6 @@ package com.masterchan.mybase
 
 import android.os.Bundle
 import android.view.View
-import com.masterchan.lib.ext.Log
 import com.masterchan.lib.ext.setOnClickListeners
 import com.masterchan.lib.ext.startActivity
 import com.masterchan.mybase.databinding.ActivityMainBinding
@@ -15,7 +14,6 @@ class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener
     override fun onCreated(savedInstanceState: Bundle?) {
         setOnClickListeners(this, binding.keyboard, binding.imageUtils)
         Logger.addLogAdapter(AndroidLogAdapter())
-        Log.d("启动：" + System.currentTimeMillis())
     }
 
     override fun onClick(v: View?) {
