@@ -1,8 +1,10 @@
 package com.masterchan.lib.log
 
 import android.util.Log
+import com.masterchan.lib.utils.DateUtils
 import com.masterchan.lib.utils.DateUtils.toString
 import com.masterchan.lib.utils.FileUtils
+import java.io.File
 import java.util.*
 
 /**
@@ -12,6 +14,11 @@ import java.util.*
  * @date: 2022-05-29 22:42
  */
 open class DiskLogManager : AbsLogManager() {
+
+    /**
+     * 默认cache文件大小为120K
+     */
+    protected open var cacheSize = 4096 * 30
 
     private var mpHandle: Long? = null
 
@@ -26,6 +33,12 @@ open class DiskLogManager : AbsLogManager() {
     }
 
     override fun init() {
+        File(config.logDir).listFiles { file -> file.isFile }?.forEach {
+            if (DateUtils.dayDiff(Date(it.lastModified()), Date()) > config.saveDays) {
+                FileUtils.deleteFile(it.absolutePath)
+            }
+        }
+
         val fileName = "${Date().toString("yyyyMMdd")}.${config.fileSuffix}"
         val cachePath = "${config.cacheDir}/$fileName"
         val logPath = "${config.logDir}/$fileName"
@@ -35,15 +48,14 @@ open class DiskLogManager : AbsLogManager() {
         if (!FileUtils.isFileExist(logPath)) {
             FileUtils.createFile(logPath)
         }
-        val handle = init(cachePath, logPath, getCacheSize())
+        File(cachePath)
+        val handle = init(cachePath, logPath, cacheSize)
         if (handle != -1L) {
             isInit = true
             mpHandle = handle
         }
         Log.d("MLog", "DiskLogManager init ${if (isInit) "success" else "failed:$handle"}")
     }
-
-    protected open fun getCacheSize() = 4096 * 4
 
     override fun onPrint(content: String) {
         mpHandle?.let {
