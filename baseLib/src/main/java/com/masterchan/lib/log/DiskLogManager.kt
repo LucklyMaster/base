@@ -3,7 +3,6 @@ package com.masterchan.lib.log
 import android.util.Log
 import com.masterchan.lib.utils.DateUtils
 import com.masterchan.lib.utils.DateUtils.toString
-import com.masterchan.lib.utils.FileUtils
 import java.io.File
 import java.util.*
 
@@ -29,7 +28,7 @@ open class DiskLogManager : AbsLogManager() {
     }
 
     init {
-        init()
+        this.init()
     }
 
     override fun init() {
