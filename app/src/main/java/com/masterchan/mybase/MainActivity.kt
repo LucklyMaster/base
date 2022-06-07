@@ -88,6 +88,7 @@ class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener
         }
         // startActivity(clazz)
         Log.d(msg)
+        Log.d(msg2)
     }
 
     override fun getViewBinding(): ActivityMainBinding {
