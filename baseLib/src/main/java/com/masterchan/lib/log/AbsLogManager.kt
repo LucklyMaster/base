@@ -1,9 +1,9 @@
 package com.masterchan.lib.log
 
 /**
+ * 日志管理
  * @author: MasterChan
  * @date: 2022-06-06 22:48
- * @describe: 日志管理
  */
 abstract class AbsLogManager {
     var isInit = false

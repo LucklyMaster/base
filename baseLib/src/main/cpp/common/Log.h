@@ -28,7 +28,7 @@ class Timer {
     {
         std::chrono::system_clock::time_point end = std::chrono::system_clock::now();
         std::chrono::duration<double> diff = end - _start;
-        LOG_D("%s, used time = %f ms\n", text.c_str(), diff.count() * 1000);
+        LOG_D("%s: used time = %f ms\n", text.c_str(), diff.count() * 1000)
     }
 
     ~Timer(){}

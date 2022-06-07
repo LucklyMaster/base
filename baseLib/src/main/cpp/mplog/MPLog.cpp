@@ -33,7 +33,7 @@ long MPLog::init(const string &cache_path, const string &log_path, size_t cache_
 	));
 	if (ptr_cache == MAP_FAILED) {
 		ptr_cache = nullptr;
-		return -1;
+		return -10001;
 	}
 	//判断缓存中是否有脏数据
 	const string &dirty_data = read_cache(header_size);
@@ -82,7 +82,8 @@ string MPLog::read_cache(size_t offset) {
 	char buffer[size_cache];
 	try {
 		memcpy(buffer, ptr_cache + offset, size_cache);
-	} catch (...) {
+	}
+	catch (...) {
 	}
 	return buffer;
 }
@@ -103,7 +104,7 @@ void MPLog::flush() {
 	fclose(file);
 	memset(ptr_cache, '\0', write_content_size);
 	write_content_size = 0;
-	END_TIMER("写出文件到磁盘：")
+	END_TIMER("写出文件到磁盘")
 }
 
 void MPLog::flush(const string &content) {
@@ -113,7 +114,7 @@ void MPLog::flush(const string &content) {
 	fflush(file);
 	fclose(file);
 	memset(ptr_cache, '\0', content.size());
-	END_TIMER("写出文件到磁盘：")
+	END_TIMER("写出文件到磁盘")
 }
 
 void MPLog::release() {

@@ -6,9 +6,10 @@ import com.masterchan.lib.utils.FileUtils
 import java.util.*
 
 /**
+ * 实现日志管理，此日志管理，未实现限制单个日志文件最大字节数，日志压缩、加密，异步写入等；
+ * 紧针对简单场景下的日志记录，更多场景需要另外实现
  * @author: MasterChan
  * @date: 2022-05-29 22:42
- * @describe:实现日志管理
  */
 open class DiskLogManager : AbsLogManager() {
 
@@ -39,7 +40,7 @@ open class DiskLogManager : AbsLogManager() {
             isInit = true
             mpHandle = handle
         }
-        Log.d("MLog", "DiskLogManager init ${if (isInit) "success" else "failed"}")
+        Log.d("MLog", "DiskLogManager init ${if (isInit) "success" else "failed:$handle"}")
     }
 
     protected open fun getCacheSize() = 4096 * 4
