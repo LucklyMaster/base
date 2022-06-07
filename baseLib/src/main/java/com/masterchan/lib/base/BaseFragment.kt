@@ -12,9 +12,9 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 
 /**
+ * BaseFragment
  * @author: MasterChan
  * @date: 2022-05-25 21:20
- * @describe: BaseFragment
  */
 open class BaseFragment(@LayoutRes layout: Int) : Fragment(layout) {
 

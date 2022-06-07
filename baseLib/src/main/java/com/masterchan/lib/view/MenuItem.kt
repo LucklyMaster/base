@@ -15,9 +15,9 @@ import androidx.annotation.StringRes
 import com.masterchan.lib.R
 
 /**
+ * MenuItem
  * @author MasterChan
  * @date 2021-12-07 14:16
- * @describe MenuItem
  */
 @Suppress("MemberVisibilityCanBePrivate")
 class MenuItem @JvmOverloads constructor(

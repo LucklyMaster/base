@@ -8,9 +8,9 @@ import com.google.android.material.color.MaterialColors
 import com.masterchan.lib.R
 
 /**
+ * ShapeLinearLayout
  * @author MasterChan
  * @date 2021-12-10 10:18
- * @describe ShapeLinearLayout
  */
 @Suppress("MemberVisibilityCanBePrivate")
 class ShapeLinearLayout @JvmOverloads constructor(

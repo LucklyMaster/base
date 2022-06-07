@@ -23,9 +23,9 @@ import com.masterchan.lib.widget.RecyclerViewDivider
 import com.masterchan.lib.widget.ViewHolder
 
 /**
+ * GridImageView
  * @author MasterChan
  * @date 2021-12-29 09:53
- * @describe GridImageView
  */
 @Suppress("MemberVisibilityCanBePrivate")
 @SuppressLint("NotifyDataSetChanged")

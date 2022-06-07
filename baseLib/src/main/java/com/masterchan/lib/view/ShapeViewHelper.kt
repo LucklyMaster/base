@@ -13,9 +13,9 @@ import androidx.annotation.ColorInt
 import kotlin.math.min
 
 /**
+ * ShapeViewHelper
  * @author MasterChan
  * @date 2021-12-10 10:18
- * @describe ShapeViewHelper
  */
 @Suppress("MemberVisibilityCanBePrivate")
 class ShapeViewHelper {

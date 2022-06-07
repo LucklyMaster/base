@@ -6,9 +6,9 @@ import kotlin.math.max
 import kotlin.math.roundToInt
 
 /**
+ * BitmapUtils
  * @author MasterChan
  * @date 2021-12-29 14:11
- * @describe BitmapUtils
  */
 object BitmapUtils {
 

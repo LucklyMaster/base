@@ -5,9 +5,9 @@ import java.io.*
 import java.util.concurrent.*
 
 /**
+ * 日志操作类
  * @author MasterChan
  * @date 20.8.26 16:09
- * @describe 日志操作类
  */
 @Suppress("MemberVisibilityCanBePrivate")
 class LogUtils private constructor() {

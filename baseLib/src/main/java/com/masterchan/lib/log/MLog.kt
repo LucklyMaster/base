@@ -1,13 +1,14 @@
 package com.masterchan.lib.log
 
 import com.masterchan.lib.BuildConfig
+import com.masterchan.lib.ext.Log
 import org.json.JSONArray
 import org.json.JSONObject
 
 /**
+ * Log打印工具，可以使用[Log]类型别名代替[MLog]
  * @author: MasterChan
  * @date: 2022-05-28 23:20
- * @describe: Log打印工具
  */
 object MLog {
     private var tag = "MLog"

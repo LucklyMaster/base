@@ -6,9 +6,9 @@ import android.os.Bundle
 import java.util.*
 
 /**
+ * Activity栈管理
  * @author: MasterChan
  * @date: 2022-05-28 16:23
- * @describe: Activity栈
  */
 class ActivityStack {
 

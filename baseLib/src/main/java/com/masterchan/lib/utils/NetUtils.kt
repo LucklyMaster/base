@@ -8,9 +8,9 @@ import android.telephony.TelephonyManager
 
 
 /**
+ * 网络相关工具类
  * @author MasterChan
  * @date 2021-12-21 14:46
- * @describe 网络相关工具类
  */
 object NetUtils {
 

@@ -7,9 +7,9 @@ import com.google.android.material.color.MaterialColors
 import com.masterchan.lib.R
 
 /**
+ * ShapeItemView
  * @author MasterChan
  * @date 2021-12-13 15:00
- * @describe ShapeItemView
  */
 @Suppress("MemberVisibilityCanBePrivate")
 class ShapeItemView @JvmOverloads constructor(

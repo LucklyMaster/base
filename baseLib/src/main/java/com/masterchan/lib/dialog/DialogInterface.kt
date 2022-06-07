@@ -4,9 +4,9 @@ import android.app.Dialog
 import android.widget.Button
 
 /**
+ * DialogInterface
  * @author MasterChan
  * @date 2021-12-15 09:59
- * @describe DialogInterface
  */
 interface DialogInterface {
 

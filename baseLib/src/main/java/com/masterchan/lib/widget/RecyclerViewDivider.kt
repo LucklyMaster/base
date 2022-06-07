@@ -15,9 +15,9 @@ import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 
 /**
+ * RecyclerView的分割线
  * @author MasterChan
  * @date 2021-12-24 13:41
- * @describe RecyclerView的分割线
  */
 class RecyclerViewDivider : ItemDecoration {
 

@@ -8,9 +8,9 @@ import androidx.annotation.IdRes
 import androidx.recyclerview.widget.RecyclerView
 
 /**
+ * ViewHolder
  * @author MasterChan
  * @date 2021-12-29 10:08
- * @describe ViewHolder
  */
 open class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 

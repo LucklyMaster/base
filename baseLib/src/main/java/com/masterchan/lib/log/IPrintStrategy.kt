@@ -1,9 +1,9 @@
 package com.masterchan.lib.log
 
 /**
+ * 打印策略接口定义
  * @author: MasterChan
  * @date: 2022-05-29 12:40
- * @describe: 打印策略接口定义
  */
 interface IPrintStrategy {
     /**

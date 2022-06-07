@@ -1,9 +1,9 @@
 package com.masterchan.lib.log
 
 /**
+ * 打印机接口定义
  * @author: MasterChan
  * @date: 2022-05-28 23:34
- * @describe: 打印机接口定义
  */
 interface IPrinter {
     /**

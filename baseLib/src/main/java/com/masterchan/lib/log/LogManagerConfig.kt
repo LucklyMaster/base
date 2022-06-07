@@ -2,6 +2,11 @@ package com.masterchan.lib.log
 
 import com.masterchan.lib.MCLib
 
+/**
+ * 日志管理配置文件
+ * @author: MasterChan
+ * @date: 2022-06-07 10:52
+ */
 data class LogManagerConfig(
     /**
      * 日志缓存目录

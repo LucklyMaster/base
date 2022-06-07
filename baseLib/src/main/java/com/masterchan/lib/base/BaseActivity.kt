@@ -12,9 +12,9 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 
 /**
+ * BaseActivity
  * @author: MasterChan
  * @date: 2022-05-24 22:11
- * @describe:BaseActivity
  */
 open class BaseActivity : AppCompatActivity() {
 

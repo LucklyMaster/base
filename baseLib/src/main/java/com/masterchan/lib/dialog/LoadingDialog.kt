@@ -17,9 +17,9 @@ import com.masterchan.lib.ext.isMainThread
 import com.masterchan.lib.ext.toActivity
 
 /**
+ * LoadingDialog
  * @author MasterChan
  * @date 2021-12-16 14:35
- * @describe LoadingDialog
  */
 class LoadingDialog(
     context: Context,

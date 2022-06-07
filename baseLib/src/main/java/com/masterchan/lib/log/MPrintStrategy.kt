@@ -5,9 +5,9 @@ import com.masterchan.lib.utils.DateUtils
 import kotlin.math.min
 
 /**
+ * 实现打印策略接口
  * @author: MasterChan
  * @date: 2022-05-29 12:43
- * @describe: 实现打印策略接口
  */
 open class MPrintStrategy(private val printer: IPrinter) : IPrintStrategy {
 

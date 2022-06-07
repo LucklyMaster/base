@@ -5,9 +5,9 @@ import android.app.Application
 import android.os.Bundle
 
 /**
+ * Activity生命周期监听
  * @author: MasterChan
  * @date: 2022-05-28 16:38
- * @describe: Activity生命周期监听
  */
 open class SimpleActivityLifecycleCallback : Application.ActivityLifecycleCallbacks {
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {

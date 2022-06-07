@@ -1,9 +1,9 @@
 package com.masterchan.lib.dialog
 
 /**
+ * BaseDialog的进出场动画
  * @author MasterChan
  * @date 2021-12-29 09:40
- * @describe BaseDialog的进出场动画
  */
 @Target(AnnotationTarget.VALUE_PARAMETER)
 @Retention(AnnotationRetention.SOURCE)

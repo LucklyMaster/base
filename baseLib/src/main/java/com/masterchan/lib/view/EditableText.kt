@@ -7,9 +7,9 @@ import android.view.MotionEvent
 import androidx.appcompat.widget.AppCompatEditText
 
 /**
+ * EditableText
  * @author MasterChan
  * @date 2021-12-28 15:46
- * @describe EditableText
  */
 @Suppress("MemberVisibilityCanBePrivate")
 class EditableText @JvmOverloads constructor(

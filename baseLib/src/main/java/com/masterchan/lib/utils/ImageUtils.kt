@@ -4,9 +4,9 @@ import android.media.ExifInterface
 import java.io.IOException
 
 /**
+ * ImageUtils
  * @author: MasterChan
  * @date: 2022-5-24 21:34
- * @describe: ImageUtils
  */
 object ImageUtils {
 

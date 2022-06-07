@@ -5,9 +5,9 @@ import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
 
 /**
+ * SquareImageView
  * @author MasterChan
  * @date 2021-12-29 14:58
- * @describe SquareImageView
  */
 class SquareImageView : AppCompatImageView {
 

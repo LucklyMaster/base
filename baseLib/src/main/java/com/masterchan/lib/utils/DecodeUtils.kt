@@ -8,9 +8,9 @@ import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 
 /**
+ * 解密相关的工具类
  * @author MasterChan
  * @date 2021-12-21 10:44
- * @describe 解密相关的工具类
  */
 object DecodeUtils {
 

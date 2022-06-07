@@ -5,12 +5,6 @@ import android.content.Intent
 import android.view.ViewGroup
 
 /**
- * @author MasterChan
- * @date 2021-12-06 14:00
- * @describe Activity相关的扩展函数
- */
-
-/**
  * 获取当前Activity的ContentView
  */
 val Activity.contentView: ViewGroup

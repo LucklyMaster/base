@@ -13,12 +13,6 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 
 /**
- * @author MasterChan
- * @date 2021-12-06 14:03
- * @describe ViewExtension
- */
-
-/**
  * 获取View的Context对应的Activity
  * @receiver View
  * @return Activity?

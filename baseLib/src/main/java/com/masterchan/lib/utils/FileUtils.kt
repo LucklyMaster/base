@@ -11,9 +11,9 @@ import java.io.*
 import java.util.*
 
 /**
+ * 文件操作工具类
  * @author MasterChan
  * @date 2021-12-01 17:52
- * @describe 文件操作工具类
  */
 object FileUtils {
 

@@ -6,12 +6,6 @@ import android.view.View
 import com.masterchan.lib.ActivityStack
 
 /**
- * @author MasterChan
- * @date 2021-12-16 16:17
- * @describe Any
- */
-
-/**
  * 当前是否是主线程
  */
 fun isMainThread() = Thread.currentThread() === Looper.getMainLooper().thread

@@ -17,9 +17,9 @@ import com.masterchan.lib.ext.isPortrait
 import com.masterchan.lib.ext.screenWidth
 
 /**
+ * BaseDialog
  * @author MasterChan
  * @date 2021-12-14 14:30
- * @describe BaseDialog
  */
 open class BaseDialog(private var contentView: View?) : DialogFragment() {
 

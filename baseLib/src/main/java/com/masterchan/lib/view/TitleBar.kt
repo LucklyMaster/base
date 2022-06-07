@@ -17,9 +17,9 @@ import com.masterchan.lib.ext.activity
 import com.masterchan.lib.ext.dp2px
 
 /**
+ * TitleBar
  * @author MasterChan
  * @date 2021-12-09 18:37
- * @describe TitleBar
  */
 @Suppress("MemberVisibilityCanBePrivate")
 open class TitleBar @JvmOverloads constructor(

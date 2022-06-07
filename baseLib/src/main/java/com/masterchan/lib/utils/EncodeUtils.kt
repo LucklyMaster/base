@@ -15,9 +15,9 @@ import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 
 /**
+ * 加密相关工具类
  * @author MasterChan
  * @date 2021-12-21 13:54
- * @describe 加密相关工具类
  */
 object EncodeUtils {
 

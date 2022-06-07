@@ -2,12 +2,6 @@ package com.masterchan.lib.ext
 
 import java.util.*
 
-/**
- * @author MasterChan
- * @date 2021-12-21 11:20
- * @describe String
- */
-
 fun ByteArray.toHexString(): String {
     val ret = CharArray(size shl 1)
     var i = 0

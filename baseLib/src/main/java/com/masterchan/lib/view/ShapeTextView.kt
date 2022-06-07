@@ -8,9 +8,9 @@ import com.google.android.material.color.MaterialColors
 import com.masterchan.lib.R
 
 /**
+ * ShapeTextView
  * @author MasterChan
  * @date 2021-12-10 10:18
- * @describe ShapeTextView
  */
 @Suppress("MemberVisibilityCanBePrivate")
 class ShapeTextView @JvmOverloads constructor(

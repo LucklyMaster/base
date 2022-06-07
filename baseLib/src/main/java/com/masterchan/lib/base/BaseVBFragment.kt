@@ -6,9 +6,9 @@ import androidx.viewbinding.ViewBinding
 import java.lang.reflect.ParameterizedType
 
 /**
+ * 在[BaseFragment]基础上使用[ViewBinding]
  * @author: MasterChan
  * @date: 2022-05-25 21:39
- * @describe:在[BaseFragment]基础上使用[ViewBinding]
  */
 abstract class BaseVBFragment<T : ViewBinding> : BaseFragment(0) {
 

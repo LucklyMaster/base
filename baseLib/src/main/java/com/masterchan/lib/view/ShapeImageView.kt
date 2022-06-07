@@ -13,9 +13,9 @@ import com.masterchan.lib.R
 import kotlin.math.min
 
 /**
+ * ShapeImageView
  * @author MasterChan
  * @date 2021-12-11 17:44
- * @describe ShapeImageView
  */
 class ShapeImageView @JvmOverloads constructor(
     context: Context,

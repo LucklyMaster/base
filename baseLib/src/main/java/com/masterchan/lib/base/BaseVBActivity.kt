@@ -6,9 +6,9 @@ import androidx.viewbinding.ViewBinding
 import java.lang.reflect.ParameterizedType
 
 /**
+ * 在[BaseActivity]基础上使用[ViewBinding]
  * @author: MasterChan
  * @date: 2022-05-24 23:37
- * @describe: 在[BaseActivity]基础上使用[ViewBinding]
  */
 open class BaseVBActivity<T : ViewBinding> : BaseActivity() {
 

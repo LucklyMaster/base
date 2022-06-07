@@ -7,12 +7,6 @@ import android.content.res.Configuration
 import androidx.annotation.StringRes
 
 /**
- * @author MasterChan
- * @date 2021-12-06 14:00
- * @describe Context相关的扩展函数
- */
-
-/**
  * 屏幕宽度
  */
 val Context.screenWidth: Int

@@ -26,9 +26,9 @@ import com.masterchan.lib.widget.RecyclerViewDivider
 import com.masterchan.lib.widget.ViewHolder
 
 /**
+ * AlertDialog
  * @author MasterChan
  * @date 2021-12-14 10:51
- * @describe AlertDialog
  */
 @Suppress("MemberVisibilityCanBePrivate")
 class AlertDialog private constructor(context: Context) {

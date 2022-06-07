@@ -8,9 +8,9 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.inputmethod.InputMethodManager
 
 /**
+ * 监听键盘的显示和隐藏
  * @author MasterChan
  * @date 2021-12-09 09:55
- * @describe 监听键盘的显示和隐藏
  */
 class KeyboardUtils private constructor(activity: Activity) {
 

@@ -4,9 +4,9 @@ import android.app.Application
 import com.masterchan.lib.log.MLog
 
 /**
+ * 初始化入口
  * @author: MasterChan
  * @date: 2022-05-26 22:14
- * @describe: 初始化入口
  */
 class MCLib {
 

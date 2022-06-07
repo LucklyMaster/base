@@ -4,9 +4,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 /**
+ * DateUtils
  * @author MasterChan
  * @date 2021-12-01 17:06
- * @describe DateUtils
  */
 object DateUtils {
     private const val YMD_HMS = "yyyy-MM-dd HH:mm:ss"
