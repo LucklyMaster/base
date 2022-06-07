@@ -1,6 +1,7 @@
 package com.masterchan.lib.log
 
 import android.util.Log
+import com.masterchan.lib.ext.create
 import com.masterchan.lib.utils.DateUtils
 import com.masterchan.lib.utils.DateUtils.toString
 import java.io.File
@@ -34,20 +35,15 @@ open class DiskLogManager : AbsLogManager() {
     override fun init() {
         File(config.logDir).listFiles { file -> file.isFile }?.forEach {
             if (DateUtils.dayDiff(Date(it.lastModified()), Date()) > config.saveDays) {
-                FileUtils.deleteFile(it.absolutePath)
+                it.delete()
             }
         }
 
         val fileName = "${Date().toString("yyyyMMdd")}.${config.fileSuffix}"
         val cachePath = "${config.cacheDir}/$fileName"
         val logPath = "${config.logDir}/$fileName"
-        if (!FileUtils.isFileExist(cachePath)) {
-            FileUtils.createFile(cachePath)
-        }
-        if (!FileUtils.isFileExist(logPath)) {
-            FileUtils.createFile(logPath)
-        }
-        File(cachePath)
+        File(cachePath).create()
+        File(logPath).create()
         val handle = init(cachePath, logPath, cacheSize)
         if (handle != -1L) {
             isInit = true
