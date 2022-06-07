@@ -49,15 +49,15 @@ class LoadingDialog(
         if (mText.isNullOrEmpty()) {
             mText = a.getString(R.styleable.LoadingDialog_mc_text) ?: mText
         }
-        val textSize = a.getDimension(R.styleable.LoadingDialog_mc_textSize, activity.dp2px(16f))
+        val textSize = a.getDimension(R.styleable.LoadingDialog_mc_textSize, dp2px(16f))
         val textColor = a.getColor(R.styleable.LoadingDialog_mc_textColor, Color.BLACK)
         val progressColor = a.getColorStateList(R.styleable.LoadingDialog_mc_progressColor)
         val progressDrawable = a.getDrawable(R.styleable.LoadingDialog_mc_progressDrawable)
         val windowColor = a.getColor(R.styleable.LoadingDialog_mc_windowColor, Color.WHITE)
-        val windowRadius = a.getDimension(R.styleable.LoadingDialog_mc_windowRadius, activity.dp2px(4f))
+        val windowRadius = a.getDimension(R.styleable.LoadingDialog_mc_windowRadius, dp2px(4f))
         val windowDrawable = a.getDrawable(R.styleable.LoadingDialog_mc_windowDrawable)
         val windowAmount = a.getFloat(R.styleable.LoadingDialog_mc_windowAmount, 0.5f)
-        val windowWidth = a.getDimension(R.styleable.LoadingDialog_mc_windowWidth, activity.dp2px(160f))
+        val windowWidth = a.getDimension(R.styleable.LoadingDialog_mc_windowWidth, dp2px(160f))
         val windowHeight = a.getDimension(R.styleable.LoadingDialog_mc_windowHeight, windowWidth)
         a.recycle()
 

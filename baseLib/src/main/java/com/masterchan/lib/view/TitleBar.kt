@@ -578,11 +578,11 @@ open class TitleBar @JvmOverloads constructor(
             return this
         }
         if (leftItem.iconDrawable != null) {
-            leftItem.iconView.setOnClickListener { activity?.finish() }
+            leftItem.iconView.setOnClickListener { activity()?.finish() }
             return this
         }
         if (leftItem.text.isNotEmpty()) {
-            leftItem.labelView.setOnClickListener { activity?.finish() }
+            leftItem.labelView.setOnClickListener { activity()?.finish() }
         }
         return this
     }

@@ -73,14 +73,6 @@ val Context.versionName: String
         return packageManager.getPackageInfo(packageName, 0).versionName
     }
 
-fun Context.dp2px(dp: Float): Float {
-    return (dp * resources.displayMetrics.density + 0.5f)
-}
-
-fun Context.px2dp(px: Float): Float {
-    return (px / resources.displayMetrics.density + 0.5f)
-}
-
 /**
  * 获取String集合
  * @receiver Context

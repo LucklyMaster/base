@@ -143,7 +143,7 @@ class AlertDialog private constructor(context: Context) {
         private var yOffset = 0
         private var windowColor = Color.WHITE
         private var windowDrawable: Drawable? = null
-        private var windowRadius: Float = context.dp2px(6f)
+        private var windowRadius: Float = dp2px(6f)
         private var windowWidth = ViewGroup.LayoutParams.WRAP_CONTENT
         private var windowHeight = ViewGroup.LayoutParams.WRAP_CONTENT
 
@@ -155,7 +155,7 @@ class AlertDialog private constructor(context: Context) {
 
             //button textSize
             val btnTextSize = a.getDimension(
-                R.styleable.AlertDialog_mc_btnTextSize, context.dp2px(16f)
+                R.styleable.AlertDialog_mc_btnTextSize, dp2px(16f)
             )
             positiveTextSize = a.getDimension(
                 R.styleable.AlertDialog_mc_positiveTextSize, btnTextSize
@@ -219,7 +219,7 @@ class AlertDialog private constructor(context: Context) {
             //title
             titleGravity = getGravity(a.getInt(R.styleable.AlertDialog_mc_titleGravity, 0))
             titleTextSize = a.getDimension(
-                R.styleable.AlertDialog_mc_titleTextSize, context.dp2px(18f)
+                R.styleable.AlertDialog_mc_titleTextSize, dp2px(18f)
             )
             if (a.hasValue(R.styleable.AlertDialog_mc_titleTextColor)) {
                 titleTextColor = a.getColorStateList(R.styleable.AlertDialog_mc_titleTextColor)!!
@@ -243,13 +243,13 @@ class AlertDialog private constructor(context: Context) {
                 listTextColor = a.getColorStateList(R.styleable.AlertDialog_mc_listTextColor)!!
             }
             listTextSize = a.getDimension(
-                R.styleable.AlertDialog_mc_listTextSize, context.dp2px(16f)
+                R.styleable.AlertDialog_mc_listTextSize, dp2px(16f)
             )
             listDividerColor = a.getColor(
                 R.styleable.AlertDialog_mc_listDividerColor, context.getColor(R.color.dividerColor)
             )
             listDividerHeight = a.getDimension(
-                R.styleable.AlertDialog_mc_listDividerHeight, context.dp2px(0.5f)
+                R.styleable.AlertDialog_mc_listDividerHeight, dp2px(0.5f)
             )
             listDividerVisible = a.getBoolean(R.styleable.AlertDialog_mc_listDividerVisible, false)
 
@@ -259,7 +259,7 @@ class AlertDialog private constructor(context: Context) {
             windowColor = a.getColor(R.styleable.AlertDialog_mc_windowColor, Color.WHITE)
             windowAmount = a.getFloat(R.styleable.AlertDialog_mc_windowAmount, 0.5f)
             windowRadius = a.getDimension(
-                R.styleable.AlertDialog_mc_windowRadius, context.dp2px(6f)
+                R.styleable.AlertDialog_mc_windowRadius, dp2px(6f)
             )
             windowGravity = getGravity(a.getInt(R.styleable.AlertDialog_mc_windowGravity, 4))
             windowDrawable = a.getDrawable(R.styleable.AlertDialog_mc_windowDrawable)
@@ -754,7 +754,7 @@ class AlertDialog private constructor(context: Context) {
                 //没有按钮，隐藏按钮的Layout，如果有按钮，为ScrollView设置一个最小高度
                 val hasBtn = btnPositive.isVisible || btnNegative.isVisible || btnNeutral.isVisible
                 containerBtn.isVisible = hasBtn
-                scrollView.minimumHeight = context.dp2px(46f).toInt()
+                scrollView.minimumHeight = dp2px(46f).toInt()
 
                 //如果有ScrollView，设置indicators
                 if (scrollView.isVisible) {

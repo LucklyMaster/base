@@ -7,28 +7,11 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.annotation.AnimRes
 import androidx.annotation.LayoutRes
-import androidx.core.view.children
 import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 
-/**
- * 获取View的Context对应的Activity
- * @receiver View
- * @return Activity?
- */
-val View.activity: Activity?
-    get() {
-        return context.toActivity()
-    }
-
-fun View.px2dp(dp: Float): Float {
-    return context.px2dp(dp)
-}
-
-fun View.dp2px(dp: Float): Float {
-    return context.dp2px(dp)
-}
+fun View.activity(): Activity? = context.toActivity()
 
 fun View.setPaddingLeft(paddingLeft: Int) {
     setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom)
@@ -56,18 +39,8 @@ fun ViewGroup.inflater(
     return LayoutInflater.from(context).inflate(layoutId, root, attachToRoot)
 }
 
-fun View.gone() {
-    isGone = true
-}
+fun View.gone() = run { isGone = true }
 
-fun ViewGroup.aa() {
-    children
-}
+fun View.visible() = run { isVisible = true }
 
-fun View.visible() {
-    isVisible = true
-}
-
-fun View.invisible() {
-    isInvisible = true
-}
+fun View.invisible() = run { isInvisible = true }

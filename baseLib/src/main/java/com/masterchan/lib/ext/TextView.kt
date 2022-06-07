@@ -4,12 +4,6 @@ import android.graphics.drawable.Drawable
 import android.view.Gravity
 import android.widget.TextView
 
-/**
- * @author: MasterChan
- * @date: 2022-05-25 23:03
- * @describe: TextView
- */
-
 fun TextView.setDrawable(drawable: Drawable?, gravity: Int) {
     drawable?.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
     when (gravity) {

@@ -7,10 +7,7 @@ import android.view.ViewGroup
 /**
  * 获取当前Activity的ContentView
  */
-val Activity.contentView: ViewGroup
-    get() {
-        return findViewById(android.R.id.content)
-    }
+fun Activity.contentView(): ViewGroup = findViewById(android.R.id.content)
 
 fun Activity.startActivity(clazz: Class<out Activity>) {
     startActivity(Intent(this, clazz))
