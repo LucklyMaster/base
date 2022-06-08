@@ -1,6 +1,5 @@
 package com.masterchan.lib.log
 
-import android.util.Log
 import com.masterchan.lib.utils.DateUtils
 import kotlin.math.min
 
@@ -53,16 +52,15 @@ open class MPrintStrategy(private val printer: IPrinter) : IPrintStrategy {
      */
     private val borderByteSize by lazy { normalBorder.toByteArray(Charsets.UTF_16BE).size }
 
-    override fun println(priority: Int, tag: String, content: String, tr: Throwable?) {
+    override fun println(priority: Int, tag: String, content: String) {
         //打印顶部
         printLog(priority, tag, topBorder)
         //打印调用栈
         printStackTrace(priority, tag)
         //打印分割线
         printLog(priority, tag, leftBorder.plus(divider))
-        //打印content和tr
+        //打印content
         printContent(priority, tag, content)
-        tr?.let { printTr(priority, tag, tr) }
         //打印底部
         printLog(priority, tag, bottomBorder)
     }
@@ -113,6 +111,9 @@ open class MPrintStrategy(private val printer: IPrinter) : IPrintStrategy {
         //先按照默认的一行打印
         val lines = content.split(System.getProperty("line.separator") ?: "\n")
         lines.forEach {
+            if (it.isEmpty()) {
+                return@forEach
+            }
             //当前需要打印的内容
             val contentByte = it.toByteArray(Charsets.UTF_16BE)
             //logcat中显示日志时，中文与"━"字符是2:1的关系，即2个"━"
@@ -137,14 +138,6 @@ open class MPrintStrategy(private val printer: IPrinter) : IPrintStrategy {
                     tempLen += subLen
                 }
             } else {
-                printLog(priority, tag, leftBorder.plus(beforeTextSpace).plus(it))
-            }
-        }
-    }
-
-    protected fun printTr(priority: Int, tag: String, tr: Throwable) {
-        Log.getStackTraceString(tr).lines().forEach {
-            if (it.isNotEmpty()) {
                 printLog(priority, tag, leftBorder.plus(beforeTextSpace).plus(it))
             }
         }

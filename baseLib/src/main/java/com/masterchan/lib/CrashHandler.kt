@@ -3,10 +3,7 @@ package com.masterchan.lib
 import android.os.Build
 import android.os.Process
 import androidx.viewbinding.BuildConfig
-import com.masterchan.lib.ext.application
-import com.masterchan.lib.ext.create
-import com.masterchan.lib.ext.versionCode
-import com.masterchan.lib.ext.versionName
+import com.masterchan.lib.ext.*
 import com.masterchan.lib.utils.DateUtils
 import com.masterchan.lib.utils.DateUtils.toString
 import kotlinx.coroutines.Dispatchers
@@ -78,6 +75,7 @@ class CrashHandler private constructor() : Thread.UncaughtExceptionHandler {
     }
 
     private fun handleException(tr: Throwable): Boolean {
+        Log.e(tr)
         saveCrash(tr, collectDeviceInfo())
         action.invoke()
         return true

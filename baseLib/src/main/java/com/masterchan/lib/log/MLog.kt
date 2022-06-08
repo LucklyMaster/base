@@ -11,8 +11,9 @@ import org.json.JSONObject
  * @date: 2022-05-28 23:20
  */
 object MLog {
-    private var tag = "MLog"
-    private var debug = true
+    var tag = "MLog"
+        private set
+    private var debug = BuildConfig.DEBUG
     private var saveLog = BuildConfig.DEBUG
     private val printer = MPrinter()
     private var printStrategy: IPrintStrategy = MPrintStrategy(printer)
@@ -51,75 +52,86 @@ object MLog {
     }
 
     fun v(any: Any?) {
-        print(Priority.VERBOSE, tag, any, null)
+        print(Priority.VERBOSE, tag, any)
     }
 
-    fun v(tag: String, any: Any?, tr: Throwable? = null) {
-        print(Priority.VERBOSE, tag, any, tr)
+    fun v(tag: String, any: Any?) {
+        print(Priority.VERBOSE, tag, any)
     }
 
     fun d(any: Any?) {
-        print(Priority.DEBUG, tag, any, null)
+        print(Priority.DEBUG, tag, any)
     }
 
-    fun d(tag: String, any: Any?, tr: Throwable? = null) {
-        print(Priority.DEBUG, tag, any, tr)
+    fun d(tag: String, any: Any?) {
+        print(Priority.DEBUG, tag, any)
     }
 
     fun i(any: Any?) {
-        print(Priority.INFO, tag, any, null)
+        print(Priority.INFO, tag, any)
     }
 
-    fun i(tag: String, any: Any?, tr: Throwable? = null) {
-        print(Priority.INFO, tag, any, tr)
+    fun i(tag: String, any: Any?) {
+        print(Priority.INFO, tag, any)
     }
 
     fun w(any: Any?) {
-        print(Priority.WARN, tag, any, null)
+        print(Priority.WARN, tag, any)
     }
 
-    fun w(tag: String, any: Any?, tr: Throwable? = null) {
-        print(Priority.WARN, tag, any, tr)
+    fun w(tag: String, any: Any?) {
+        print(Priority.WARN, tag, any)
     }
 
     fun e(any: Any?) {
-        print(Priority.ERROR, tag, any, null)
+        print(Priority.ERROR, tag, any)
     }
 
-    fun e(tag: String, any: Any?, tr: Throwable? = null) {
-        print(Priority.ERROR, tag, any, tr)
+    fun e(tag: String, any: Any?) {
+        print(Priority.ERROR, tag, any)
     }
 
     fun wtf(any: Any?) {
-        print(Priority.ASSERT, tag, any, null)
+        print(Priority.ASSERT, tag, any)
     }
 
-    fun wtf(tag: String, any: Any?, tr: Throwable? = null) {
-        print(Priority.ASSERT, tag, any, tr)
+    fun wtf(tag: String, any: Any?) {
+        print(Priority.ASSERT, tag, any)
     }
 
-    private fun print(priority: Int, tag: String, any: Any?, tr: Throwable?) {
-        val content = getContent(any, tr)
+    private fun print(priority: Int, tag: String, any: Any?) {
+        val content = parseAny(any)
         if (debug) {
-            printStrategy.println(priority, tag, content, tr)
+            printStrategy.println(priority, tag, content)
         }
         if (saveLog) {
             logManager?.onPrint(content)
         }
     }
 
-    private fun getContent(any: Any?, tr: Throwable?): String {
+    /**
+     * 将Any解析为String
+     * @param any Any?
+     * @return String
+     */
+    private fun parseAny(any: Any?): String {
         if (any == null) {
-            return if (tr == null) "Notice! The print content is null." else ""
+            return "Notice! The print content is null."
         }
         return when (any) {
             is String -> parseString(any)
             is Array<*> -> any.contentToString()
             is Map<*, *> -> parseString(JSONObject(any).toString())
+            is Throwable -> android.util.Log.getStackTraceString(any)
             else -> any.toString()
         }
     }
 
+    /**
+     * 解析String，判断是否是json格式
+     * @param content String
+     * @return String
+     */
     private fun parseString(content: String): String {
         return when {
             content.startsWith("{") && content.endsWith("}") -> {
