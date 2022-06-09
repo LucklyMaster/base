@@ -31,5 +31,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <Button
+            android:onClick="createFile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="创建" />
+
+        <Button
+            android:onClick="queryFile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="查询" />
+
     </LinearLayout>
 </ScrollView>

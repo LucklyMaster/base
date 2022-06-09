@@ -8,7 +8,7 @@ package com.masterchan.lib.sandbox
 class Sandbox {
 
     companion object {
-        val FILES: Files by lazy { Files() }
+        // val FILES: Files by lazy { Files() }
     }
 
 }

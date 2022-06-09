@@ -1,16 +1,14 @@
 package com.masterchan.mybase
 
-import android.content.ContentValues
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.view.View
+import androidx.documentfile.provider.DocumentFile
 import com.masterchan.lib.ext.setOnClickListeners
-import com.masterchan.lib.sandbox.Sandbox
+import com.masterchan.lib.log.MLog
 import com.masterchan.mybase.databinding.ActivityMainBinding
-import java.io.ByteArrayOutputStream
+import java.io.File
 
 class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener {
 
@@ -25,15 +23,9 @@ class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener
             else -> MainActivity::class.java
         }
         // startActivity(clazz)
-       /* val cv = ContentValues()
-        cv.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
-        cv.put(MediaStore.MediaColumns.DISPLAY_NAME, "a.png")
-        val uri = contentResolver.insert(MediaStore.Images.Media.getContentUri("external"), cv)
-        val bitmap = BitmapFactory.decodeResource(resources, R.mipmap.img)
-        val os = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, os)
-        contentResolver.openOutputStream(uri!!)?.write(os.toByteArray())*/
-        Sandbox.FILES.listFile()
+
+
+        // Sandbox.FILES.listFile()
         /* val cv = ContentValues()
          // cv.put(MediaStore.Files.FileColumns.RELATIVE_PATH, Environment.DIRECTORY_DOCUMENTS)
          // cv.put(MediaStore.Files.FileColumns.DISPLAY_NAME, "c.txt")
@@ -70,5 +62,48 @@ class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener
 
     override fun getViewBinding(): ActivityMainBinding {
         return ActivityMainBinding.inflate(layoutInflater)
+    }
+
+    fun createFile(view: View) {
+        /* val cv = ContentValues()
+         cv.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+         cv.put(MediaStore.MediaColumns.DISPLAY_NAME, "${System.currentTimeMillis()}.png")
+         val uri = contentResolver.insert(MediaStore.Images.Media.getContentUri("external"), cv)
+         val bitmap = BitmapFactory.decodeResource(resources, R.mipmap.img)
+         val os = ByteArrayOutputStream()
+         bitmap.compress(Bitmap.CompressFormat.PNG, 100, os)
+         contentResolver.openOutputStream(uri!!)?.write(os.toByteArray())*/
+    }
+
+    fun queryFile(view: View) {
+        val file = File(
+            Environment.getExternalStorageDirectory().absolutePath + "/" + Environment.DIRECTORY_DOWNLOADS + "/1654783118000.txt"
+        )
+        MLog.d(DocumentFile.fromFile(file).lastModified())
+        MLog.d(file.lastModified())
+        // MLog.d(file.readText())
+        // MLog.d(file.appendText("还是说"))
+
+        val selection = MediaStore.MediaColumns.DISPLAY_NAME + " = ?"
+        val args = arrayOf("a.png")
+        val projection = arrayOf(
+            MediaStore.MediaColumns.WIDTH, MediaStore.MediaColumns.HEIGHT,
+            MediaStore.MediaColumns.SIZE, MediaStore.MediaColumns.RESOLUTION,
+            MediaStore.MediaColumns._ID, MediaStore.MediaColumns.MIME_TYPE
+        )
+
+        val cursor = contentResolver.query(
+            MediaStore.Files.getContentUri("external"), projection, selection, args, null
+        )
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                val map = mutableMapOf<String, String>()
+                cursor.columnNames.forEach {
+                    map[it] = cursor.getString(cursor.getColumnIndex(it))
+                }
+                MLog.d(map)
+            } while (cursor.moveToNext())
+        }
+        cursor?.close()
     }
 }
