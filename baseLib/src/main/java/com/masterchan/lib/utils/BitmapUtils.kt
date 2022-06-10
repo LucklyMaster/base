@@ -2,8 +2,6 @@ package com.masterchan.lib.utils
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import kotlin.math.max
-import kotlin.math.roundToInt
 
 /**
  * BitmapUtils
@@ -59,16 +57,16 @@ object BitmapUtils {
      * @param maxHeight Int
      * @return Int
      */
-    private fun calculateInSampleSize(
+    fun calculateInSampleSize(
         options: BitmapFactory.Options, maxWidth: Int, maxHeight: Int
     ): Int {
         val height = options.outHeight
         val width = options.outWidth
         var inSampleSize = 1
         if (width > maxWidth || height > maxHeight) {
-            val heightRatio = (height.toFloat() / maxHeight.toFloat()).roundToInt()
-            val widthRatio = (width.toFloat() / maxWidth.toFloat()).roundToInt()
-            inSampleSize = max(widthRatio, heightRatio)
+            while (width / inSampleSize > maxWidth || height / inSampleSize > maxHeight) {
+                inSampleSize *= 2
+            }
         }
         return inSampleSize
     }

@@ -9,6 +9,8 @@ import com.masterchan.lib.ext.setOnClickListeners
 import com.masterchan.lib.log.MLog
 import com.masterchan.mybase.databinding.ActivityMainBinding
 import java.io.File
+import java.net.FileNameMap
+import java.net.URLConnection
 
 class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener {
 
@@ -65,6 +67,11 @@ class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener
     }
 
     fun createFile(view: View) {
+        val file = File(cacheDir.absolutePath + "/MLog/20220607.log")
+        // MLog.d(contentResolver.getType(file.toUri()))
+        val fileNameMap: FileNameMap = URLConnection.getFileNameMap()
+        val type: String = fileNameMap.getContentTypeFor(file.getName())
+        MLog.d(type)
         /* val cv = ContentValues()
          cv.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
          cv.put(MediaStore.MediaColumns.DISPLAY_NAME, "${System.currentTimeMillis()}.png")

@@ -1,6 +1,8 @@
 package com.masterchan.lib.utils
 
+import android.graphics.BitmapFactory
 import android.media.ExifInterface
+import android.util.Size
 import java.io.IOException
 
 /**
@@ -26,5 +28,17 @@ object ImageUtils {
             e.printStackTrace()
         }
         return 0
+    }
+
+    /**
+     * 获取图片宽高
+     * @param path String
+     * @return Size
+     */
+    fun getImageSize(path: String): Size {
+        val options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        BitmapFactory.decodeFile(path, options)
+        return Size(options.outWidth, options.outHeight)
     }
 }
