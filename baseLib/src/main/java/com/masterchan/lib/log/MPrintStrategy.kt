@@ -52,11 +52,16 @@ open class MPrintStrategy(private val printer: IPrinter) : IPrintStrategy {
      */
     private val borderByteSize by lazy { normalBorder.toByteArray(Charsets.UTF_16BE).size }
 
-    override fun println(priority: Int, tag: String, content: String) {
+    override fun println(
+        priority: Int,
+        tag: String,
+        content: String,
+        stackTrace: StackTraceElement?
+    ) {
         //打印顶部
         printLog(priority, tag, topBorder)
         //打印调用栈
-        printStackTrace(priority, tag)
+        printStackTrace(priority, tag, stackTrace)
         //打印分割线
         printLog(priority, tag, leftBorder.plus(divider))
         //打印content
@@ -74,8 +79,8 @@ open class MPrintStrategy(private val printer: IPrinter) : IPrintStrategy {
      * @param priority Int
      * @param tag String
      */
-    protected fun printStackTrace(priority: Int, tag: String) {
-        val element = getTargetStackTraceElement()
+    protected fun printStackTrace(priority: Int, tag: String, stackTrace: StackTraceElement?) {
+        val element = stackTrace ?: getTargetStackTraceElement()
         var content = "$leftBorder$beforeTextSpace${DateUtils.now("yyyy-MM-dd HH:mm:ss.SS")}"
         if (element == null) {
             printer.println(priority, tag, content)

@@ -5,6 +5,9 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.res.Configuration
 import android.os.Build
+import android.view.WindowInsets
+import android.view.WindowManager
+import android.view.WindowMetrics
 import androidx.annotation.StringRes
 
 fun dp2px(dp: Float): Float = (dp * application.resources.displayMetrics.density + 0.5f)
@@ -42,6 +45,14 @@ val statusBarHeight: Int
         )
         return application.resources.getDimensionPixelSize(resourceId)
     }
+
+/*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+    WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+    WindowMetrics windowMetrics = wm.getCurrentWindowMetrics();
+    WindowInsets windowInsets = windowMetrics.getWindowInsets();
+    Insets insets = windowInsets.getInsetsIgnoringVisibility(WindowInsets.Type.navigationBars() | WindowInsets.Type.displayCutout());
+    return insets.top;
+}*/
 
 /**
  * 导航栏高度

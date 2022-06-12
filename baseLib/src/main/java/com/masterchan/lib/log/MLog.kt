@@ -99,10 +99,10 @@ object MLog {
         print(Priority.ASSERT, tag, any)
     }
 
-    private fun print(priority: Int, tag: String, any: Any?) {
+    fun print(priority: Int, tag: String, any: Any?, stackTrace: StackTraceElement? = null) {
         val content = parseAny(any)
         if (debug) {
-            printStrategy.println(priority, tag, content)
+            printStrategy.println(priority, tag, content, stackTrace)
         }
         if (saveLog) {
             logManager?.onPrint(content)

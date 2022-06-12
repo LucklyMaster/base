@@ -27,5 +27,5 @@ fun getTopActivity(): Activity? = ActivityStack.instance.currentActivity
  * 是否适配了分区存储
  * @return Boolean
  */
-val scopedStorage: Boolean
+val isScopedStorage: Boolean
     get() = Build.VERSION.SDK_INT >= 29 && !Environment.isExternalStorageLegacy()

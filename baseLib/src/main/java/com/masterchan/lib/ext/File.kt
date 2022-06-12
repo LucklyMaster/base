@@ -5,16 +5,24 @@ import androidx.documentfile.provider.DocumentFile
 import java.io.File
 
 /**
- * 推测文件的mimeType
+ * 根据文件扩展名，推测mimeType，如果是自定义的扩展名，则返回null
  * @receiver File
  * @return String?
  */
-fun File.guessMimeType(): String? {
-    return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+val File.mimeType: String?
+    get() {
+        return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+    }
+
+fun File.createDirs(): Boolean {
+    if (exists()) {
+        return true
+    }
+    return mkdirs()
 }
 
 /**
- * 创建文件，如果文件夹不存在，和文件夹一起创建
+ * 创建文件或文件夹，创建文件时，如果路径中的文件夹不存在，一同创建
  * @receiver File
  * @return Boolean
  */
@@ -22,18 +30,35 @@ fun File.create(): Boolean {
     if (exists()) {
         return true
     }
+    if (isDirectory) {
+        return this.createDirs()
+    }
     val parent = parentFile
     if (parent != null && !parent.exists()) {
-        if (!parent.mkdirs()) {
+        if (!parent.createDirs()) {
             return false
         }
     }
-    return try {
-        createNewFile()
-    } catch (tr: Throwable) {
-        tr.printStackTrace()
-        false
+    return createNewFile()
+}
+
+/**
+ * 获取文件夹下包括子文件夹的所有文件
+ * @receiver File
+ * @return List<File>
+ */
+fun File.listFilesWithChildDir(): List<File> {
+    val fileList = mutableListOf<File>()
+    val pathList = listFiles()
+    if (!pathList.isNullOrEmpty()) {
+        pathList.forEach {
+            fileList.add(it)
+            if (it.isDirectory) {
+                fileList.addAll(it.listFilesWithChildDir())
+            }
+        }
     }
+    return fileList
 }
 
 /**

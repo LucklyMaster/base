@@ -6,6 +6,8 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import com.masterchan.lib.ext.application
 import com.masterchan.lib.ext.isMainThread
+import com.masterchan.lib.log.MLog
+import com.masterchan.lib.log.Priority
 import java.lang.ref.WeakReference
 
 /**
@@ -64,5 +66,21 @@ object MToast {
         toast!!.get()!!.apply { setText(text) }.show()
         lastText = text
         lastMills = System.currentTimeMillis()
+        MLog.print(Priority.DEBUG, MLog.tag, text, getTargetStackTraceElement())
+    }
+
+    private fun getTargetStackTraceElement(): StackTraceElement? {
+        var traceElement: StackTraceElement? = null
+        var shouldTrace = false
+        val stackTrace = Thread.currentThread().stackTrace
+        for (stackTraceElement in stackTrace) {
+            val isLogMethod = stackTraceElement.className == javaClass.name
+            if (shouldTrace && !isLogMethod) {
+                traceElement = stackTraceElement
+                break
+            }
+            shouldTrace = isLogMethod
+        }
+        return traceElement
     }
 }

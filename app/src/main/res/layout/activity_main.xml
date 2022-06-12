@@ -26,22 +26,16 @@
             android:id="@+id/keyboard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="AutoFoldKeyboard"
+            android:text="自动折叠键盘"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:onClick="createFile"
+            android:id="@+id/scoped"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="创建" />
-
-        <Button
-            android:onClick="queryFile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="查询" />
+            android:text="分区存储" />
 
     </LinearLayout>
 </ScrollView>

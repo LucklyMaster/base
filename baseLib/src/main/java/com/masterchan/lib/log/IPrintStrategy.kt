@@ -11,6 +11,7 @@ interface IPrintStrategy {
      * @param priority 打印等级
      * @param tag TAG
      * @param content 需要打印的信息
+     * @param stackTrace 调用栈信息
      */
-    fun println(priority: Int, tag: String, content: String)
+    fun println(priority: Int, tag: String, content: String, stackTrace: StackTraceElement? = null)
 }
