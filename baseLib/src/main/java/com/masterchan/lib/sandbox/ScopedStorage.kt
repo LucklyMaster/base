@@ -5,7 +5,7 @@ import com.masterchan.lib.ext.isScopedStorage
 import com.masterchan.lib.sandbox.request.*
 
 /**
- * API29及以上分区存储文件访问框架，API28设置分区存储不生效；
+ * API29及以上分区存储文件访问框架，API28需要设置分区存储不生效；
  * 所有参数中的路径，可以是"sdcard/xxx/xxx.txt"，也可以是[Environment.DIRECTORY_DOWNLOADS]/xxx/xxx.txt，
  * 调用时会自动组装
  * @author: MasterChan

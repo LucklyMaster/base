@@ -23,7 +23,10 @@ import java.io.File
 abstract class AbsFileRequest : IFileRequest {
 
     protected val resolver = application.contentResolver!!
-    protected val dbUri = MediaStore.Files.getContentUri("external")
+    protected val fileUri = MediaStore.Files.getContentUri("external")
+    protected val imageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+    protected val audioUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+    protected val videoUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
 
     override fun exist(uri: Uri): Boolean {
         return DocumentFile.fromSingleUri(application, uri)?.exists() == true
@@ -155,6 +158,11 @@ abstract class AbsFileRequest : IFileRequest {
         }
     }
 
+    /**
+     * 路径组装，将传入的路径组装为已[Environment.getExternalStorageDirectory]开头
+     * @param relativePath 组装的路径
+     * @return String
+     */
     protected fun obtainPath(relativePath: String): String {
         val rootPath = Environment.getExternalStorageDirectory().absolutePath
         return if (relativePath.startsWith(rootPath)) {
@@ -164,6 +172,12 @@ abstract class AbsFileRequest : IFileRequest {
         }
     }
 
+    /**
+     * ContentProvider查询方法
+     * @param selection 查询条件
+     * @param args 查询参数
+     * @return List<FileResponse>?
+     */
     @SuppressLint("Range")
     protected fun query(selection: String?, args: Array<String>?): List<FileResponse>? {
         val projection = mutableListOf<String>()
@@ -176,7 +190,7 @@ abstract class AbsFileRequest : IFileRequest {
             projection.add(MediaStore.MediaColumns.DURATION)
         }
         val cursor = resolver.query(
-            dbUri, projection.toTypedArray(), selection, args, null
+            fileUri, projection.toTypedArray(), selection, args, null
         ) ?: return null
         val list = mutableListOf<FileResponse>()
         cursor.moveToFirst()
@@ -191,11 +205,59 @@ abstract class AbsFileRequest : IFileRequest {
             } else {
                 FileResponse.NOT_SUPPORT
             }
-            val uri = ContentUris.withAppendedId(dbUri, id)
+            val uri = ContentUris.withAppendedId(fileUri, id)
             list.add(FileResponse(uri, File(path), date, duration, width, height))
             cursor.moveToNext()
         }
         cursor.close()
         return list
+    }
+
+    /**
+     * 根据传入的标准目录，选择合适的数据库
+     * @param standardDir String
+     * @return Uri
+     */
+    protected fun getSuitableContentUri(standardDir: String?): Uri {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            when (standardDir) {
+                Environment.DIRECTORY_DCIM,
+                Environment.DIRECTORY_SCREENSHOTS,
+                Environment.DIRECTORY_PICTURES -> imageUri
+                Environment.DIRECTORY_DOWNLOADS,
+                Environment.DIRECTORY_DOCUMENTS -> fileUri
+                Environment.DIRECTORY_ALARMS,
+                Environment.DIRECTORY_AUDIOBOOKS,
+                Environment.DIRECTORY_PODCASTS,
+                Environment.DIRECTORY_MUSIC,
+                Environment.DIRECTORY_NOTIFICATIONS -> audioUri
+                Environment.DIRECTORY_MOVIES -> videoUri
+                else -> fileUri
+            }
+        } else {
+            when (standardDir) {
+                Environment.DIRECTORY_DCIM,
+                Environment.DIRECTORY_PICTURES -> imageUri
+                Environment.DIRECTORY_DOWNLOADS,
+                Environment.DIRECTORY_DOCUMENTS -> fileUri
+                Environment.DIRECTORY_ALARMS,
+                Environment.DIRECTORY_PODCASTS,
+                Environment.DIRECTORY_MUSIC,
+                Environment.DIRECTORY_NOTIFICATIONS -> audioUri
+                Environment.DIRECTORY_MOVIES -> videoUri
+                else -> fileUri
+            }
+        }
+    }
+
+    protected fun getStandardDir(file: File): String {
+        //将filePath拆分成Standard Dir的相对路径
+        var dir = file.absolutePath
+        val rootPath = "${Environment.getExternalStorageDirectory().absolutePath}/"
+        if (dir.startsWith(rootPath)) {
+            dir = dir.replace(rootPath, "")
+        }
+
+        return dir.split("/").first()
     }
 }

@@ -8,6 +8,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.webkit.MimeTypeMap
 import androidx.annotation.RequiresApi
+import com.masterchan.lib.ext.mimeType
 import com.masterchan.lib.sandbox.FileResponse
 import java.io.File
 
@@ -25,34 +26,43 @@ open class FileRequest : AbsFileRequest() {
         args: (ContentValues.() -> Unit)?
     ): Boolean {
         val file = File(obtainPath(filePath))
-        //无法判断没有后缀，添加了mimeType的情况
+        // 文件已存在，直接返回
+        // 这里无法判断没有后缀，添加了mimeType的情况
         if (file.exists()) {
             return true
         }
-        try {
-            var dir = filePath
-            val rootPath = "${Environment.getExternalStorageDirectory().absolutePath}/"
-            if (dir.startsWith(rootPath)) {
-                dir = dir.replace(rootPath, "")
-            }
-            dir = dir.substringBefore("/${file.name}")
-            val cv = ContentValues()
-            cv.put(MediaStore.MediaColumns.RELATIVE_PATH, dir)
-            cv.put(MediaStore.MediaColumns.DISPLAY_NAME, file.name)
-            args?.invoke(cv)
-            //判断没有后缀，添加了mimeType的情况
-            val split = filePath.split("/")
-            if (split.isNotEmpty() && !split.last().contains(".")) {
-                val mimeType = cv.getAsString(MediaStore.MediaColumns.MIME_TYPE)
-                if (mimeType != null) {
-                    val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
-                    if (File("${file.absolutePath}.$extension").exists()) {
-                        return true
-                    }
+
+        //将filePath拆分成Standard Dir的相对路径
+        var dir = filePath
+        val rootPath = "${Environment.getExternalStorageDirectory().absolutePath}/"
+        if (dir.startsWith(rootPath)) {
+            dir = dir.replace(rootPath, "")
+        }
+        dir = dir.substringBefore("/${file.name}")
+
+        //添加参数，并自动推断其mimeType
+        val cv = ContentValues()
+        cv.put(MediaStore.MediaColumns.RELATIVE_PATH, dir)
+        cv.put(MediaStore.MediaColumns.DISPLAY_NAME, file.name)
+        file.mimeType?.let {
+            cv.put(MediaStore.MediaColumns.MIME_TYPE, it)
+        }
+        args?.invoke(cv)
+
+        //判断没有后缀，添加了mimeType的情况
+        val split = filePath.split("/")
+        if (split.isNotEmpty() && split.last().contains(".")) {
+            val mimeType = cv.getAsString(MediaStore.MediaColumns.MIME_TYPE)
+            if (mimeType != null) {
+                val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
+                if (File("${file.absolutePath}.$extension").exists()) {
+                    return true
                 }
             }
+        }
+        try {
             val uri = resolver.insert(
-                MediaStore.Files.getContentUri("external"), cv
+                getSuitableContentUri(dir.split("/").first()), cv
             ) ?: return false
             write(uri, data ?: "".toByteArray())
             return true

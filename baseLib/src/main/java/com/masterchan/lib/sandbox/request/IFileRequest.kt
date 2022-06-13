@@ -2,6 +2,7 @@ package com.masterchan.lib.sandbox.request
 
 import android.content.ContentValues
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
 import com.masterchan.lib.sandbox.FileResponse
 
@@ -35,9 +36,13 @@ interface IFileRequest {
     fun createDir(filePath: String): Boolean
 
     /**
-     * 创建并写入内容，如果文件已存在不会继续写入，返回true；如果[filePath]不包含后缀名，在[args]中
-     * 添加[MediaStore.MediaColumns.MIME_TYPE]参数，会根据mimeType自动添加文件后缀；如果已经包含了后缀
-     * 名，同时添加了[MediaStore.MediaColumns.MIME_TYPE]参数，会在原有后缀上追加根据mimeType推测的后缀；
+     * 创建并写入内容，如果文件已存在不会继续写入，返回true；
+     *
+     * 特别需要注意的是，此方法在[Build.VERSION_CODES.Q]以下也会将创建的文件写入到数据库
+     *
+     * 如果[filePath]不包含后缀名，在[args]中添加[MediaStore.MediaColumns.MIME_TYPE]参数，会根据
+     * mimeType自动添加文件后缀；如果已经包含了后缀名，同时添加了[MediaStore.MediaColumns.MIME_TYPE]
+     * 参数，会在原有后缀上追加根据mimeType推测的后缀；
      * 如果只是想写入内容，使用[write]方法；
      * @param filePath 文件夹路径
      * @param data 需要写入的内容

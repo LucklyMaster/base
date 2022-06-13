@@ -2,10 +2,11 @@ package com.masterchan.lib.sandbox.request
 
 import android.content.ContentValues
 import android.net.Uri
+import android.os.Environment
 import android.provider.MediaStore
-import android.webkit.MimeTypeMap
 import com.masterchan.lib.ext.create
 import com.masterchan.lib.ext.listFilesWithChildDir
+import com.masterchan.lib.ext.mimeType
 import com.masterchan.lib.sandbox.FileResponse
 import java.io.File
 
@@ -21,15 +22,18 @@ open class FileRequestApi28Impl : AbsFileRequest() {
         data: ByteArray?,
         args: (ContentValues.() -> Unit)?
     ): Boolean {
+        val cv = ContentValues()
+        File(obtainPath(filePath)).mimeType?.let {
+            cv.put(MediaStore.MediaColumns.MIME_TYPE, it)
+        }
+        //根据MIME_TYPE判断是否需要在文件末尾添加推断的扩展名
         var suffix = ""
-        args?.let {
-            val cv = ContentValues()
+        if (args != null) {
             args.invoke(cv)
-            val mimeType = cv.getAsString(MediaStore.MediaColumns.MIME_TYPE)
-            mimeType?.let {
-                suffix = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType) ?: ""
+            cv.getAsString(MediaStore.MediaColumns.MIME_TYPE)?.let {
+                suffix = it
                 if (suffix.isNotEmpty()) {
-                    suffix = ".".plus(suffix)
+                    suffix = ".$suffix"
                 }
             }
         }
@@ -37,10 +41,12 @@ open class FileRequestApi28Impl : AbsFileRequest() {
         if (file.exists()) {
             return true
         }
-        val cv = ContentValues()
         cv.put(MediaStore.MediaColumns.DATA, file.absolutePath)
         cv.put(MediaStore.MediaColumns.DISPLAY_NAME, file.name)
-        resolver.insert(MediaStore.Files.getContentUri("external"), cv)
+
+        val rootPath = "${Environment.getExternalStorageDirectory().absolutePath}/"
+        val standardDir = filePath.replace(rootPath, "").split("/").firstOrNull()
+        resolver.insert(getSuitableContentUri(standardDir), cv)
         if (!file.create()) {
             return false
         }

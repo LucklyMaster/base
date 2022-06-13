@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/uriAccess"
+        android:title="切换到Uri访问" />
+    <item
+        android:id="@+id/pathAccess"
+        android:title="切换到Path访问" />
+</menu>
