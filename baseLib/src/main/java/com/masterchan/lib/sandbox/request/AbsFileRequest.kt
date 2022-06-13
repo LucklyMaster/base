@@ -2,16 +2,15 @@ package com.masterchan.lib.sandbox.request
 
 import android.annotation.SuppressLint
 import android.content.ContentUris
+import android.content.ContentValues
+import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
-import com.masterchan.lib.ext.application
-import com.masterchan.lib.ext.create
-import com.masterchan.lib.ext.createDirs
-import com.masterchan.lib.ext.orNull
+import com.masterchan.lib.ext.*
 import com.masterchan.lib.sandbox.FileResponse
 import java.io.File
 
@@ -92,17 +91,24 @@ abstract class AbsFileRequest : IFileRequest {
     }
 
     override fun delete(uri: Uri): Boolean {
-        resolver.delete(uri, null, null)
-        return true
-        // return DocumentFile.fromTreeUri(application, uri)?.delete() == true
+        return resolver.delete(uri, null, null) >= 0
     }
 
     override fun delete(relativePath: String): Boolean {
-        val file = File(obtainPath(relativePath))
-        if (!file.exists()) {
-            return true
+        val response = getResponse(relativePath) ?: return false
+        return delete(response.uri)
+    }
+
+    override fun renameTo(uri: Uri, name: String): Boolean {
+        return try {
+            val cv = ContentValues()
+            cv.put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+            resolver.update(uri, cv, null, null)
+            true
+        } catch (t: Throwable) {
+            t.printStackTrace()
+            false
         }
-        return DocumentFile.fromFile(file).delete()
     }
 
     override fun renameTo(relativePath: String, destName: String): Boolean {
@@ -110,12 +116,15 @@ abstract class AbsFileRequest : IFileRequest {
         if (!file.exists()) {
             return false
         }
-        return DocumentFile.fromFile(file).renameTo(destName)
+        val response = getResponse(relativePath) ?: return false
+        val cv = ContentValues()
+        cv.put(MediaStore.MediaColumns.DISPLAY_NAME, destName)
+        return resolver.update(response.uri, cv, null, null) >= 0
     }
 
-    override fun copyTo(uri: Uri, destUri: Uri): Boolean {
+    override fun copyTo(uri: Uri, destPath: String): Boolean {
         return try {
-            write(destUri, read(uri))
+            write(destPath, read(uri))
             true
         } catch (t: Throwable) {
             t.printStackTrace()
@@ -143,8 +152,8 @@ abstract class AbsFileRequest : IFileRequest {
         }
     }
 
-    override fun moveTo(uri: Uri, destUri: Uri): Boolean {
-        return if (copyTo(uri, destUri)) delete(uri) else false
+    override fun moveTo(uri: Uri, destPath: String): Boolean {
+        return if (copyTo(uri, destPath)) delete(uri) else false
     }
 
     override fun moveTo(
@@ -156,6 +165,38 @@ abstract class AbsFileRequest : IFileRequest {
         } else {
             false
         }
+    }
+
+    override fun listFiles(uri: Uri): List<FileResponse>? {
+        val file = uri.toFileResponse()?.file ?: return null
+        val path = if (file.isDirectory) {
+            file.absolutePath
+        } else {
+            file.parentFile?.absolutePath ?: return null
+        }
+        return listFiles(path)
+    }
+
+    override fun getResponse(path: String): FileResponse? {
+        val selection = "${MediaStore.MediaColumns.DATA} = ?"
+        val args = arrayOf(obtainPath(path))
+        val list = query(selection, args)
+        if (!list.isNullOrEmpty()) {
+            return list.first()
+        }
+        return null
+    }
+
+    override fun getResponse(uri: Uri): FileResponse? {
+        check(uri.authority == "content://") { "only support the 'content://' authority" }
+        val cursor = resolver.query(
+            uri, getProjection(), null, null, null
+        ) ?: return null
+        val list = read2Response(cursor)
+        if (list.isNotEmpty()) {
+            return list.first()
+        }
+        return null
     }
 
     /**
@@ -178,38 +219,53 @@ abstract class AbsFileRequest : IFileRequest {
      * @param args 查询参数
      * @return List<FileResponse>?
      */
-    @SuppressLint("Range")
     protected fun query(selection: String?, args: Array<String>?): List<FileResponse>? {
+        val cursor = resolver.query(
+            fileUri, getProjection(), selection, args, null
+        ) ?: return null
+        return read2Response(cursor)
+    }
+
+    protected fun getProjection(): Array<String> {
         val projection = mutableListOf<String>()
         projection.add(MediaStore.MediaColumns._ID)
         projection.add(MediaStore.MediaColumns.DATA)
         projection.add(MediaStore.MediaColumns.DATE_ADDED)
         projection.add(MediaStore.MediaColumns.WIDTH)
         projection.add(MediaStore.MediaColumns.HEIGHT)
+        projection.add(MediaStore.Images.Media.LATITUDE)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             projection.add(MediaStore.MediaColumns.DURATION)
         }
-        val cursor = resolver.query(
-            fileUri, projection.toTypedArray(), selection, args, null
-        ) ?: return null
+        return projection.toTypedArray()
+    }
+
+    @SuppressLint("Range")
+    protected fun read2Response(cursor: Cursor): MutableList<FileResponse> {
         val list = mutableListOf<FileResponse>()
-        cursor.moveToFirst()
-        (0 until cursor.count).forEach { _ ->
-            val id = cursor.getLong(cursor.getColumnIndex(MediaStore.MediaColumns._ID))
-            val path = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))
-            val date = cursor.getLong(cursor.getColumnIndex(MediaStore.MediaColumns.DATE_ADDED))
-            val width = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns.WIDTH))
-            val height = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns.HEIGHT))
-            val duration = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                cursor.getLong(cursor.getColumnIndex(MediaStore.MediaColumns.DURATION))
-            } else {
-                FileResponse.NOT_SUPPORT
+        try {
+            cursor.moveToFirst()
+            (0 until cursor.count).forEach { _ ->
+                val id = cursor.getLong(cursor.getColumnIndex(MediaStore.MediaColumns._ID))
+                val path = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))
+                val date = cursor.getLong(cursor.getColumnIndex(MediaStore.MediaColumns.DATE_ADDED))
+                val width = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns.WIDTH))
+                val height = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns.HEIGHT))
+                Log.d("经纬度:" + cursor.getColumnIndex(MediaStore.Images.Media.LATITUDE))
+                val duration = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    cursor.getLong(cursor.getColumnIndex(MediaStore.MediaColumns.DURATION))
+                } else {
+                    FileResponse.NOT_SUPPORT
+                }
+                val uri = ContentUris.withAppendedId(fileUri, id)
+                list.add(FileResponse(uri, File(path), date, duration, width, height))
+                cursor.moveToNext()
             }
-            val uri = ContentUris.withAppendedId(fileUri, id)
-            list.add(FileResponse(uri, File(path), date, duration, width, height))
-            cursor.moveToNext()
+        } catch (t: Throwable) {
+            t.printStackTrace()
+        } finally {
+            cursor.close()
         }
-        cursor.close()
         return list
     }
 
@@ -257,7 +313,6 @@ abstract class AbsFileRequest : IFileRequest {
         if (dir.startsWith(rootPath)) {
             dir = dir.replace(rootPath, "")
         }
-
         return dir.split("/").first()
     }
 }

@@ -72,18 +72,6 @@ open class FileRequest : AbsFileRequest() {
         }
     }
 
-    override fun renameTo(uri: Uri, name: String): Boolean {
-        return try {
-            val cv = ContentValues()
-            cv.put(MediaStore.MediaColumns.DISPLAY_NAME, name)
-            resolver.update(uri, cv, null, null)
-            true
-        } catch (t: Throwable) {
-            t.printStackTrace()
-            false
-        }
-    }
-
     @SuppressLint("Range")
     override fun listFiles(relativePath: String, withChildDir: Boolean): List<FileResponse>? {
         val selection = if (!withChildDir) {
@@ -92,42 +80,6 @@ open class FileRequest : AbsFileRequest() {
             "${MediaStore.MediaColumns.RELATIVE_PATH} like ?"
         }
         val args = if (!withChildDir) arrayOf("$relativePath/") else arrayOf("$relativePath/%")
-        return query(selection, args)
-    }
-
-    override fun queryByName(
-        relativePath: String,
-        fileName: String,
-        withChildDir: Boolean,
-        equalsFileName: Boolean
-    ): List<FileResponse>? {
-        val operate = if (equalsFileName) "like" else "="
-        var selection = "${MediaStore.MediaColumns.DISPLAY_NAME} $operate ? "
-        if (!withChildDir) {
-            selection = selection.plus("${MediaStore.MediaColumns.RELATIVE_PATH}=?")
-        }
-        val args = if (!withChildDir) {
-            arrayOf(if (equalsFileName) "%$fileName%" else fileName, "$relativePath/")
-        } else {
-            arrayOf(if (equalsFileName) "%$fileName%" else fileName)
-        }
-        return query(selection, args)
-    }
-
-    override fun queryByExtension(
-        relativePath: String,
-        extension: String,
-        withChildDir: Boolean
-    ): List<FileResponse>? {
-        var selection = "${MediaStore.MediaColumns.DISPLAY_NAME} like ? "
-        if (!withChildDir) {
-            selection = selection.plus("${MediaStore.MediaColumns.RELATIVE_PATH}=?")
-        }
-        val args = if (!withChildDir) {
-            arrayOf("%$extension", "$relativePath/")
-        } else {
-            arrayOf("%$extension")
-        }
         return query(selection, args)
     }
 }

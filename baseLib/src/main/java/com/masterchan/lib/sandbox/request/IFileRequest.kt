@@ -71,13 +71,19 @@ interface IFileRequest {
 
     fun renameTo(relativePath: String, destName: String): Boolean
 
-    fun copyTo(uri: Uri, destUri: Uri): Boolean
+    fun copyTo(uri: Uri, destPath: String): Boolean
 
     fun copyTo(relativePath: String, destRelativePath: String): Boolean
 
-    fun moveTo(uri: Uri, destUri: Uri): Boolean
+    fun moveTo(uri: Uri, destPath: String): Boolean
 
     fun moveTo(relativePath: String, destRelativePath: String): Boolean
+
+    fun getResponse(path: String): FileResponse?
+
+    fun getResponse(uri: Uri): FileResponse?
+
+    fun listFiles(uri: Uri): List<FileResponse>?
 
     /**
      * 遍历文件夹中的所有文件，如果[withChildDir]为true，子文件夹中的文件也会参与遍历
@@ -87,32 +93,4 @@ interface IFileRequest {
      * @return List<FileResponse>?
      */
     fun listFiles(relativePath: String, withChildDir: Boolean = true): List<FileResponse>?
-
-    /**
-     * 在指定文件夹查找指定文件名称的文件
-     * @param relativePath 需要查找文件的文件夹
-     * @param fileName 文件名称
-     * @param withChildDir 是否包含[relativePath]中的子文件夹
-     * @param equalsFileName 是否是查询与[fileName]相等的文件
-     * @return List<FileResponse>
-     */
-    fun queryByName(
-        relativePath: String,
-        fileName: String,
-        withChildDir: Boolean = true,
-        equalsFileName: Boolean = false
-    ): List<FileResponse>?
-
-    /**
-     * 查询指定文件夹下的指定后缀名的文件
-     * @param relativePath 要查找文件的文件夹
-     * @param extension 后缀名，[.xxx]
-     * @param withChildDir 否包含[relativePath]中的子文件夹
-     * @return List<FileResponse>
-     */
-    fun queryByExtension(
-        relativePath: String,
-        extension: String,
-        withChildDir: Boolean = true
-    ): List<FileResponse>?
 }

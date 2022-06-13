@@ -33,12 +33,6 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="isDir"
-            android:text="是否是文件夹" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:onClick="writeFile"
             android:text="写入内容" />
 

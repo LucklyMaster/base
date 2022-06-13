@@ -13,7 +13,7 @@ import com.masterchan.lib.sandbox.request.*
  */
 object ScopedStorage {
 
-    val file: FileAccess
+    /*val file: FileAccess
         get() = if (isScopedStorage) FileAccess(FileRequest()) else FileAccess(
             (FileRequestApi28Impl())
         )
@@ -31,5 +31,5 @@ object ScopedStorage {
     val video: VideoAccess
         get() = if (isScopedStorage) VideoAccess(VideoRequest()) else VideoAccess(
             (VideoRequestApi28Impl())
-        )
+        )*/
 }
