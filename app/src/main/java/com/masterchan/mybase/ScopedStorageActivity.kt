@@ -66,8 +66,8 @@ class ScopedStorageActivity : MyBaseActivity<ActivityScopedStorageBinding>() {
             result3 = FileAccess.exist(relativePath3)
         } else {
             result1 = FileAccess.exist(relativePath.toFileResponse()?.uri!!)
-            result2 = FileAccess.exist(relativePath.toFileResponse()?.uri!!)
-            result3 = FileAccess.exist(relativePath.toFileResponse()?.uri!!)
+            result2 = FileAccess.exist(relativePath2.toFileResponse()?.uri!!)
+            result3 = FileAccess.exist("$relativePath3/c.txt".toFileResponse()?.uri!!)
         }
         MToast.showLong("exist:$result1,$result2,$result3")
     }
@@ -82,8 +82,8 @@ class ScopedStorageActivity : MyBaseActivity<ActivityScopedStorageBinding>() {
             result3 = !FileAccess.isDirectory(relativePath3)
         } else {
             result1 = !FileAccess.isDirectory(relativePath.toFileResponse()?.uri!!)
-            result2 = !FileAccess.isDirectory(relativePath.toFileResponse()?.uri!!)
-            result3 = !FileAccess.isDirectory(relativePath.toFileResponse()?.uri!!)
+            result2 = !FileAccess.isDirectory(relativePath2.toFileResponse()?.uri!!)
+            result3 = !FileAccess.isDirectory("$relativePath3/c.txt".toFileResponse()?.uri!!)
         }
         MToast.showLong("isFile:$result1,$result2,$result3")
     }
@@ -94,6 +94,9 @@ class ScopedStorageActivity : MyBaseActivity<ActivityScopedStorageBinding>() {
             FileAccess.write(relativePath, "，writeFile追加".toByteArray(), true)
             FileAccess.write(relativePath2, "writeFile写入".toByteArray())
             FileAccess.write(relativePath2, "writeFile追加".toByteArray(), true)
+            FileAccess.write(
+                "${Environment.DIRECTORY_DOWNLOADS}/test/load.txt", "正在测试写入文件是否加入到媒体库".toByteArray()
+            )
         } else {
             FileAccess.write(
                 File(absolutePath(relativePath)).toUri(), "writeFile写入".toByteArray()
@@ -103,29 +106,32 @@ class ScopedStorageActivity : MyBaseActivity<ActivityScopedStorageBinding>() {
             )
             FileAccess.write(relativePath2, "writeFile写入".toByteArray())
             FileAccess.write(relativePath2, "writeFile追加".toByteArray(), true)
+            FileAccess.write(
+                "${Environment.DIRECTORY_DOWNLOADS}/test/load2.txt".toUri(),
+                "正在测试写入文件是否加入到媒体库".toByteArray()
+            )
         }
     }
 
     fun deleteFile(view: View) {
-        val result = if (pathAccessMode) {
-            FileAccess.delete(Environment.DIRECTORY_DOCUMENTS)
-        } else {
-            FileAccess.delete(
-                absolutePath(
-                    Environment.getExternalStorageDirectory().absolutePath + "/" + Environment.DIRECTORY_DOCUMENTS
-                )
-            )
+        //todo 重写删除 文件删除后 file.delete删除文件夹，文件夹循环遍历删除
+        //重写listfile，相对路径
+        val selection = MediaStore.MediaColumns.RELATIVE_PATH + " = ?"
+        val args = Environment.DIRECTORY_DOCUMENTS + "/MyBase1/"
+        FileAccess.query(selection, arrayOf(args))?.forEach {
+            MLog.d(it)
         }
-        MToast.showLong("删除文件:$result")
+        /* val result = if (pathAccessMode) {
+             FileAccess.delete(Environment.DIRECTORY_DOCUMENTS + "/MyBase1/a.txt")
+         } else {
+             FileAccess.delete(Environment.DIRECTORY_DOCUMENTS)
+         }
+         MToast.showLong("删除文件:$result")*/
     }
 
     fun getAllFiles(view: View) {
-        if (pathAccessMode) {
-            FileAccess.listFiles(Environment.DIRECTORY_DOCUMENTS)?.forEach { MLog.d(it) }
-        } else {
-            val uri = relativePath3.toFileResponse()!!.uri
-            FileAccess.listFiles(uri)?.forEach { MLog.d(it) }
-        }
+        FileAccess.listFiles(Environment.DIRECTORY_DOCUMENTS)?.forEach { MLog.d(it) }
+        FileAccess.listFiles(Environment.DIRECTORY_DCIM)?.forEach { MLog.d(it) }
     }
 
     fun rename(view: View) {

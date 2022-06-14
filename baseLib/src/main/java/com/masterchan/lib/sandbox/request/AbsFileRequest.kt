@@ -28,7 +28,7 @@ abstract class AbsFileRequest : IFileRequest {
     protected val videoUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
 
     override fun exist(uri: Uri): Boolean {
-        return DocumentFile.fromSingleUri(application, uri)?.exists() == true
+        return uri.toFileResponse()?.file?.exists() == true
     }
 
     override fun exist(filePath: String): Boolean {
@@ -91,12 +91,8 @@ abstract class AbsFileRequest : IFileRequest {
     }
 
     override fun delete(uri: Uri): Boolean {
-        return resolver.delete(uri, null, null) >= 0
-    }
-
-    override fun delete(relativePath: String): Boolean {
-        val response = getResponse(relativePath) ?: return false
-        return delete(response.uri)
+        resolver.delete(uri, null, null)
+        return true
     }
 
     override fun renameTo(uri: Uri, name: String): Boolean {
@@ -119,7 +115,7 @@ abstract class AbsFileRequest : IFileRequest {
         val response = getResponse(relativePath) ?: return false
         val cv = ContentValues()
         cv.put(MediaStore.MediaColumns.DISPLAY_NAME, destName)
-        return resolver.update(response.uri, cv, null, null) >= 0
+        return resolver.update(response.uri, cv, null, null) > 0
     }
 
     override fun copyTo(uri: Uri, destPath: String): Boolean {
@@ -169,15 +165,15 @@ abstract class AbsFileRequest : IFileRequest {
 
     override fun listFiles(uri: Uri): List<FileResponse>? {
         val file = uri.toFileResponse()?.file ?: return null
-        val path = if (file.isDirectory) {
-            file.absolutePath
-        } else {
-            file.parentFile?.absolutePath ?: return null
+        if (!file.isDirectory) {
+            return null
         }
-        return listFiles(path)
+        return listFiles(file.absolutePath)
     }
 
     override fun getResponse(path: String): FileResponse? {
+        val file = File(obtainPath(path))
+        check(!file.isDirectory) { "getResponse not support directory" }
         val selection = "${MediaStore.MediaColumns.DATA} = ?"
         val args = arrayOf(obtainPath(path))
         val list = query(selection, args)
@@ -188,7 +184,7 @@ abstract class AbsFileRequest : IFileRequest {
     }
 
     override fun getResponse(uri: Uri): FileResponse? {
-        check(uri.authority == "content://") { "only support the 'content://' authority" }
+        check(uri.scheme == "content") { "only support the 'content://' scheme" }
         val cursor = resolver.query(
             uri, getProjection(), null, null, null
         ) ?: return null
@@ -219,9 +215,13 @@ abstract class AbsFileRequest : IFileRequest {
      * @param args 查询参数
      * @return List<FileResponse>?
      */
-    protected fun query(selection: String?, args: Array<String>?): List<FileResponse>? {
+    override fun query(
+        selection: String?,
+        args: Array<String>?,
+        sort: String?
+    ): List<FileResponse>? {
         val cursor = resolver.query(
-            fileUri, getProjection(), selection, args, null
+            fileUri, getProjection(), selection, args, sort
         ) ?: return null
         return read2Response(cursor)
     }
@@ -233,7 +233,7 @@ abstract class AbsFileRequest : IFileRequest {
         projection.add(MediaStore.MediaColumns.DATE_ADDED)
         projection.add(MediaStore.MediaColumns.WIDTH)
         projection.add(MediaStore.MediaColumns.HEIGHT)
-        projection.add(MediaStore.Images.Media.LATITUDE)
+        projection.add(MediaStore.MediaColumns.RELATIVE_PATH)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             projection.add(MediaStore.MediaColumns.DURATION)
         }
@@ -251,7 +251,8 @@ abstract class AbsFileRequest : IFileRequest {
                 val date = cursor.getLong(cursor.getColumnIndex(MediaStore.MediaColumns.DATE_ADDED))
                 val width = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns.WIDTH))
                 val height = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns.HEIGHT))
-                Log.d("经纬度:" + cursor.getColumnIndex(MediaStore.Images.Media.LATITUDE))
+                val height2 = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.RELATIVE_PATH))
+                Log.d(height2)
                 val duration = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     cursor.getLong(cursor.getColumnIndex(MediaStore.MediaColumns.DURATION))
                 } else {
@@ -304,15 +305,5 @@ abstract class AbsFileRequest : IFileRequest {
                 else -> fileUri
             }
         }
-    }
-
-    protected fun getStandardDir(file: File): String {
-        //将filePath拆分成Standard Dir的相对路径
-        var dir = file.absolutePath
-        val rootPath = "${Environment.getExternalStorageDirectory().absolutePath}/"
-        if (dir.startsWith(rootPath)) {
-            dir = dir.replace(rootPath, "")
-        }
-        return dir.split("/").first()
     }
 }

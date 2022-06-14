@@ -2,7 +2,6 @@ package com.masterchan.lib.sandbox.request
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
-import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
@@ -70,6 +69,24 @@ open class FileRequest : AbsFileRequest() {
             t.printStackTrace()
             return false
         }
+    }
+
+    override fun delete(relativePath: String): Boolean {
+        val file = File(obtainPath(relativePath))
+        if (!file.exists()) {
+            return true
+        }
+        val rootPath = "${Environment.getExternalStorageDirectory().absolutePath}/"
+        var path = file.absolutePath.replace(rootPath, "")
+        path = if (file.isDirectory) {
+            path
+        } else {
+            path.replace(file.name, "") + "/"
+        }
+        val selection = "${MediaStore.MediaColumns.RELATIVE_PATH} = ?"
+        val args = arrayOf(path)
+        resolver.delete(fileUri, selection, args)
+        return true
     }
 
     @SuppressLint("Range")

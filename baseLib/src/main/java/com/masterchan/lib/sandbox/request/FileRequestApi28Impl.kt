@@ -5,6 +5,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.webkit.MimeTypeMap
 import com.masterchan.lib.ext.create
+import com.masterchan.lib.ext.deleteAll
 import com.masterchan.lib.ext.mimeType
 import com.masterchan.lib.sandbox.FileResponse
 import java.io.File
@@ -51,6 +52,17 @@ open class FileRequestApi28Impl : AbsFileRequest() {
         }
         data?.let { file.writeBytes(it) }
         return true
+    }
+
+    override fun delete(relativePath: String): Boolean {
+        val file = File(obtainPath(relativePath))
+        if (!file.exists()) {
+            return true
+        }
+        val selection = "${MediaStore.MediaColumns.DATA} like ?"
+        val args = arrayOf("${file.absolutePath}%")
+        resolver.delete(fileUri, selection, args)
+        return file.deleteAll()
     }
 
     override fun listFiles(relativePath: String, withChildDir: Boolean): List<FileResponse>? {

@@ -66,24 +66,18 @@ fun File.listFilesWithChildDir(): List<File> {
  * @receiver File
  * @return Boolean
  */
-fun File.deleteAll(deleteSelf: Boolean): Boolean {
+fun File.deleteAll(): Boolean {
     if (!exists()) {
         return true
     }
     if (!isDirectory) {
         return delete()
     }
-    val result = false
-    listFiles()?.isNotEmpty {
-        forEach { result && if (!isDirectory) it.delete() else it.deleteAll(true) }
+    val fileList = listFiles()
+    fileList?.forEach {
+        if (it.isDirectory) it.deleteAll() else it.delete()
     }
-    if (!result) {
-        return false
-    }
-    if (deleteSelf) {
-        return delete()
-    }
-    return result
+    return delete()
 }
 
 fun File.renameTo(fileName: String): Boolean {

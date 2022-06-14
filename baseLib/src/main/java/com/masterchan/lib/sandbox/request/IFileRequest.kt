@@ -87,10 +87,14 @@ interface IFileRequest {
 
     /**
      * 遍历文件夹中的所有文件，如果[withChildDir]为true，子文件夹中的文件也会参与遍历
+     *
+     * 特别注意的是，此方法在API29以下会返回包含的文件夹，而以上则只有文件
      * @param relativePath 共享目录相对路径
      * @param withChildDir 是否包含[relativePath]中的子文件夹，此参数只在API29及以上生效，
      * 其余版本返回全部文件
      * @return List<FileResponse>?
      */
     fun listFiles(relativePath: String, withChildDir: Boolean = true): List<FileResponse>?
+
+    fun query(selection: String?, args: Array<String>?, sort: String? = null): List<FileResponse>?
 }
