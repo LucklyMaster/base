@@ -51,33 +51,34 @@ interface IFileRequest {
      */
     fun createFile(
         filePath: String,
+        fileName: String,
         data: ByteArray? = null,
         args: (ContentValues.() -> Unit)? = null
     ): Boolean
 
     fun write(uri: Uri, data: ByteArray?, append: Boolean = false)
 
-    fun write(relativePath: String, data: ByteArray?, append: Boolean = false)
+    fun write(filePath: String, data: ByteArray?, append: Boolean = false)
 
     fun read(uri: Uri): ByteArray?
 
-    fun read(relativePath: String): ByteArray?
+    fun read(filePath: String): ByteArray?
 
     fun delete(uri: Uri): Boolean
 
-    fun delete(relativePath: String): Boolean
+    fun delete(filePath: String): Boolean
 
     fun renameTo(uri: Uri, name: String): Boolean
 
-    fun renameTo(relativePath: String, destName: String): Boolean
+    fun renameTo(filePath: String, destName: String): Boolean
 
     fun copyTo(uri: Uri, destPath: String): Boolean
 
-    fun copyTo(relativePath: String, destRelativePath: String): Boolean
+    fun copyTo(filePath: String, destFilePath: String): Boolean
 
     fun moveTo(uri: Uri, destPath: String): Boolean
 
-    fun moveTo(relativePath: String, destRelativePath: String): Boolean
+    fun moveTo(filePath: String, destFilePath: String): Boolean
 
     fun getResponse(path: String): FileResponse?
 

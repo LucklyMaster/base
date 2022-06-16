@@ -2,7 +2,6 @@ package com.masterchan.lib.sandbox.request
 
 import android.annotation.SuppressLint
 import android.content.ContentUris
-import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
 import android.os.Build
@@ -10,7 +9,10 @@ import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
-import com.masterchan.lib.ext.*
+import com.masterchan.lib.ext.application
+import com.masterchan.lib.ext.createDirs
+import com.masterchan.lib.ext.orNull
+import com.masterchan.lib.ext.toFileResponse
 import com.masterchan.lib.sandbox.FileResponse
 import java.io.File
 
@@ -75,47 +77,23 @@ abstract class AbsFileRequest : IFileRequest {
         data?.let { resolver.openOutputStream(uri, if (append) "wa" else "w")?.write(it) }
     }
 
-    override fun write(relativePath: String, data: ByteArray?, append: Boolean) {
-        val file = File(obtainPath(relativePath))
-        file.parentFile?.createDirs()
-        write(file.toUri(), data, append)
+    override fun write(filePath: String, data: ByteArray?, append: Boolean) {
+        val file = File(obtainPath(filePath))
+        if (file.exists()) {
+            file.parentFile?.createDirs()
+            write(file.toUri(), data, append)
+        } else {
+            createFile(file.parent!!, file.name, data)
+        }
     }
 
     override fun read(uri: Uri): ByteArray? {
         return resolver.openInputStream(uri)?.readBytes()
     }
 
-    override fun read(relativePath: String): ByteArray? {
-        val file = File(obtainPath(relativePath)).orNull { exists() } ?: return null
+    override fun read(filePath: String): ByteArray? {
+        val file = File(obtainPath(filePath)).orNull { exists() } ?: return null
         return read(file.toUri())
-    }
-
-    override fun delete(uri: Uri): Boolean {
-        resolver.delete(uri, null, null)
-        return true
-    }
-
-    override fun renameTo(uri: Uri, name: String): Boolean {
-        return try {
-            val cv = ContentValues()
-            cv.put(MediaStore.MediaColumns.DISPLAY_NAME, name)
-            resolver.update(uri, cv, null, null)
-            true
-        } catch (t: Throwable) {
-            t.printStackTrace()
-            false
-        }
-    }
-
-    override fun renameTo(relativePath: String, destName: String): Boolean {
-        val file = File(obtainPath(relativePath))
-        if (!file.exists()) {
-            return false
-        }
-        val response = getResponse(relativePath) ?: return false
-        val cv = ContentValues()
-        cv.put(MediaStore.MediaColumns.DISPLAY_NAME, destName)
-        return resolver.update(response.uri, cv, null, null) > 0
     }
 
     override fun copyTo(uri: Uri, destPath: String): Boolean {
@@ -128,24 +106,13 @@ abstract class AbsFileRequest : IFileRequest {
         }
     }
 
-    override fun copyTo(
-        relativePath: String,
-        destRelativePath: String
-    ): Boolean {
-        val srcFile = File(obtainPath(relativePath))
+    override fun copyTo(filePath: String, destFilePath: String): Boolean {
+        val srcFile = File(obtainPath(filePath))
         if (!srcFile.exists()) {
             return false
         }
-        return try {
-            val destFile = File(obtainPath(destRelativePath)).apply { create() }
-            resolver.openInputStream(srcFile.toUri())?.readBytes().let {
-                resolver.openOutputStream(destFile.toUri())?.write(it)
-            }
-            true
-        } catch (t: Throwable) {
-            t.printStackTrace()
-            false
-        }
+        write(obtainPath(destFilePath), read(srcFile.absolutePath))
+        return true
     }
 
     override fun moveTo(uri: Uri, destPath: String): Boolean {
@@ -153,11 +120,11 @@ abstract class AbsFileRequest : IFileRequest {
     }
 
     override fun moveTo(
-        relativePath: String,
-        destRelativePath: String
+        filePath: String,
+        destFilePath: String
     ): Boolean {
-        return if (copyTo(relativePath, destRelativePath)) {
-            delete(relativePath)
+        return if (copyTo(filePath, destFilePath)) {
+            delete(filePath)
         } else {
             false
         }
@@ -233,7 +200,6 @@ abstract class AbsFileRequest : IFileRequest {
         projection.add(MediaStore.MediaColumns.DATE_ADDED)
         projection.add(MediaStore.MediaColumns.WIDTH)
         projection.add(MediaStore.MediaColumns.HEIGHT)
-        projection.add(MediaStore.MediaColumns.RELATIVE_PATH)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             projection.add(MediaStore.MediaColumns.DURATION)
         }
@@ -251,8 +217,6 @@ abstract class AbsFileRequest : IFileRequest {
                 val date = cursor.getLong(cursor.getColumnIndex(MediaStore.MediaColumns.DATE_ADDED))
                 val width = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns.WIDTH))
                 val height = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns.HEIGHT))
-                val height2 = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.RELATIVE_PATH))
-                Log.d(height2)
                 val duration = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     cursor.getLong(cursor.getColumnIndex(MediaStore.MediaColumns.DURATION))
                 } else {

@@ -1,12 +1,14 @@
 package com.masterchan.lib.sandbox.request
 
 import android.content.ContentValues
+import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.webkit.MimeTypeMap
 import com.masterchan.lib.ext.create
 import com.masterchan.lib.ext.deleteAll
-import com.masterchan.lib.ext.mimeType
+import com.masterchan.lib.ext.renameTo
+import com.masterchan.lib.ext.toFileResponse
 import com.masterchan.lib.sandbox.FileResponse
 import java.io.File
 
@@ -19,34 +21,27 @@ open class FileRequestApi28Impl : AbsFileRequest() {
 
     override fun createFile(
         filePath: String,
+        fileName: String,
         data: ByteArray?,
         args: (ContentValues.() -> Unit)?
     ): Boolean {
         val cv = ContentValues()
-        File(obtainPath(filePath)).mimeType?.let {
-            cv.put(MediaStore.MediaColumns.MIME_TYPE, it)
-        }
-        //根据MIME_TYPE判断是否需要在文件末尾添加推断的扩展名
-        var suffix = ""
-        if (args != null) {
-            args.invoke(cv)
-            cv.getAsString(MediaStore.MediaColumns.MIME_TYPE)?.let {
-                suffix = MimeTypeMap.getSingleton().getExtensionFromMimeType(it) ?: ""
-                if (suffix.isNotEmpty()) {
-                    suffix = ".$suffix"
-                }
+        var file = File(obtainPath("$filePath/$fileName"))
+        cv.put(MediaStore.MediaColumns.DATA, file.absolutePath)
+        cv.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+        args?.invoke(cv)
+        cv.getAsString(MediaStore.MediaColumns.MIME_TYPE)?.let {
+            val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(it)
+            val split = fileName.split(".")
+            if (split.size == 1 || split[1] != extension) {
+                file = File("${file.absolutePath}.$extension")
+                cv.put(MediaStore.MediaColumns.DATA, file.absolutePath)
             }
         }
-        val file = File(obtainPath("$filePath$suffix"))
-        if (file.exists()) {
-            return true
-        }
-        cv.put(MediaStore.MediaColumns.DATA, file.absolutePath)
-        cv.put(MediaStore.MediaColumns.DISPLAY_NAME, file.name)
-
         val rootPath = "${Environment.getExternalStorageDirectory().absolutePath}/"
         val standardDir = filePath.replace(rootPath, "").split("/").firstOrNull()
         resolver.insert(getSuitableContentUri(standardDir), cv)
+
         if (!file.create()) {
             return false
         }
@@ -54,15 +49,64 @@ open class FileRequestApi28Impl : AbsFileRequest() {
         return true
     }
 
-    override fun delete(relativePath: String): Boolean {
-        val file = File(obtainPath(relativePath))
+    override fun delete(uri: Uri): Boolean {
+        val fileResponse = uri.toFileResponse() ?: return false
+        return delete(fileResponse.file.absolutePath)
+    }
+
+    override fun delete(filePath: String): Boolean {
+        val file = File(obtainPath(filePath))
         if (!file.exists()) {
             return true
         }
-        val selection = "${MediaStore.MediaColumns.DATA} like ?"
-        val args = arrayOf("${file.absolutePath}%")
-        resolver.delete(fileUri, selection, args)
-        return file.deleteAll()
+        return if (file.isDirectory) {
+            val selection = "${MediaStore.MediaColumns.DATA} like ?"
+            val args = arrayOf("${file.absolutePath}%")
+            resolver.delete(fileUri, selection, args)
+            file.deleteAll()
+        } else {
+            val selection = "${MediaStore.MediaColumns.DATA} = ?"
+            val args = arrayOf(file.absolutePath)
+            resolver.delete(fileUri, selection, args)
+            if (file.exists()) {
+                file.delete()
+            } else {
+                true
+            }
+        }
+    }
+
+    override fun renameTo(uri: Uri, name: String): Boolean {
+        val fileResponse = uri.toFileResponse() ?: return false
+        return try {
+            if (!fileResponse.file.renameTo(name)) {
+                return false
+            }
+            val cv = ContentValues()
+            cv.put(MediaStore.MediaColumns.DATA, "${fileResponse.file.parent!!}/$name")
+            cv.put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+            resolver.update(uri, cv, null, null)
+            true
+        } catch (t: Throwable) {
+            t.printStackTrace()
+            false
+        }
+    }
+
+    override fun renameTo(filePath: String, destName: String): Boolean {
+        val file = File(obtainPath(filePath))
+        if (!file.exists()) {
+            return false
+        }
+        val response = getResponse(filePath) ?: return false
+        if (!file.renameTo(destName)) {
+            return false
+        }
+        val cv = ContentValues()
+        cv.put(MediaStore.MediaColumns.DATA, "${file.parent!!}/$destName")
+        cv.put(MediaStore.MediaColumns.DISPLAY_NAME, destName)
+        resolver.update(response.uri, cv, null, null)
+        return true
     }
 
     override fun listFiles(relativePath: String, withChildDir: Boolean): List<FileResponse>? {
