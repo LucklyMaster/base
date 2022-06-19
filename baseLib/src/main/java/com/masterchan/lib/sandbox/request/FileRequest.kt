@@ -8,6 +8,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
 import com.masterchan.lib.ext.deleteAll
+import com.masterchan.lib.ext.mimeType
 import com.masterchan.lib.sandbox.FileResponse
 import java.io.File
 
@@ -35,9 +36,14 @@ open class FileRequest : AbsFileRequest() {
         cv.put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath)
         cv.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
         args?.invoke(cv)
+        var mimeType = cv.getAsString(MediaStore.MediaColumns.MIME_TYPE)
+        if (mimeType.isNullOrEmpty()) {
+            mimeType = File("${file.absolutePath}/$fileName").mimeType
+            cv.put(MediaStore.MediaColumns.MIME_TYPE, mimeType)
+        }
 
         val uri = resolver.insert(
-            getSuitableContentUri(relativePath.split("/").first()), cv
+            getSuitableContentUri(relativePath.split("/").first(), mimeType ?: ""), cv
         ) ?: return false
         write(uri, data ?: "".toByteArray())
         return true

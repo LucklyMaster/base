@@ -239,10 +239,12 @@ abstract class AbsFileRequest : IFileRequest {
      * @param standardDir String
      * @return Uri
      */
-    protected fun getSuitableContentUri(standardDir: String?): Uri {
+    protected fun getSuitableContentUri(standardDir: String?, mimeType: String): Uri {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             when (standardDir) {
-                Environment.DIRECTORY_DCIM,
+                Environment.DIRECTORY_DCIM -> {
+                    if (mimeType.contains("video")) videoUri else imageUri
+                }
                 Environment.DIRECTORY_SCREENSHOTS,
                 Environment.DIRECTORY_PICTURES -> imageUri
                 Environment.DIRECTORY_DOWNLOADS,
@@ -257,7 +259,9 @@ abstract class AbsFileRequest : IFileRequest {
             }
         } else {
             when (standardDir) {
-                Environment.DIRECTORY_DCIM,
+                Environment.DIRECTORY_DCIM -> {
+                    if (mimeType.contains("video")) videoUri else imageUri
+                }
                 Environment.DIRECTORY_PICTURES -> imageUri
                 Environment.DIRECTORY_DOWNLOADS,
                 Environment.DIRECTORY_DOCUMENTS -> fileUri

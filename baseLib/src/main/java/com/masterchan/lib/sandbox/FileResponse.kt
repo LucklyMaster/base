@@ -4,7 +4,7 @@ import android.net.Uri
 import java.io.File
 
 /**
- * 文件访问结果，在API29以下只有[file]有效
+ * 文件访问结果，在API29以下只有[uri]、[file]、[addDate]有效
  * @author: MasterChan
  * @date: 2022-06-11 22:31
  */

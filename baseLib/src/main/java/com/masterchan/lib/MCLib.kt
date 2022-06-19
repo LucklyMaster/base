@@ -2,6 +2,8 @@ package com.masterchan.lib
 
 import android.app.Application
 import com.masterchan.lib.log.MLog
+import com.masterchan.lib.sandbox.Delegate
+import com.masterchan.lib.sandbox.request.IFileRequest
 
 /**
  * 初始化入口
@@ -41,4 +43,12 @@ class MCLib {
         method.invoke(CrashHandler.instance)
     }
 
+    /**
+     * 设置媒体库访问代理
+     * @param delegate Function0<IFileRequest>
+     * @return MCLib
+     */
+    fun setMediaAccessDelegate(delegate: () -> IFileRequest) = apply {
+        Delegate.setRequestDelegate(delegate)
+    }
 }

@@ -5,10 +5,7 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.webkit.MimeTypeMap
-import com.masterchan.lib.ext.create
-import com.masterchan.lib.ext.deleteAll
-import com.masterchan.lib.ext.renameTo
-import com.masterchan.lib.ext.toFileResponse
+import com.masterchan.lib.ext.*
 import com.masterchan.lib.sandbox.FileResponse
 import java.io.File
 
@@ -30,17 +27,24 @@ open class FileRequestApi28Impl : AbsFileRequest() {
         cv.put(MediaStore.MediaColumns.DATA, file.absolutePath)
         cv.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
         args?.invoke(cv)
-        cv.getAsString(MediaStore.MediaColumns.MIME_TYPE)?.let {
-            val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(it)
-            val split = fileName.split(".")
-            if (split.size == 1 || split[1] != extension) {
-                file = File("${file.absolutePath}.$extension")
-                cv.put(MediaStore.MediaColumns.DATA, file.absolutePath)
-            }
+
+        var mimeType = cv.getAsString(MediaStore.MediaColumns.MIME_TYPE)
+        //没有mimeType，自动推测添加一个mimeType
+        if (mimeType.isNullOrEmpty()) {
+            mimeType = file.mimeType
+            cv.put(MediaStore.MediaColumns.MIME_TYPE, mimeType)
         }
+        //有mimeType，组装为包含mimeType推测文件后缀的文件
+        val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
+        val split = fileName.split(".")
+        if (split.size == 1 || split[1] != extension) {
+            file = File("${file.absolutePath}.$extension")
+            cv.put(MediaStore.MediaColumns.DATA, file.absolutePath)
+        }
+
         val rootPath = "${Environment.getExternalStorageDirectory().absolutePath}/"
         val standardDir = filePath.replace(rootPath, "").split("/").firstOrNull()
-        resolver.insert(getSuitableContentUri(standardDir), cv)
+        resolver.insert(getSuitableContentUri(standardDir, mimeType ?: ""), cv)
 
         if (!file.create()) {
             return false
