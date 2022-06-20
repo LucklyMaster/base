@@ -4,7 +4,8 @@ import android.net.Uri
 import java.io.File
 
 /**
- * 文件访问结果，在API29以下只有[uri]、[file]、[addDate]有效
+ * 文件访问结果，在API29以下只有[uri]、[file]、[addDate]有效，对于其他字段，可以使用
+ * [android.media.MediaMetadataRetriever]获取
  * @author: MasterChan
  * @date: 2022-06-11 22:31
  */

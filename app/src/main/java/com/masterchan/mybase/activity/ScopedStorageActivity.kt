@@ -1,4 +1,4 @@
-package com.masterchan.mybase
+package com.masterchan.mybase.activity
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -13,6 +13,7 @@ import com.masterchan.lib.MToast
 import com.masterchan.lib.ext.toFileResponse
 import com.masterchan.lib.log.MLog
 import com.masterchan.lib.sandbox.MediaAccess
+import com.masterchan.mybase.R
 import com.masterchan.mybase.databinding.ActivityScopedStorageBinding
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -183,9 +184,9 @@ class ScopedStorageActivity : MyBaseActivity<ActivityScopedStorageBinding>() {
         return Environment.getExternalStorageDirectory().absolutePath + "/" + path
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.scoped_storage, menu)
-        return super.onCreateOptionsMenu(menu)
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

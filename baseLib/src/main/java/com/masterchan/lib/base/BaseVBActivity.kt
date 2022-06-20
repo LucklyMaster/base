@@ -2,6 +2,7 @@ package com.masterchan.lib.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import androidx.viewbinding.ViewBinding
 import java.lang.reflect.ParameterizedType
 
@@ -29,5 +30,9 @@ open class BaseVBActivity<T : ViewBinding> : BaseActivity() {
         val clazz = type.actualTypeArguments[0] as Class<*>
         val method = clazz.getMethod("inflate", LayoutInflater::class.java)
         return method.invoke(null, layoutInflater) as T
+    }
+
+    fun setOnViewClickListeners(clickListener: View.OnClickListener, views: T.() -> Array<View>) {
+        views.invoke(binding).forEach { it.setOnClickListener(clickListener) }
     }
 }

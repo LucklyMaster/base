@@ -1,6 +1,7 @@
-package com.masterchan.mybase
+package com.masterchan.mybase.activity
 
 import android.os.Bundle
+import com.masterchan.mybase.R
 import com.masterchan.mybase.databinding.ActivityAutoFoldKeyboardBinding
 import com.masterchan.mybase.fragment.AutoFoldKeyboardFragment
 

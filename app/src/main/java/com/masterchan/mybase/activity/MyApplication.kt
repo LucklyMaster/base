@@ -1,4 +1,4 @@
-package com.masterchan.mybase
+package com.masterchan.mybase.activity
 
 import android.app.Application
 import com.masterchan.lib.MCLib

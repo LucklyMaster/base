@@ -8,7 +8,9 @@ import android.graphics.Point
 import android.os.Build
 import android.view.WindowManager
 import com.masterchan.lib.ext.application
+import com.masterchan.lib.ext.topActivity
 import com.masterchan.lib.log.MLog
+import kotlin.math.max
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -24,7 +26,7 @@ object BitmapUtils {
 
     fun getBitmap(
         path: String,
-        inPreferredConfig: Bitmap.Config = Bitmap.Config.ARGB_8888
+        inPreferredConfig: Bitmap.Config = Bitmap.Config.RGB_565
     ): Bitmap? {
         if (maxBitmapSize == 0) {
             maxBitmapSize = getMaxBitmapSize()
@@ -83,7 +85,7 @@ object BitmapUtils {
     fun getMaxBitmapSize(): Int {
         val size = Point()
         val display = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            application.display
+            topActivity?.display
         } else {
             (application.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
         }
@@ -94,16 +96,18 @@ object BitmapUtils {
         var maxBitmapSize = sqrt(width.toDouble().pow(2.0) + height.toDouble().pow(2.0)).toInt()
 
         // Check for max texture size via Canvas
-        val canvas = Canvas()
+        /*val canvas = Canvas()
         val maxCanvasSize = canvas.maximumBitmapWidth.coerceAtMost(canvas.maximumBitmapHeight)
         if (maxCanvasSize > 0) {
-            maxBitmapSize = maxBitmapSize.coerceAtMost(maxCanvasSize)
-        }
+            maxBitmapSize = max(maxCanvasSize, maxBitmapSize)
+            // maxBitmapSize = maxBitmapSize.coerceAtMost(maxCanvasSize)
+        }*/
 
         // Check for max texture size via GL
         val maxTextureSize: Int = EglUtils.maxTextureSize
         if (maxTextureSize > 0) {
-            maxBitmapSize = maxBitmapSize.coerceAtMost(maxTextureSize)
+            maxBitmapSize = max(maxBitmapSize, maxTextureSize)
+            // maxBitmapSize = maxBitmapSize.coerceAtMost(maxTextureSize)
         }
         MLog.d("maxBitmapSize = $maxBitmapSize")
         return maxBitmapSize

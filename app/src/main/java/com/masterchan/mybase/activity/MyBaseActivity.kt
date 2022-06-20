@@ -1,4 +1,4 @@
-package com.masterchan.mybase
+package com.masterchan.mybase.activity
 
 import android.os.Bundle
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen

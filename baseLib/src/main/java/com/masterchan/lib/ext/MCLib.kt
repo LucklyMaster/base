@@ -15,13 +15,15 @@ typealias Log = MLog
 /**
  * APP是否在前台
  */
-fun isAppForeground() = ActivityStack.instance.isAppForeground
+val isAppForeground
+    get() = ActivityStack.instance.isAppForeground
 
 /**
  * 获取栈顶的Activity
  * @return Activity?
  */
-fun getTopActivity(): Activity? = ActivityStack.instance.currentActivity
+val topActivity: Activity?
+    get() = ActivityStack.instance.currentActivity
 
 /**
  * 是否适配了分区存储
