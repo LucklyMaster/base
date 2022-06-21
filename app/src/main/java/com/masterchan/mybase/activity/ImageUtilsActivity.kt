@@ -1,16 +1,19 @@
 package com.masterchan.mybase.activity
 
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import com.luck.picture.lib.basic.PictureSelector
 import com.luck.picture.lib.config.SelectMimeType
 import com.luck.picture.lib.entity.LocalMedia
 import com.luck.picture.lib.interfaces.OnResultCallbackListener
+import com.masterchan.lib.ext.dp2px
+import com.masterchan.lib.ext.toRoundCorner
 import com.masterchan.lib.utils.BitmapUtils
 import com.masterchan.mybase.GlideEngine
+import com.masterchan.mybase.R
 import com.masterchan.mybase.databinding.ActivityImageUtilsBinding
-
 
 class ImageUtilsActivity : MyBaseActivity<ActivityImageUtilsBinding>(), View.OnClickListener {
 
@@ -48,6 +51,9 @@ class ImageUtilsActivity : MyBaseActivity<ActivityImageUtilsBinding>(), View.OnC
                     })
             }
             binding.btnLoad -> {
+                var bitmap = BitmapFactory.decodeResource(resources, R.mipmap.img)
+                bitmap = bitmap.toRoundCorner(dp2px(20), dp2px(10), Color.GREEN)
+                binding.ivImage.setImageBitmap(bitmap)
             }
         }
     }

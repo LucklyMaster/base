@@ -5,18 +5,18 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.res.Configuration
 import android.os.Build
-import android.view.WindowInsets
-import android.view.WindowManager
-import android.view.WindowMetrics
-import androidx.annotation.StringRes
 
-fun dp2px(dp: Float): Float = (dp * application.resources.displayMetrics.density + 0.5f)
+fun dp2px(dp: Float): Float = (dp * displayDensity + 0.5f)
+fun dp2px(dp: Int): Float = (dp * displayDensity + 0.5f)
+fun px2dp(px: Float): Float = (px / displayDensity + 0.5f)
+fun px2dp(px: Int): Float = (px / displayDensity + 0.5f)
+fun dp2pxi(dp: Float): Int = (dp * displayDensity + 0.5f).toInt()
+fun dp2pxi(dp: Int): Int = (dp * displayDensity + 0.5f).toInt()
+fun px2dpi(px: Float): Int = (px / displayDensity + 0.5f).toInt()
+fun px2dpi(px: Int): Int = (px / displayDensity + 0.5f).toInt()
 
-fun px2dp(px: Float): Float = (px / application.resources.displayMetrics.density + 0.5f)
-
-fun dp2pxi(dp: Float): Int = (dp * application.resources.displayMetrics.density + 0.5f).toInt()
-
-fun px2dpi(px: Float): Int = (px / application.resources.displayMetrics.density + 0.5f).toInt()
+val displayDensity: Float
+    get() = application.resources.displayMetrics.density
 
 /**
  * 屏幕宽度
@@ -45,14 +45,6 @@ val statusBarHeight: Int
         )
         return application.resources.getDimensionPixelSize(resourceId)
     }
-
-/*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-    WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-    WindowMetrics windowMetrics = wm.getCurrentWindowMetrics();
-    WindowInsets windowInsets = windowMetrics.getWindowInsets();
-    Insets insets = windowInsets.getInsetsIgnoringVisibility(WindowInsets.Type.navigationBars() | WindowInsets.Type.displayCutout());
-    return insets.top;
-}*/
 
 /**
  * 导航栏高度
@@ -110,26 +102,6 @@ val versionName: String
     get() {
         return application.packageManager.getPackageInfo(application.packageName, 0).versionName
     }
-
-/**
- * 获取String集合
- * @receiver Context
- * @param resources StringRes
- * @return List<String>
- */
-fun Context.getStringList(@StringRes vararg resources: Int): List<String> {
-    return resources.map { getString(it) }
-}
-
-/**
- * 获取String数组
- * @receiver Context
- * @param resources IntArray
- * @return Array<String>
- */
-fun Context.getStringArray(@StringRes vararg resources: Int): Array<String> {
-    return getStringList(*resources).toTypedArray()
-}
 
 /**
  * 获取Context对应的Activity

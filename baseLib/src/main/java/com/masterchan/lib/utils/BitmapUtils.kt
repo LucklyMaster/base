@@ -1,16 +1,9 @@
 package com.masterchan.lib.utils
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.Point
-import android.os.Build
-import android.view.WindowManager
-import com.masterchan.lib.ext.application
-import com.masterchan.lib.ext.topActivity
-import com.masterchan.lib.log.MLog
-import kotlin.math.max
+import com.masterchan.lib.ext.screenHeight
+import com.masterchan.lib.ext.screenWidth
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -22,15 +15,13 @@ import kotlin.math.sqrt
  */
 object BitmapUtils {
 
-    private var maxBitmapSize = 0
-
     fun getBitmap(
         path: String,
-        inPreferredConfig: Bitmap.Config = Bitmap.Config.RGB_565
+        inPreferredConfig: Bitmap.Config = Bitmap.Config.ARGB_8888
     ): Bitmap? {
-        if (maxBitmapSize == 0) {
-            maxBitmapSize = getMaxBitmapSize()
-        }
+        val maxBitmapSize = sqrt(
+            screenWidth.toDouble().pow(2) + screenHeight.toDouble().pow(2)
+        ).toInt()
         return getBitmap(path, maxBitmapSize, maxBitmapSize, inPreferredConfig)
     }
 
@@ -75,41 +66,11 @@ object BitmapUtils {
         val width = options.outWidth
         var inSampleSize = 1
         if (width > maxWidth || height > maxHeight) {
+            //也可以通过Bitmap占用的内存和当前应用剩余内存比较，计算最大宽高
             while (width / inSampleSize > maxWidth || height / inSampleSize > maxHeight) {
                 inSampleSize *= 2
             }
         }
         return inSampleSize
-    }
-
-    fun getMaxBitmapSize(): Int {
-        val size = Point()
-        val display = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            topActivity?.display
-        } else {
-            (application.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
-        }
-        display?.getSize(size)
-        val width = size.x
-        val height = size.y
-
-        var maxBitmapSize = sqrt(width.toDouble().pow(2.0) + height.toDouble().pow(2.0)).toInt()
-
-        // Check for max texture size via Canvas
-        /*val canvas = Canvas()
-        val maxCanvasSize = canvas.maximumBitmapWidth.coerceAtMost(canvas.maximumBitmapHeight)
-        if (maxCanvasSize > 0) {
-            maxBitmapSize = max(maxCanvasSize, maxBitmapSize)
-            // maxBitmapSize = maxBitmapSize.coerceAtMost(maxCanvasSize)
-        }*/
-
-        // Check for max texture size via GL
-        val maxTextureSize: Int = EglUtils.maxTextureSize
-        if (maxTextureSize > 0) {
-            maxBitmapSize = max(maxBitmapSize, maxTextureSize)
-            // maxBitmapSize = maxBitmapSize.coerceAtMost(maxTextureSize)
-        }
-        MLog.d("maxBitmapSize = $maxBitmapSize")
-        return maxBitmapSize
     }
 }
