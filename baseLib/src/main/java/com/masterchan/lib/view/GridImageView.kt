@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.masterchan.lib.R
 import com.masterchan.lib.ext.inflater
-import com.masterchan.lib.utils.BitmapUtils
+import com.masterchan.lib.utils.ImageUtils
 import com.masterchan.lib.widget.RecyclerViewDivider
 import com.masterchan.lib.widget.ViewHolder
 
@@ -196,7 +196,7 @@ class GridImageView @JvmOverloads constructor(
             imageView.setImageBitmap(
                 when (any) {
                     is Int -> AppCompatResources.getDrawable(context, any)?.toBitmap()
-                    is String -> BitmapUtils.getBitmap(any)
+                    is String -> ImageUtils.getBitmap(any)
                     is Drawable -> any.toBitmap()
                     is Bitmap -> any
                     else -> null

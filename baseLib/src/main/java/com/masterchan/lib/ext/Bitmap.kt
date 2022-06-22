@@ -10,6 +10,7 @@ import android.renderscript.ScriptIntrinsicBlur
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
 import androidx.core.graphics.toRect
+import com.masterchan.lib.utils.YuvUtils
 import java.io.ByteArrayOutputStream
 import kotlin.math.min
 
@@ -46,6 +47,16 @@ fun Bitmap.rotate(degrees: Float): Bitmap {
     val matrix = Matrix()
     matrix.setRotate(degrees)
     return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true);
+}
+
+/**
+ * Bitmap转化为ARGB数据，再转化为NV21数据
+ * @return nv21数据
+ */
+fun Bitmap.toYuv(): ByteArray {
+    val argb = IntArray(width * height)
+    getPixels(argb, 0, width, 0, 0, width, height)
+    return YuvUtils.rgb2Yuv(argb, width, height)
 }
 
 /**
