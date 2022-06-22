@@ -13,6 +13,18 @@ import androidx.core.view.isVisible
 
 fun View.activity(): Activity? = context.toActivity()
 
+fun View.setSingleClickListener(listener: View.OnClickListener) {
+    setOnClickListener {
+        val tagKey = Int.MAX_VALUE - 1001
+        if (it.getTag(tagKey) != null) {
+            return@setOnClickListener
+        }
+        it.setTag(tagKey, "singleClick")
+        listener.onClick(it)
+        it.setTag(tagKey, null)
+    }
+}
+
 fun View.setPaddingLeft(paddingLeft: Int) {
     setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom)
 }
