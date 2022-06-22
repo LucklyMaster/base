@@ -2,14 +2,27 @@ package com.masterchan.mybase.activity
 
 import android.os.Bundle
 import android.view.View
-import com.masterchan.lib.ext.setOnClickListeners
-import com.masterchan.lib.ext.startActivity
+import com.masterchan.lib.ext.*
+import com.masterchan.lib.log.MLog
 import com.masterchan.mybase.databinding.ActivityMainBinding
 
 class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener {
 
     override fun onCreated(savedInstanceState: Bundle?) {
+        printAppInfo()
         setOnClickListeners(this, binding.keyboard, binding.imageUtils, binding.scoped)
+    }
+
+    private fun printAppInfo() {
+        MLog.d(
+            "screenWidth:$screenWidth\n" +
+            "screenHeight:$screenHeight\n" +
+            "statusBarHeight:$statusBarHeight\n" +
+            "navigationBarHeight:$navigationBarHeight\n" +
+            "orientation:$orientation\n" +
+            "versionName:$versionName\n" +
+            "versionCode:$versionCode"
+        )
     }
 
     override fun onClick(v: View?) {

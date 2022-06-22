@@ -15,15 +15,11 @@ fun dp2pxi(dp: Int): Int = (dp * displayDensity + 0.5f).toInt()
 fun px2dpi(px: Float): Int = (px / displayDensity + 0.5f).toInt()
 fun px2dpi(px: Int): Int = (px / displayDensity + 0.5f).toInt()
 
-val displayDensity: Float
-    get() = application.resources.displayMetrics.density
-
 /**
  * 屏幕宽度
  */
 val screenWidth: Int
     get() {
-        Log.d("获取一次")
         return application.resources.displayMetrics.widthPixels
     }
 
@@ -56,6 +52,12 @@ val navigationBarHeight: Int
         )
         return application.resources.getDimensionPixelSize(resourceId)
     }
+
+/**
+ * 像素密度
+ */
+val displayDensity: Float
+    get() = application.resources.displayMetrics.density
 
 /**
  * 屏幕方向，取值为[Configuration.ORIENTATION_LANDSCAPE]、[Configuration.ORIENTATION_PORTRAIT]、
