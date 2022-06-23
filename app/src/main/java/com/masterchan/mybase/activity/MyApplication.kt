@@ -1,8 +1,8 @@
 package com.masterchan.mybase.activity
 
 import android.app.Application
-import com.masterchan.lib.MCLib
-import com.masterchan.lib.log.DiskLogManager
+import com.mc.lib.MCLib
+import com.mc.lib.log.DiskLogManager
 
 /**
  * @author: MasterChan

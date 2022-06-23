@@ -6,7 +6,7 @@
 
 extern "C"
 JNIEXPORT jlong JNICALL
-Java_com_masterchan_lib_log_DiskLogManager_init(
+Java_com_mc_lib_log_DiskLogManager_init(
 	JNIEnv *env,
 	jobject thiz,
 	jstring _cachePath,
@@ -27,7 +27,7 @@ Java_com_masterchan_lib_log_DiskLogManager_init(
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_masterchan_lib_log_DiskLogManager_write(
+Java_com_mc_lib_log_DiskLogManager_write(
 	JNIEnv *env,
 	jobject thiz,
 	jlong handle,
@@ -45,7 +45,7 @@ Java_com_masterchan_lib_log_DiskLogManager_write(
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_masterchan_lib_log_DiskLogManager_release(JNIEnv *env, jobject thiz, jlong handle) {
+Java_com_mc_lib_log_DiskLogManager_release(JNIEnv *env, jobject thiz, jlong handle) {
 	auto *mp_file = (MPLog *)handle;
 	mp_file->release();
 }

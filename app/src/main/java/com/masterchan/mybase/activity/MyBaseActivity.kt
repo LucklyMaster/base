@@ -3,8 +3,8 @@ package com.masterchan.mybase.activity
 import android.os.Bundle
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.viewbinding.ViewBinding
-import com.masterchan.lib.base.BaseVBActivity
-import com.masterchan.lib.ext.Log
+import com.mc.lib.base.BaseVBActivity
+import com.mc.lib.ext.Log
 
 /**
  * @author: MasterChan
