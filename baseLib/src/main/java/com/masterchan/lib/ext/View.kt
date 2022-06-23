@@ -13,15 +13,21 @@ import androidx.core.view.isVisible
 
 fun View.activity(): Activity? = context.toActivity()
 
-fun View.setSingleClickListener(listener: View.OnClickListener) {
+fun View.setOnSingleClickListener(listener: View.OnClickListener) {
+    setOnSingleClickListener {
+        listener.onClick(it)
+    }
+}
+
+fun View.setOnSingleClickListener(delay: Int = 500, listener: (View: View) -> Unit) {
     setOnClickListener {
         val tagKey = Int.MAX_VALUE - 1001
-        if (it.getTag(tagKey) != null) {
+        val tag = it.getTag(tagKey)
+        if (tag != null && System.currentTimeMillis() - (tag as Long) < delay) {
             return@setOnClickListener
         }
-        it.setTag(tagKey, "singleClick")
-        listener.onClick(it)
-        it.setTag(tagKey, null)
+        listener.invoke(it)
+        it.setTag(tagKey, System.currentTimeMillis())
     }
 }
 

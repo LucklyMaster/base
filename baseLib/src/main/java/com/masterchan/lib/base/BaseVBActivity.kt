@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.viewbinding.ViewBinding
+import com.masterchan.lib.ext.setOnSingleClickListener
 import java.lang.reflect.ParameterizedType
 
 /**
@@ -34,5 +35,12 @@ open class BaseVBActivity<T : ViewBinding> : BaseActivity() {
 
     fun setOnViewClickListeners(clickListener: View.OnClickListener, views: T.() -> Array<View>) {
         views.invoke(binding).forEach { it.setOnClickListener(clickListener) }
+    }
+
+    fun setOnViewSingleClickListeners(
+        clickListener: View.OnClickListener,
+        views: T.() -> Array<View>
+    ) {
+        views.invoke(binding).forEach { it.setOnSingleClickListener(clickListener) }
     }
 }

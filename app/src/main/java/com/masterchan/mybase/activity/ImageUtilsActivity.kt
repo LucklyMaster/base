@@ -12,7 +12,7 @@ import com.masterchan.mybase.databinding.ActivityImageUtilsBinding
 class ImageUtilsActivity : MyBaseActivity<ActivityImageUtilsBinding>(), View.OnClickListener {
 
     override fun onCreated(savedInstanceState: Bundle?) {
-        setOnViewClickListeners(this) {
+        setOnViewSingleClickListeners(this) {
             arrayOf(btnSelector, btnLoad)
         }
     }
