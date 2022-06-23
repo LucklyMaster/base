@@ -43,7 +43,6 @@ interface IFileRequest {
      * 如果[filePath]不包含后缀名，在[args]中添加[MediaStore.MediaColumns.MIME_TYPE]参数，会根据
      * mimeType自动添加文件后缀；如果已经包含了后缀名，同时添加了[MediaStore.MediaColumns.MIME_TYPE]
      * 参数，会在原有后缀上追加根据mimeType推测的后缀；
-     * 如果只是想写入内容，使用[write]方法；
      * @param filePath 文件夹路径
      * @param data 需要写入的内容
      * @param args 自定义需要写入到文件的参数[ContentValues]
