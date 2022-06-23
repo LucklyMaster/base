@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.res.Configuration
 import android.os.Build
+import android.util.DisplayMetrics
 
 fun dp2px(dp: Float): Float = (dp * displayDensity + 0.5f)
 fun dp2px(dp: Int): Float = (dp * displayDensity + 0.5f)
@@ -24,11 +25,25 @@ val screenWidth: Int
     }
 
 /**
- * 屏幕高度
+ * 屏幕高度，未包含系统装饰
  */
 val screenHeight: Int
     get() {
         return application.resources.displayMetrics.heightPixels
+    }
+
+/**
+ * 屏幕物理高度，即真正的高度
+ */
+val screenRealHeight: Int
+    get() {
+        return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
+            topActivity?.windowManager?.currentWindowMetrics?.bounds?.height() ?: 0
+        } else {
+            val metrics = DisplayMetrics()
+            topActivity?.windowManager?.defaultDisplay?.getRealMetrics(metrics)
+            metrics.heightPixels
+        }
     }
 
 /**

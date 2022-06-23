@@ -1,28 +1,37 @@
 package com.masterchan.mybase.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.masterchan.lib.ext.*
 import com.masterchan.lib.log.MLog
+import com.masterchan.lib.utils.DeviceUtils
 import com.masterchan.mybase.databinding.ActivityMainBinding
+
 
 class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener {
 
     override fun onCreated(savedInstanceState: Bundle?) {
         printAppInfo()
         setOnClickListeners(this, binding.keyboard, binding.imageUtils, binding.scoped)
-    }
+    }aaa
 
     private fun printAppInfo() {
         MLog.d(
             "screenWidth:$screenWidth\n" +
             "screenHeight:$screenHeight\n" +
+            "screenRealHeight:$screenRealHeight\n" +
             "statusBarHeight:$statusBarHeight\n" +
             "navigationBarHeight:$navigationBarHeight\n" +
             "orientation:$orientation\n" +
             "versionName:$versionName\n" +
-            "versionCode:$versionCode"
+            "versionCode:$versionCode\n" +
+            "isRooted:${DeviceUtils.isRooted()}"
         )
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
     }
 
     override fun onClick(v: View?) {
