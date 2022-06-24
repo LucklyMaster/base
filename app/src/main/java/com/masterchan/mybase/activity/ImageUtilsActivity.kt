@@ -4,9 +4,10 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import com.master.lib.ext.toBlur
+import com.master.lib.ext.toRound
 import com.masterchan.mybase.R
 import com.masterchan.mybase.databinding.ActivityImageUtilsBinding
-import com.mc.lib.ext.*
 
 class ImageUtilsActivity : MyBaseActivity<ActivityImageUtilsBinding>(), View.OnClickListener {
 

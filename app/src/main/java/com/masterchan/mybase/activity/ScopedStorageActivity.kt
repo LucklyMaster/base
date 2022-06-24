@@ -9,10 +9,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.core.net.toUri
-import com.mc.lib.MToast
-import com.mc.lib.ext.toFileResponse
-import com.mc.lib.log.MLog
-import com.mc.lib.sandbox.MediaAccess
+import com.master.lib.MToast
+import com.master.lib.ext.toFileResponse
+import com.master.lib.log.MLog
+import com.master.lib.sandbox.MediaAccess
 import com.masterchan.mybase.R
 import com.masterchan.mybase.databinding.ActivityScopedStorageBinding
 import java.io.ByteArrayOutputStream

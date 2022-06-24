@@ -3,10 +3,10 @@ package com.masterchan.mybase.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import com.mc.lib.log.MLog
-import com.mc.lib.utils.DeviceUtils
+import com.master.lib.ext.*
+import com.master.lib.log.MLog
+import com.master.lib.utils.DeviceUtils
 import com.masterchan.mybase.databinding.ActivityMainBinding
-import com.mc.lib.ext.*
 
 
 class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener {
@@ -19,14 +19,14 @@ class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener
     private fun printAppInfo() {
         MLog.d(
             "screenWidth:$screenWidth\n" +
-                    "screenHeight:$screenHeight\n" +
-                    "screenRealHeight:$screenRealHeight\n" +
-                    "statusBarHeight:$statusBarHeight\n" +
-                    "navigationBarHeight:$navigationBarHeight\n" +
-                    "orientation:$orientation\n" +
-                    "versionName:$versionName\n" +
-                    "versionCode:$versionCode\n" +
-                    "isRooted:${DeviceUtils.isRooted()}"
+            "screenHeight:$screenHeight\n" +
+            "screenRealHeight:$screenRealHeight\n" +
+            "statusBarHeight:$statusBarHeight\n" +
+            "navigationBarHeight:$navigationBarHeight\n" +
+            "orientation:$orientation\n" +
+            "versionName:$versionName\n" +
+            "versionCode:$versionCode\n" +
+            "isRooted:${DeviceUtils.isRooted()}"
         )
     }
 

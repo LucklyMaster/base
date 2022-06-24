@@ -1,6 +1,6 @@
 package com.masterchan.mybase.fragment
 
-import com.mc.lib.base.BaseVBFragment
+import com.master.lib.base.BaseVBFragment
 import com.masterchan.mybase.databinding.FragmentAutoFoldKeyboardBinding
 
 /**
