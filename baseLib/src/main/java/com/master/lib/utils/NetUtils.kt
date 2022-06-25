@@ -1,10 +1,14 @@
 package com.master.lib.utils
 
+import android.Manifest.permission
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.telephony.TelephonyManager
+import androidx.annotation.IntDef
+import androidx.annotation.RequiresPermission
+import com.master.lib.ext.application
 
 
 /**
@@ -23,29 +27,44 @@ object NetUtils {
     const val NET_4G = 4
     const val NET_5G = 5
 
+    @Retention(AnnotationRetention.SOURCE)
+    @IntDef(NET_NONE, NET_UNKNOWN, NET_ETHERNET, NET_WIFI, NET_2G, NET_3G, NET_4G, NET_5G)
+    annotation class NetType
+
     /**
      * 是否连接到可用的网络，如果连接的网络无法访问互联网也会返回false
-     * @param context Context
      * @return Boolean
      */
-    @JvmStatic
-    fun isConnected(context: Context): Boolean {
-        val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    @RequiresPermission(permission.ACCESS_NETWORK_STATE)
+    fun isConnected(): Boolean {
+        val manager =
+            application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val capabilities = manager.getNetworkCapabilities(manager.activeNetwork)
         return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) == true
     }
 
-    fun getConnectState(context: Context): Int {
-        val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    /**
+     * 获取网络连接类型
+     * @param context Context
+     * @return [NetType]
+     */
+    @RequiresPermission(
+        anyOf = [permission.ACCESS_NETWORK_STATE, permission.READ_PHONE_STATE]
+    )
+    @NetType
+    fun getConnectType(): Int {
+        val manager =
+            application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val cap = manager.getNetworkCapabilities(manager.activeNetwork) ?: return NET_NONE
         return when {
             cap.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> NET_WIFI
             cap.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> NET_ETHERNET
-            cap.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> getMobileType(context)
+            cap.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> getMobileType(application)
             else -> NET_NONE
         }
     }
 
+    @RequiresPermission(permission.READ_PHONE_STATE)
     private fun getMobileType(context: Context): Int {
         val manager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
         val netWorkType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

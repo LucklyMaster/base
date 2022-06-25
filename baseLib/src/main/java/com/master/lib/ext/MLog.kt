@@ -7,7 +7,7 @@ import com.master.lib.utils.StackTraceUtils
 fun Any.println(priority: Int = Priority.DEBUG) {
     MLog.print(
         priority, MLog.tag, this,
-        StackTraceUtils.getTargetStackTraceElement("com.mc.lib.ext.MLogKt")
+        StackTraceUtils.getTargetStackTraceElement("com.master.lib.ext.MLogKt")
     )
 }
 
