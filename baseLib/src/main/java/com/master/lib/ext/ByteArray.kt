@@ -1,6 +1,16 @@
 package com.master.lib.ext
 
+import android.util.Base64
+import com.master.lib.utils.EncryptUtils
 import java.util.*
+
+fun ByteArray.toBase64(flags: Int = Base64.NO_WRAP): ByteArray {
+    return EncryptUtils.base64(this, flags)
+}
+
+fun ByteArray.toBase64String(flags: Int = Base64.NO_WRAP): String {
+    return EncryptUtils.base64(this, flags).toString(Charsets.US_ASCII)
+}
 
 fun ByteArray.toHexString(): String {
     val ret = CharArray(size shl 1)

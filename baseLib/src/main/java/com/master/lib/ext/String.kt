@@ -1,8 +1,18 @@
 package com.master.lib.ext
 
 import android.content.Context
+import android.util.Base64
 import androidx.annotation.StringRes
+import com.master.lib.utils.EncryptUtils
 import java.util.*
+
+fun String.toBase64(flags: Int = Base64.NO_WRAP): ByteArray {
+    return EncryptUtils.base64(this.toByteArray(), flags)
+}
+
+fun String.toBase64String(flags: Int = Base64.NO_WRAP): String {
+    return EncryptUtils.base64(this, flags)
+}
 
 fun String.toHexByteArray(): ByteArray {
     require(length % 2 == 0) { "长度不是偶数" }

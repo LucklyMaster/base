@@ -2,6 +2,8 @@ package com.master.lib.utils
 
 import android.annotation.SuppressLint
 import android.util.Base64
+import java.io.ByteArrayOutputStream
+import java.security.PrivateKey
 import java.security.SecureRandom
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
@@ -11,7 +13,7 @@ import javax.crypto.spec.SecretKeySpec
  * @author: MasterChan
  * @date: 2022-06-24 00:15
  */
-object DecodeUtils {
+object DecryptUtils {
 
     fun base64(data: ByteArray, flags: Int = Base64.NO_WRAP): ByteArray {
         return Base64.decode(data, flags)
@@ -19,10 +21,6 @@ object DecodeUtils {
 
     fun base64(data: String, flags: Int = Base64.NO_WRAP): ByteArray {
         return base64(data.toByteArray(), flags)
-    }
-
-    fun base64ToString(input: String, flags: Int = Base64.NO_WRAP): String {
-        return base64(input, flags).decodeToString()
     }
 
     /**
@@ -77,5 +75,29 @@ object DecodeUtils {
             e.printStackTrace()
         }
         return byteArrayOf()
+    }
+
+    /**
+     * RSA解密
+     * @param data ByteArray
+     * @param privateKey PrivateKey
+     * @return ByteArray
+     */
+    fun rsa(data: ByteArray, privateKey: PrivateKey): ByteArray {
+        return try {
+            val cipher = Cipher.getInstance("RSA")
+            cipher.init(Cipher.DECRYPT_MODE, privateKey)
+            val blockSize = cipher.blockSize
+            val outputStream = ByteArrayOutputStream(64)
+            var j = 0
+            while (data.size - j * blockSize > 0) {
+                outputStream.write(cipher.doFinal(data, j * blockSize, blockSize))
+                j++
+            }
+            outputStream.toByteArray()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            byteArrayOf()
+        }
     }
 }
