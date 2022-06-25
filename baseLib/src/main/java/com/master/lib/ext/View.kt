@@ -13,13 +13,19 @@ import androidx.core.view.isVisible
 
 fun View.activity(): Activity? = context.toActivity()
 
-fun View.setOnSingleClickListener(listener: View.OnClickListener) {
-    setOnSingleClickListener {
+fun View.setOnMultiClickListener(listener: View.OnClickListener) {
+    setOnMultiClickListener {
         listener.onClick(it)
     }
 }
 
-fun View.setOnSingleClickListener(delay: Int = 500, listener: (View: View) -> Unit) {
+/**
+ * 多次点击只有一次生效
+ * @receiver View
+ * @param delay Int
+ * @param listener Function1<[@kotlin.ParameterName] View, Unit>
+ */
+fun View.setOnMultiClickListener(delay: Int = 500, listener: (View: View) -> Unit) {
     setOnClickListener {
         val tagKey = Int.MAX_VALUE - 1001
         val tag = it.getTag(tagKey)

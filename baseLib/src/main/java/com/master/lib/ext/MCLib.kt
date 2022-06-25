@@ -33,10 +33,3 @@ val topActivity: Activity?
  */
 val isScopedStorage: Boolean
     get() = Build.VERSION.SDK_INT >= 29 && !Environment.isExternalStorageLegacy()
-
-fun Any.println() {
-    MLog.print(
-        Priority.DEBUG, MLog.tag, this,
-        StackTraceUtils.getTargetStackTraceElement("com.mc.lib.ext.MCLibKt")
-    )
-}
