@@ -11,7 +11,6 @@ import androidx.annotation.IntDef
 import androidx.annotation.RequiresPermission
 import com.master.lib.ext.application
 
-
 /**
  * 网络相关工具类
  * @author MasterChan
@@ -48,9 +47,7 @@ object NetUtils {
      * 获取网络连接类型
      * @return [NetType]
      */
-    @RequiresPermission(
-        allOf = [permission.ACCESS_NETWORK_STATE, permission.READ_PHONE_STATE]
-    )
+    @RequiresPermission(allOf = [permission.ACCESS_NETWORK_STATE, permission.READ_PHONE_STATE])
     fun getConnectType(): Int {
         val manager =
             application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -122,10 +119,10 @@ object NetUtils {
         return false
     }
 
-    @RequiresPermission(permission.CHANGE_WIFI_STATE)
-    fun setWifiEnabled(enabled: Boolean) {
-        val manager = application.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        if (enabled == manager.isWifiEnabled) return
-        manager.isWifiEnabled = enabled
+    @RequiresPermission(permission.INTERNET)
+    fun getIpAddress(useIpv4: Boolean): String {
+        val connectType = getConnectType()
+        // TODO: 通过网络状态获取相应的ip地址
+        // TODO: 获取外网IP地址
     }
 }
