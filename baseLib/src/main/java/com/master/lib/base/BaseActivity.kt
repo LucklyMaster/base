@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
+import androidx.activity.result.ActivityResult
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.master.lib.widget.ActivityResultHelper
 
 /**
  * BaseActivity
@@ -31,11 +33,18 @@ open class BaseActivity : AppCompatActivity() {
      */
     protected var windowController: WindowInsetsControllerCompat? = null
 
+    private var activityResultHelper: ActivityResultHelper? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        windowController = ViewCompat.getWindowInsetsController(window.decorView)
         context = this
         activity = this
+        windowController = ViewCompat.getWindowInsetsController(window.decorView)
+    }
+
+    fun registerForActivityResult() {
+        activityResultHelper = ActivityResultHelper(this)
+        activityResultHelper!!.registerForActivityResult()
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
@@ -68,5 +77,17 @@ open class BaseActivity : AppCompatActivity() {
 
     protected open fun hideKeyboard() {
         windowController?.hide(WindowInsetsCompat.Type.ime())
+    }
+
+    protected open fun startActivityForResult(
+        clazz: Class<out Activity>,
+        result: ActivityResult.() -> Unit
+    ) {
+        if (activityResultHelper == null) {
+            throw IllegalArgumentException(
+                "please call registerActivityForResult when onCreate first"
+            )
+        }
+        activityResultHelper!!.launch(clazz, result)
     }
 }

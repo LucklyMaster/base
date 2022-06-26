@@ -47,7 +47,7 @@ class AlertDialog private constructor(context: Context) {
     val activity: FragmentActivity
 
     init {
-        val con = context.toActivity() ?: throw Exception("the Context not attach a Activity")
+        val con = context.activity ?: throw Exception("the Context not attach a Activity")
         if (con !is FragmentActivity) {
             throw Exception("the Context must be a FragmentActivity")
         }

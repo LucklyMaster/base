@@ -3,9 +3,13 @@ package com.master.lib.ext
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import android.util.DisplayMetrics
+import androidx.activity.ComponentActivity
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 
 fun dp2px(dp: Float): Float = (dp * displayDensity + 0.5f)
 fun dp2px(dp: Int): Float = (dp * displayDensity + 0.5f)
@@ -125,13 +129,24 @@ val versionName: String
  * @receiver Context
  * @return Activity?
  */
-fun Context.toActivity(): Activity? {
-    var context = this
-    while (context is ContextWrapper) {
-        if (context is Activity) {
-            return context
+val Context.activity: Activity?
+    get() {
+        var context = this
+        while (context is ContextWrapper) {
+            if (context is Activity) {
+                return context
+            }
+            context = (this as ContextWrapper).baseContext
         }
-        context = (this as ContextWrapper).baseContext
+        return null
     }
-    return null
+
+fun Activity.startActivity(clazz: Class<out Activity>) {
+    startActivity(Intent(this, clazz))
+}
+
+inline fun <reified T : Activity> Activity.startActivity(params: Intent.() -> Unit) {
+    val intent = Intent(this, T::class.java)
+    params.invoke(intent)
+    startActivity(intent)
 }

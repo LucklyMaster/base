@@ -10,11 +10,11 @@ import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.FragmentActivity
-import com.masterchan.lib.R
-import com.masterchan.lib.databinding.McDialogLoadingBinding
+import com.master.lib.ext.activity
 import com.master.lib.ext.dp2px
 import com.master.lib.ext.isMainThread
-import com.master.lib.ext.toActivity
+import com.masterchan.lib.R
+import com.masterchan.lib.databinding.McDialogLoadingBinding
 
 /**
  * LoadingDialog
@@ -37,7 +37,7 @@ class LoadingDialog(
     val context: FragmentActivity
 
     init {
-        val activity = context.toActivity() ?: throw Exception("the Context not attach a Activity")
+        val activity = context.activity ?: throw Exception("the Context not attach a Activity")
         if (activity !is FragmentActivity) {
             throw Exception("the Context must be a FragmentActivity")
         }

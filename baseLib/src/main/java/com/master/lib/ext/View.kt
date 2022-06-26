@@ -11,7 +11,8 @@ import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 
-fun View.activity(): Activity? = context.toActivity()
+val View.activity: Activity?
+    get() = context.activity
 
 fun View.setOnMultiClickListener(listener: View.OnClickListener) {
     setOnMultiClickListener {

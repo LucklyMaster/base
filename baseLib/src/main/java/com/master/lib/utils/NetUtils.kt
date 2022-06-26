@@ -4,6 +4,7 @@ import android.Manifest.permission
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.wifi.WifiManager
 import android.os.Build
 import android.telephony.TelephonyManager
 import androidx.annotation.IntDef
@@ -45,13 +46,11 @@ object NetUtils {
 
     /**
      * 获取网络连接类型
-     * @param context Context
      * @return [NetType]
      */
     @RequiresPermission(
-        anyOf = [permission.ACCESS_NETWORK_STATE, permission.READ_PHONE_STATE]
+        allOf = [permission.ACCESS_NETWORK_STATE, permission.READ_PHONE_STATE]
     )
-    @NetType
     fun getConnectType(): Int {
         val manager =
             application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -92,5 +91,41 @@ object NetUtils {
             TelephonyManager.NETWORK_TYPE_UNKNOWN -> NET_UNKNOWN
             else -> NET_UNKNOWN
         }
+    }
+
+    /**
+     * 是否是移动网络连接
+     * @return Boolean
+     */
+    @RequiresPermission(permission.ACCESS_NETWORK_STATE)
+    fun isMobileConnected(): Boolean {
+        val manager =
+            application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkCapabilities = manager.getNetworkCapabilities(manager.activeNetwork)
+        return networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) == true
+    }
+
+    @RequiresPermission(permission.ACCESS_WIFI_STATE)
+    fun isWifiEnabled(): Boolean {
+        val manager = application.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        return manager.isWifiEnabled
+    }
+
+    @RequiresPermission(permission.ACCESS_NETWORK_STATE)
+    fun isWifiConnected(): Boolean {
+        val manager =
+            application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkCapabilities = manager.getNetworkCapabilities(manager.activeNetwork)
+        if (networkCapabilities != null) {
+            return networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+        }
+        return false
+    }
+
+    @RequiresPermission(permission.CHANGE_WIFI_STATE)
+    fun setWifiEnabled(enabled: Boolean) {
+        val manager = application.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        if (enabled == manager.isWifiEnabled) return
+        manager.isWifiEnabled = enabled
     }
 }
