@@ -9,7 +9,11 @@ import android.os.Build
 import android.telephony.TelephonyManager
 import androidx.annotation.IntDef
 import androidx.annotation.RequiresPermission
+import androidx.core.content.getSystemService
 import com.master.lib.ext.application
+import java.net.Inet4Address
+import java.net.Inet6Address
+import java.net.NetworkInterface
 
 /**
  * 网络相关工具类
@@ -37,8 +41,7 @@ object NetUtils {
      */
     @RequiresPermission(permission.ACCESS_NETWORK_STATE)
     fun isConnected(): Boolean {
-        val manager =
-            application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val manager = application.getSystemService<ConnectivityManager>() ?: return false
         val capabilities = manager.getNetworkCapabilities(manager.activeNetwork)
         return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) == true
     }
@@ -62,7 +65,7 @@ object NetUtils {
 
     @RequiresPermission(permission.READ_PHONE_STATE)
     private fun getMobileType(context: Context): Int {
-        val manager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        val manager = context.getSystemService<TelephonyManager>() ?: return NET_UNKNOWN
         val netWorkType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             manager.dataNetworkType
         } else {
@@ -96,22 +99,20 @@ object NetUtils {
      */
     @RequiresPermission(permission.ACCESS_NETWORK_STATE)
     fun isMobileConnected(): Boolean {
-        val manager =
-            application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val manager = application.getSystemService<ConnectivityManager>() ?: return false
         val networkCapabilities = manager.getNetworkCapabilities(manager.activeNetwork)
         return networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) == true
     }
 
     @RequiresPermission(permission.ACCESS_WIFI_STATE)
     fun isWifiEnabled(): Boolean {
-        val manager = application.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        val manager = application.getSystemService<WifiManager>() ?: return false
         return manager.isWifiEnabled
     }
 
     @RequiresPermission(permission.ACCESS_NETWORK_STATE)
     fun isWifiConnected(): Boolean {
-        val manager =
-            application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val manager = application.getSystemService<ConnectivityManager>() ?: return false
         val networkCapabilities = manager.getNetworkCapabilities(manager.activeNetwork)
         if (networkCapabilities != null) {
             return networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
@@ -119,10 +120,47 @@ object NetUtils {
         return false
     }
 
+    @RequiresPermission(permission.ACCESS_WIFI_STATE)
+    fun getWifiAddress(): String {
+        val wifiManager = application.getSystemService<WifiManager>()
+        val ipInt = wifiManager?.connectionInfo?.ipAddress ?: return ""
+        return (ipInt and 0xFF).toString()
+            .plus(".")
+            .plus(ipInt shr 8 and 0xFF)
+            .plus(".")
+            .plus(ipInt shr 16 and 0xFF)
+            .plus(".")
+            .plus(ipInt shr 24 and 0xFF)
+    }
+
     @RequiresPermission(permission.INTERNET)
-    fun getIpAddress(useIpv4: Boolean): String {
-        val connectType = getConnectType()
-        // TODO: 通过网络状态获取相应的ip地址
-        // TODO: 获取外网IP地址
+    fun getIpAddress(useIpv6: Boolean = false): String {
+        val nis = NetworkInterface.getNetworkInterfaces()
+        while (nis.hasMoreElements()) {
+            val element = nis.nextElement()
+            val inetAddresses = element.inetAddresses
+            while (inetAddresses.hasMoreElements()) {
+                val nextElement = inetAddresses.nextElement()
+                if (nextElement.isLoopbackAddress) continue
+                val hostAddress = nextElement.hostAddress ?: continue
+                //ipv6
+                if (useIpv6 && nextElement is Inet6Address) {
+                    return if (hostAddress.contains("%")) {
+                        if (hostAddress.split("%")[1].contains("wlan0")) {
+                            hostAddress.substringBefore("%")
+                        } else {
+                            continue
+                        }
+                    } else {
+                        hostAddress
+                    }
+                }
+                //ipv4
+                if (!useIpv6 && nextElement is Inet4Address) {
+                    return hostAddress
+                }
+            }
+        }
+        return ""
     }
 }
