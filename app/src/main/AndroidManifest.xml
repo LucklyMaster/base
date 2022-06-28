@@ -25,7 +25,7 @@
             android:name=".activity.ScopedStorageActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.ImageUtilsActivity"
+            android:name=".activity.ShapeViewActivity"
             android:exported="false" />
         <activity
             android:name=".activity.AutoFoldKeyboardActivity"

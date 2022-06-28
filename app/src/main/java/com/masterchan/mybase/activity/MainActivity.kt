@@ -37,7 +37,7 @@ class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener
     override fun onClick(v: View?) {
         val clazz = when (v) {
             binding.keyboard -> AutoFoldKeyboardActivity::class.java
-            binding.imageUtils -> ImageUtilsActivity::class.java
+            binding.imageUtils -> ShapeViewActivity::class.java
             binding.scoped -> ScopedStorageActivity::class.java
             else -> MainActivity::class.java
         }

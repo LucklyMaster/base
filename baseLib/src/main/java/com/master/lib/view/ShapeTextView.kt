@@ -31,11 +31,11 @@ class ShapeTextView @JvmOverloads constructor(
         val rbRadius = a.getDimension(R.styleable.ShapeTextView_mc_rightBottomRadius, radius)
         val strokeWidth = a.getDimensionPixelOffset(R.styleable.ShapeTextView_mc_strokeWidth, 0)
 
-        val controlColor = MaterialColors.getColor(this, android.R.attr.colorControlHighlight)
+        val controlColor = MaterialColors.getColor(this, androidx.appcompat.R.attr.colorControlHighlight)
         val rippleColor = a.getColor(R.styleable.ShapeTextView_mc_rippleColor, controlColor)
         val pressedColor = a.getColor(R.styleable.ShapeTextView_mc_pressedColor, controlColor)
         val strokeColor = a.getColor(R.styleable.ShapeTextView_mc_strokeColor, Color.GRAY)
-        var normalColor = MaterialColors.getColor(this, android.R.attr.colorPrimary)
+        var normalColor = MaterialColors.getColor(this, androidx.appcompat.R.attr.colorPrimary)
         normalColor = a.getColor(R.styleable.ShapeTextView_mc_normalColor, normalColor)
         val disableColor = a.getColor(
             R.styleable.ShapeTextView_mc_disableColor, Color.parseColor("#BFBFBF")
