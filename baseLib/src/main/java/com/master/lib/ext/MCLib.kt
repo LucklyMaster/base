@@ -7,8 +7,6 @@ import android.os.Environment
 import com.master.lib.ActivityStack
 import com.master.lib.MCLib
 import com.master.lib.log.MLog
-import com.master.lib.log.Priority
-import com.master.lib.utils.StackTraceUtils
 
 var application: Application = MCLib.application
 

@@ -1,4 +1,4 @@
-package com.master.lib.view
+package com.master.lib.view.shapeview
 
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -8,9 +8,12 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.RippleDrawable
 import android.graphics.drawable.StateListDrawable
+import android.util.AttributeSet
 import android.view.View
 import android.view.ViewOutlineProvider
 import androidx.annotation.ColorInt
+import com.google.android.material.color.MaterialColors
+import com.masterchan.lib.R
 import kotlin.math.min
 
 /**
@@ -19,30 +22,15 @@ import kotlin.math.min
  * @date 2021-12-10 10:18
  */
 @Suppress("MemberVisibilityCanBePrivate")
-class ShapeViewHelper() {
+class ShapeViewHelper(attrs: AttributeSet? = null) : IShapeView {
 
+    var view: View? = null
     var useRipple = false
     var strokeWidth = 0
     var stokeColor = 0
-
-    /**
-     * 正常时的颜色
-     */
     var normalColor = 0
-
-    /**
-     * [View.isEnabled]为false时的颜色
-     */
     var disableColor = 0
-
-    /**
-     * 按下后的颜色，如果[useRipple]为true，不生效，使用[rippleColor]
-     */
     var pressedColor = 0
-
-    /**
-     * 水波纹颜色
-     */
     var rippleColor = 0
     var leftTopRadius = 0f
     var leftBottomRadius = 0f
@@ -50,62 +38,125 @@ class ShapeViewHelper() {
     var rightBottomRadius = 0f
     var isCircle = false
 
-    fun setUseRipple(useRipple: Boolean) = apply {
+    init {
+        // if (view != null && attrs != null) {
+        initWithAttrs(view!!, attrs)
+        // }
+    }
+
+    private fun initWithAttrs(view: View, attrs: AttributeSet?) {
+        val context = view.context
+        val controlColor = context.getColor(R.color.color_ripple)
+        var normalColor = MaterialColors.getColor(context, android.R.attr.colorPrimary, 0)
+
+        val a = context.obtainStyledAttributes(attrs, R.styleable.ShapeView)
+        val useRipple = a.getBoolean(R.styleable.ShapeView_mc_useRipple, true)
+        val radius = a.getDimension(R.styleable.ShapeView_mc_radius, 0f)
+        val ltRadius = a.getDimension(R.styleable.ShapeView_mc_leftTopRadius, radius)
+        val lbRadius = a.getDimension(R.styleable.ShapeView_mc_leftBottomRadius, radius)
+        val rtRadius = a.getDimension(R.styleable.ShapeView_mc_rightTopRadius, radius)
+        val rbRadius = a.getDimension(R.styleable.ShapeView_mc_rightBottomRadius, radius)
+        val strokeWidth = a.getDimensionPixelOffset(R.styleable.ShapeView_mc_strokeWidth, 0)
+
+        val rippleColor = a.getColor(R.styleable.ShapeView_mc_rippleColor, controlColor)
+        val pressedColor = a.getColor(R.styleable.ShapeView_mc_pressedColor, controlColor)
+        val strokeColor = a.getColor(R.styleable.ShapeView_mc_strokeColor, Color.GRAY)
+
+        normalColor = a.getColor(R.styleable.ShapeView_mc_normalColor, normalColor)
+        val disableColor = a.getColor(
+            R.styleable.ShapeView_mc_disableColor, context.getColor(R.color.color_disable)
+        )
+
+        val circle = a.getBoolean(R.styleable.ShapeView_mc_circle, false)
+        a.recycle()
+
+        this.setStrokeWidth(strokeWidth)
+            .setStrokeColor(strokeColor)
+            .setRippleColor(rippleColor)
+            .setNormalColor(normalColor)
+            .setPressedColor(pressedColor)
+            .setDisableColor(disableColor)
+            .setLeftTopRadius(ltRadius)
+            .setLeftBottomRadius(lbRadius)
+            .setRightTopRadius(rtRadius)
+            .setRightBottomRadius(rbRadius)
+            .setUseRipple(useRipple)
+            .setCircle(circle)
+            .into(view)
+    }
+
+    override fun bindView(view: View) = apply {
+        this.view = view
+    }
+
+    override fun setUseRipple(useRipple: Boolean) = apply {
         this.useRipple = useRipple
     }
 
-    fun setStrokeWidth(stokeWidth: Int) = apply {
+    override fun setStrokeWidth(stokeWidth: Int) = apply {
         this.strokeWidth = stokeWidth
     }
 
-    fun setStrokeColor(@ColorInt stokeColor: Int) = apply {
+    override fun setStrokeColor(@ColorInt stokeColor: Int) = apply {
         this.stokeColor = stokeColor
     }
 
-    fun setNormalColor(@ColorInt normalColor: Int) = apply {
+    override fun setNormalColor(@ColorInt normalColor: Int) = apply {
         this.normalColor = normalColor
     }
 
-    fun setPressedColor(@ColorInt pressedColor: Int) = apply {
+    /**
+     * 按下后的颜色，如果[useRipple]为true，不生效，使用[rippleColor]
+     * @param pressedColor Int
+     * @return ShapeViewHelper
+     */
+    override fun setPressedColor(@ColorInt pressedColor: Int) = apply {
         this.pressedColor = pressedColor
     }
 
-    fun setDisableColor(@ColorInt disableColor: Int) = apply {
+    override fun setDisableColor(@ColorInt disableColor: Int) = apply {
         this.disableColor = disableColor
     }
 
-    fun setRippleColor(@ColorInt rippleColor: Int) = apply {
+    override fun setRippleColor(@ColorInt rippleColor: Int) = apply {
         this.rippleColor = rippleColor
     }
 
-    fun setLeftTopRadius(radius: Float) = apply {
+    override fun setLeftTopRadius(radius: Float) = apply {
         leftTopRadius = radius
     }
 
-    fun setLeftBottomRadius(radius: Float) = apply {
+    override fun setLeftBottomRadius(radius: Float) = apply {
         leftBottomRadius = radius
     }
 
-    fun setRightTopRadius(radius: Float) = apply {
+    override fun setRightTopRadius(radius: Float) = apply {
         rightTopRadius = radius
     }
 
-    fun setRightBottomRadius(radius: Float) = apply {
+    override fun setRightBottomRadius(radius: Float) = apply {
         rightBottomRadius = radius
     }
 
-    fun setRadius(radius: Float) = apply {
+    override fun setRadius(radius: Float) = apply {
         leftTopRadius = radius
         leftBottomRadius = radius
         rightTopRadius = radius
         rightBottomRadius = radius
     }
 
-    fun setCircle(isCircle: Boolean) = apply {
+    override fun setCircle(isCircle: Boolean) = apply {
         this.isCircle = isCircle
     }
 
-    fun into(view: View) {
+    override fun into() {
+        if (view == null) {
+            throw IllegalArgumentException("the bind view is null")
+        }
+        into(view!!)
+    }
+
+    override fun into(view: View) {
         if (isCircle) {
             view.outlineProvider = object : ViewOutlineProvider() {
                 override fun getOutline(view: View, outline: Outline) {

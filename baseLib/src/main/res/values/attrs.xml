@@ -57,6 +57,22 @@
         <enum name="center" value="4" />
     </attr>
 
+    <declare-styleable name="ShapeView">
+        <attr name="mc_useRipple" />
+        <attr name="mc_rippleColor" />
+        <attr name="mc_radius" />
+        <attr name="mc_leftTopRadius" />
+        <attr name="mc_leftBottomRadius" />
+        <attr name="mc_rightTopRadius" />
+        <attr name="mc_rightBottomRadius" />
+        <attr name="mc_strokeWidth" />
+        <attr name="mc_strokeColor" />
+        <attr name="mc_normalColor" />
+        <attr name="mc_pressedColor" />
+        <attr name="mc_disableColor" />
+        <attr name="mc_circle" />
+    </declare-styleable>
+
     <declare-styleable name="ShapeTextView">
         <attr name="mc_useRipple" />
         <attr name="mc_rippleColor" />

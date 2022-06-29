@@ -13,22 +13,28 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <com.master.lib.view.ShapeTextView
+        <com.master.lib.view.shapeview.ShapeTextView
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:gravity="center"
             android:onClick="onClick"
             android:text="ShapeTextView"
             android:textColor="@color/white"
-            app:mc_radius="10dp" />
+            app:mc_radius="20dp" />
 
-        <Button
+        <com.master.lib.view.shapeview.ShapeTextView
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginTop="20dp"
+            app:mc_circle="true"
             android:gravity="center"
             android:onClick="onClick"
             android:text="TextView"
             android:textColor="@color/white" />
+
+        <LinearLayout
+            android:id="@+id/layout"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"/>
     </LinearLayout>
 </ScrollView>

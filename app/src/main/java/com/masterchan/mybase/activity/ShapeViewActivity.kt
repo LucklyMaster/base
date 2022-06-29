@@ -2,6 +2,7 @@ package com.masterchan.mybase.activity
 
 import android.os.Bundle
 import android.view.View
+import com.master.lib.view.shapeview.ShapeViewHelper
 import com.masterchan.mybase.databinding.ActivityShapeViewBinding
 
 class ShapeViewActivity : MyBaseActivity<ActivityShapeViewBinding>() {
@@ -10,6 +11,6 @@ class ShapeViewActivity : MyBaseActivity<ActivityShapeViewBinding>() {
     }
 
     fun onClick(v: View) {
-        val a = v.background
+        ShapeViewHelper(binding.layout)
     }
 }

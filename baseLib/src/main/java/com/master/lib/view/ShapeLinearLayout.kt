@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.util.AttributeSet
 import android.widget.LinearLayout
 import com.google.android.material.color.MaterialColors
+import com.master.lib.view.shapeview.ShapeViewHelper
 import com.masterchan.lib.R
 
 /**
