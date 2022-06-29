@@ -20,13 +20,12 @@
             android:onClick="onClick"
             android:text="ShapeTextView"
             android:textColor="@color/white"
-            app:mc_disableColor="@color/black"
-            app:mc_rippleColor="@color/design_default_color_error" />
+            app:mc_radius="10dp" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="@drawable/bg1"
+            android:layout_marginTop="20dp"
             android:gravity="center"
             android:onClick="onClick"
             android:text="TextView"

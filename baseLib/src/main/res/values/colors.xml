@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--基础颜色-->
     <color name="transparent">#00000000</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-    <color name="dividerColor">#D6D6D6</color>
-    <color name="mc_4A">#4A4A4A</color>
-    <color name="mc_32">#323232</color>
+
+    <!--lib用到的颜色-->
+    <color name="color_alert_dialog_text">#323232</color>
+    <color name="color_alert_dialog_button">#4A4A4A</color>
+    <color name="color_divider">#D6D6D6</color>
+    <color name="color_disable">#BFBFBF</color>
+
+    <!--需要适配黑暗模式的颜色-->
+    <color name="color_ripple">#33ffffff</color>
 </resources>

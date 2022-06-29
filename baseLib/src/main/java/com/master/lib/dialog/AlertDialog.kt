@@ -20,10 +20,10 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.master.lib.ext.*
-import com.masterchan.lib.R
-import com.masterchan.lib.databinding.McDialogAlertBinding
 import com.master.lib.widget.RecyclerViewDivider
 import com.master.lib.widget.ViewHolder
+import com.masterchan.lib.R
+import com.masterchan.lib.databinding.McDialogAlertBinding
 
 /**
  * AlertDialog
@@ -96,11 +96,11 @@ class AlertDialog private constructor(context: Context) {
         private var negativeTextSize: Float
         private var neutralTextSize: Float
 
-        private var positiveTextColor = context.getColorStateList(R.color.mc_4A)
-        private var negativeTextColor = context.getColorStateList(R.color.mc_4A)
-        private var neutralTextColor = context.getColorStateList(R.color.mc_4A)
-        private var titleTextColor = context.getColorStateList(R.color.mc_32)
-        private var messageTextColor = context.getColorStateList(R.color.mc_32)
+        private var positiveTextColor = context.getColorStateList(R.color.color_alert_dialog_button)
+        private var negativeTextColor = context.getColorStateList(R.color.color_alert_dialog_button)
+        private var neutralTextColor = context.getColorStateList(R.color.color_alert_dialog_button)
+        private var titleTextColor = context.getColorStateList(R.color.color_alert_dialog_text)
+        private var messageTextColor = context.getColorStateList(R.color.color_alert_dialog_text)
 
         private var titleGravity: Int
         private var titleTextSize: Float
@@ -117,7 +117,7 @@ class AlertDialog private constructor(context: Context) {
         private var neutralBackground: Drawable? = null
 
         private var listItemRes: Int
-        private var listTextColor = context.getColorStateList(R.color.mc_32)
+        private var listTextColor = context.getColorStateList(R.color.color_alert_dialog_text)
         private var listTextSize: Float
         private var listDividerVisible: Boolean
         private var listDividerHeight: Float
@@ -246,7 +246,7 @@ class AlertDialog private constructor(context: Context) {
                 R.styleable.AlertDialog_mc_listTextSize, dp2px(16f)
             )
             listDividerColor = a.getColor(
-                R.styleable.AlertDialog_mc_listDividerColor, context.getColor(R.color.dividerColor)
+                R.styleable.AlertDialog_mc_listDividerColor, context.getColor(R.color.color_divider)
             )
             listDividerHeight = a.getDimension(
                 R.styleable.AlertDialog_mc_listDividerHeight, dp2px(0.5f)

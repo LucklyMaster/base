@@ -4,7 +4,10 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Outline
 import android.graphics.Rect
-import android.graphics.drawable.*
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.RippleDrawable
+import android.graphics.drawable.StateListDrawable
 import android.view.View
 import android.view.ViewOutlineProvider
 import androidx.annotation.ColorInt
@@ -126,52 +129,22 @@ class ShapeViewHelper() {
     }
 
     private fun getShapeRippleDrawable(): Drawable {
+        //此处的state添加顺序，经测试，改变后会导致state切换失效
         val drawable = StateListDrawable()
-
-        val pressedDrawable = RippleDrawable(
-            ColorStateList.valueOf(Color.RED), ColorDrawable(Color.BLUE), null
-        )
-        drawable.addState(intArrayOf(-android.R.attr.state_pressed), pressedDrawable)
-
-
-        /*val radii = floatArrayOf(
+        val radii = floatArrayOf(
             leftTopRadius, leftTopRadius, rightTopRadius, rightTopRadius, rightBottomRadius,
             rightBottomRadius, leftBottomRadius, leftBottomRadius
         )
-
         //正常
-        val normalDrawable = GradientDrawable().apply {
+        val content = GradientDrawable().apply {
             cornerRadii = radii
             setColor(normalColor)
             setStroke(strokeWidth, stokeColor)
         }
-        drawable.addState(
-            intArrayOf(android.R.attr.state_enabled, android.R.attr.state_pressed), normalDrawable
+        val normalDrawable = RippleDrawable(
+            ColorStateList.valueOf(rippleColor), content, null
         )
-        val pressedContent1 = GradientDrawable().apply {
-            cornerRadii = radii.copyOf()
-            setColor(normalColor)
-            setStroke(strokeWidth, stokeColor)
-        }
-        val pressedDrawable1 = RippleDrawable(
-            ColorStateList.valueOf(Color.RED), pressedContent1, null
-        )
-        drawable.addState(
-            intArrayOf(android.R.attr.state_enabled, android.R.attr.state_pressed), pressedDrawable1
-        )
-
-        //按下
-        val pressedContent = GradientDrawable().apply {
-            cornerRadii = radii.copyOf()
-            setColor(normalColor)
-            setStroke(strokeWidth, stokeColor)
-        }
-        val pressedDrawable = RippleDrawable(
-            ColorStateList.valueOf(Color.RED), pressedContent, null
-        )
-        drawable.addState(
-            intArrayOf(android.R.attr.state_enabled, -android.R.attr.state_pressed), pressedDrawable
-        )
+        drawable.addState(intArrayOf(android.R.attr.state_enabled), normalDrawable)
 
         //禁用
         val disableDrawable = GradientDrawable().apply {
@@ -179,7 +152,10 @@ class ShapeViewHelper() {
             setColor(disableColor)
             cornerRadii = radii.copyOf()
         }
-        drawable.addState(intArrayOf(-android.R.attr.state_enabled), disableDrawable)*/
+        drawable.addState(intArrayOf(-android.R.attr.state_enabled), disableDrawable)
+
+        //按下
+        drawable.addState(intArrayOf(-android.R.attr.state_pressed), normalDrawable)
 
         return drawable
     }

@@ -11,6 +11,5 @@ class ShapeViewActivity : MyBaseActivity<ActivityShapeViewBinding>() {
 
     fun onClick(v: View) {
         val a = v.background
-        // v.isEnabled = false
     }
 }

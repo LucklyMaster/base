@@ -23,11 +23,11 @@
         <item name="mc_textMaxWidth">100dp</item>
         <item name="mc_ellipsize">end</item>
         <item name="mc_iconUseRipple">true</item>
-        <item name="mc_iconRippleColor">?android:attr/colorControlHighlight</item>
+        <item name="mc_iconRippleColor">@color/color_ripple</item>
         <item name="mc_userIconTint">true</item>
-        <item name="mc_iconPressedColor">?android:attr/colorControlHighlight</item>
+        <item name="mc_iconPressedColor">@color/color_ripple</item>
         <item name="mc_dividerVisible">false</item>
-        <item name="mc_dividerColor">@color/dividerColor</item>
+        <item name="mc_dividerColor">@color/color_divider</item>
         <item name="mc_dividerHeight">0.5dp</item>
         <item name="mc_clickLeftFinish">true</item>
         <item name="mc_excludePaddingHeight">50dp</item>
@@ -71,7 +71,7 @@
 
     <style name="mc_LoadingDialog">
         <item name="mc_text">@string/mc_loading</item>
-        <item name="mc_textColor">@color/mc_32</item>
+        <item name="mc_textColor">@color/color_alert_dialog_text</item>
         <item name="mc_textSize">14dp</item>
         <item name="mc_windowRadius">6dp</item>
         <item name="mc_windowWidth">160dp</item>

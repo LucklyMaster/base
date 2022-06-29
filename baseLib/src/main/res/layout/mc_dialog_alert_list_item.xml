@@ -30,7 +30,7 @@
         android:layout_height="@dimen/list_item_height"
         android:layout_marginStart="4dp"
         android:gravity="center_vertical"
-        android:textColor="@color/mc_32"
+        android:textColor="@color/color_alert_dialog_text"
         android:textSize="16sp"
         tools:text="item" />
 </LinearLayout>
