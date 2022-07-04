@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="mc_shapeViewDefaultStyle">
-        <item name="mc_circle">false</item>
-        <item name="mc_useRipple">true</item>
-        <item name="mc_strokeWidth">0dp</item>
-        <item name="mc_strokeColor">#D6D6D6</item>
-        <item name="mc_normalColor">?android:attr/colorPrimary</item>
-        <item name="mc_pressedColor">?android:attr/colorPrimaryDark</item>
-    </style>
-
     <style name="mc_TitleBar">
         <item name="mc_iconGravity">start</item>
         <item name="mc_leftIconWidth">40dp</item>

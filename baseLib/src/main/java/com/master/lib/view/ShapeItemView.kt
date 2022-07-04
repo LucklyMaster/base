@@ -17,7 +17,7 @@ class ShapeItemView @JvmOverloads constructor(
     defStyleRes: Int = R.style.mc_ShapeItemView
 ) : TitleBar(context, attrs, defStyleAttr, defStyleRes), IShapeView {
 
-    override val shapeHelper: ShapeViewHelper by lazy { ShapeViewHelper(this, attrs, defStyleAttr) }
+    override val shapeHelper: ShapeViewHelper by lazy { ShapeViewHelper(this, attrs) }
 
     init {
         shapeHelper.into()

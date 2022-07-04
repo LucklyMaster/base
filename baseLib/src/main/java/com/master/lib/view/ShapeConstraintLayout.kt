@@ -16,7 +16,7 @@ class ShapeConstraintLayout @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), IShapeView {
 
-    override val shapeHelper: ShapeViewHelper by lazy { ShapeViewHelper(this, attrs, defStyleAttr) }
+    override val shapeHelper: ShapeViewHelper by lazy { ShapeViewHelper(this, attrs) }
 
     init {
         shapeHelper.into()

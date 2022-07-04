@@ -13,21 +13,16 @@ import android.view.ViewOutlineProvider
 import androidx.annotation.ColorInt
 import com.google.android.material.color.MaterialColors
 import com.master.lib.ext.getColor
-import com.master.lib.ext.getColorInt
 import com.masterchan.lib.R
 import kotlin.math.min
 
 /**
- * ShapeViewHelper
+ * ShapeView实现的帮助类，可以使用属性[R.attr.mc_shapeViewDefaultStyle]进行全局配置
  * @author MasterChan
  * @date 2021-12-10 10:18
  */
 @Suppress("MemberVisibilityCanBePrivate")
-class ShapeViewHelper(
-    val view: View,
-    attrs: AttributeSet? = null,
-    private val defStyleAttr: Int = 0
-) {
+class ShapeViewHelper(val view: View, attrs: AttributeSet? = null) {
 
     var isCircle = false
         private set
@@ -55,13 +50,9 @@ class ShapeViewHelper(
         private set
 
     init {
-        initWithAttrs(attrs)
-    }
-
-    private fun initWithAttrs(attrs: AttributeSet?) {
         val context = view.context
         val a = context.obtainStyledAttributes(
-            attrs, R.styleable.ShapeView, R.attr.mc_shapeViewStyle, defStyleAttr
+            attrs, R.styleable.ShapeView, R.attr.mc_shapeViewDefaultStyle, 0
         )
 
         isCircle = a.getBoolean(R.styleable.ShapeView_mc_circle, false)
@@ -77,8 +68,8 @@ class ShapeViewHelper(
         }
         normalColor = a.getColor(R.styleable.ShapeView_mc_normalColor, normalColor)
         pressedColor = a.getColor(R.styleable.ShapeView_mc_pressedColor, "#FF3700B3")
-        stokeColor = a.getColor(R.styleable.ShapeView_mc_strokeColor, Color.GRAY)
-        disableColor = a.getColorInt(R.styleable.ShapeView_mc_disableColor, R.color.color_disable)
+        stokeColor = a.getColor(R.styleable.ShapeView_mc_strokeColor, "#D6D6D6")
+        disableColor = a.getColor(R.styleable.ShapeView_mc_disableColor, "#BFBFBF")
 
         strokeWidth = a.getDimensionPixelOffset(R.styleable.ShapeView_mc_strokeWidth, 0)
         val radius = a.getDimension(R.styleable.ShapeView_mc_radius, 0f)
@@ -106,11 +97,6 @@ class ShapeViewHelper(
         this.normalColor = normalColor
     }
 
-    /**
-     * 按下后的颜色，如果[useRipple]为true，不生效，使用[rippleColor]
-     * @param pressedColor Int
-     * @return ShapeViewHelper
-     */
     fun setPressedColor(@ColorInt pressedColor: Int) = apply {
         this.pressedColor = pressedColor
     }

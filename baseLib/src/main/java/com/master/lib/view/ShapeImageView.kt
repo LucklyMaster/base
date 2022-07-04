@@ -7,6 +7,7 @@ import android.graphics.Shader.TileMode
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
 import com.masterchan.lib.R
@@ -53,9 +54,20 @@ class ShapeImageView @JvmOverloads constructor(
         mLeftTopRadius = a.getDimension(R.styleable.ShapeImageView_mc_leftTopRadius, mRadius)
         mLeftBottomRadius = a.getDimension(R.styleable.ShapeImageView_mc_leftBottomRadius, mRadius)
         mRightTopRadius = a.getDimension(R.styleable.ShapeImageView_mc_rightTopRadius, mRadius)
-        mRightBottomRadius =
-            a.getDimension(R.styleable.ShapeImageView_mc_rightBottomRadius, mRadius)
+        mRightBottomRadius = a.getDimension(
+            R.styleable.ShapeImageView_mc_rightBottomRadius, mRadius
+        )
         a.recycle()
+    }
+
+    override fun setImageResource(resId: Int) {
+        super.setImageResource(resId)
+        mRebuildShader = true
+    }
+
+    override fun setImageURI(uri: Uri?) {
+        super.setImageURI(uri)
+        mRebuildShader = true
     }
 
     override fun setImageDrawable(drawable: Drawable?) {

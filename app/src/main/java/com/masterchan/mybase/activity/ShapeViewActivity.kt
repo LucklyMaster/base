@@ -12,10 +12,10 @@ class ShapeViewActivity : MyBaseActivity<ActivityShapeViewBinding>() {
     }
 
     fun onClick(v: View) {
-        (v as IShapeView).shapeHelper.setLeftTopRadius(dp2px(10)).into()
+        // (v as IShapeView).shapeHelper.setLeftTopRadius(dp2px(10)).into()
     }
 
     fun onClick1(v: View) {
-        (v as IShapeView).shapeHelper.setRightTopRadius(dp2px(30)).into()
+        // (v as IShapeView).shapeHelper.setRightTopRadius(dp2px(30)).into()
     }
 }

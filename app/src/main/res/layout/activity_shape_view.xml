@@ -20,7 +20,8 @@
             android:onClick="onClick"
             android:text="ShapeTextView"
             android:textColor="@color/white"
-            app:mc_radius="24dp" />
+            app:mc_leftTopRadius="40dp"
+            app:mc_rightBottomRadius="20dp" />
 
         <com.master.lib.view.ShapeButton
             android:layout_width="match_parent"
@@ -33,7 +34,5 @@
             app:mc_leftTopRadius="20dp"
             app:mc_rightBottomRadius="20dp"
             app:mc_useRipple="false" />
-
-
     </LinearLayout>
 </ScrollView>

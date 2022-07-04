@@ -179,5 +179,5 @@
         <attr name="mc_circle" />
     </declare-styleable>
 
-    <attr name="mc_shapeViewStyle" format="reference" />
+    <attr name="mc_shapeViewDefaultStyle" format="reference" />
 </resources>
