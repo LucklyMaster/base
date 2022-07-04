@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="mc_useRipple" format="boolean" />
+    <attr name="mc_rippleColor" format="reference|color" />
+    <attr name="mc_radius" format="dimension" />
+    <attr name="mc_leftTopRadius" format="dimension" />
+    <attr name="mc_leftBottomRadius" format="dimension" />
+    <attr name="mc_rightTopRadius" format="dimension" />
+    <attr name="mc_rightBottomRadius" format="dimension" />
+    <attr name="mc_strokeWidth" format="dimension" />
+    <attr name="mc_strokeColor" format="reference|color" />
+    <attr name="mc_normalColor" format="reference|color" />
+    <attr name="mc_pressedColor" format="reference|color" />
+    <attr name="mc_disableColor" format="reference|color" />
+    <attr name="mc_circle" format="boolean" />
+    <attr name="mc_icon" format="reference" />
+    <attr name="mc_iconColor" format="reference|color" />
+    <attr name="mc_iconWidth" format="dimension" />
+    <attr name="mc_iconHeight" format="dimension" />
+    <attr name="mc_text" format="reference|string" />
+    <attr name="mc_textColor" format="reference|color" />
+    <attr name="mc_textSize" format="dimension" />
+    <attr name="mc_textMaxWidth" format="dimension" />
+    <attr name="mc_textMinWidth" format="dimension" />
+    <attr name="mc_iconPadding" format="dimension" />
+    <attr name="mc_iconGravity" format="enum">
+        <enum name="start" value="0" />
+        <enum name="top" value="1" />
+        <enum name="end" value="2" />
+        <enum name="bottom" value="3" />
+    </attr>
+    <attr name="mc_textGravity" format="enum">
+        <enum name="start" value="0" />
+        <enum name="end" value="1" />
+        <enum name="center" value="2" />
+    </attr>
+    <attr name="mc_ellipsize" format="enum">
+        <enum name="start" value="1" />
+        <enum name="middle" value="2" />
+        <enum name="end" value="3" />
+        <enum name="marquee" value="4" />
+    </attr>
+    <attr name="mc_editable" format="boolean" />
+    <attr name="mc_windowColor" format="color" />
+    <attr name="mc_windowRadius" format="dimension" />
+    <attr name="mc_windowDrawable" format="reference" />
+    <attr name="mc_windowAmount" format="float" />
+    <attr name="mc_windowWidth" format="dimension" />
+    <attr name="mc_windowHeight" format="dimension" />
+    <attr name="mc_windowGravity" format="enum">
+        <enum name="start" value="0" />
+        <enum name="top" value="1" />
+        <enum name="end" value="2" />
+        <enum name="bottom" value="3" />
+        <enum name="center" value="4" />
+    </attr>
+
+    <declare-styleable name="ShapeView">
+        <attr name="mc_useRipple" />
+        <attr name="mc_rippleColor" />
+        <attr name="mc_radius" />
+        <attr name="mc_leftTopRadius" />
+        <attr name="mc_leftBottomRadius" />
+        <attr name="mc_rightTopRadius" />
+        <attr name="mc_rightBottomRadius" />
+        <attr name="mc_strokeWidth" />
+        <attr name="mc_strokeColor" />
+        <attr name="mc_normalColor" />
+        <attr name="mc_pressedColor" />
+        <attr name="mc_disableColor" />
+        <attr name="mc_circle" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeTextView">
+        <attr name="mc_useRipple" />
+        <attr name="mc_rippleColor" />
+        <attr name="mc_radius" />
+        <attr name="mc_leftTopRadius" />
+        <attr name="mc_leftBottomRadius" />
+        <attr name="mc_rightTopRadius" />
+        <attr name="mc_rightBottomRadius" />
+        <attr name="mc_strokeWidth" />
+        <attr name="mc_strokeColor" />
+        <attr name="mc_normalColor" />
+        <attr name="mc_pressedColor" />
+        <attr name="mc_disableColor" />
+        <attr name="mc_circle" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeButton">
+        <attr name="mc_useRipple" />
+        <attr name="mc_rippleColor" />
+        <attr name="mc_radius" />
+        <attr name="mc_leftTopRadius" />
+        <attr name="mc_leftBottomRadius" />
+        <attr name="mc_rightTopRadius" />
+        <attr name="mc_rightBottomRadius" />
+        <attr name="mc_strokeWidth" />
+        <attr name="mc_strokeColor" />
+        <attr name="mc_normalColor" />
+        <attr name="mc_pressedColor" />
+        <attr name="mc_disableColor" />
+        <attr name="mc_circle" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeLinearLayout">
+        <attr name="mc_useRipple" />
+        <attr name="mc_rippleColor" />
+        <attr name="mc_radius" />
+        <attr name="mc_leftTopRadius" />
+        <attr name="mc_leftBottomRadius" />
+        <attr name="mc_rightTopRadius" />
+        <attr name="mc_rightBottomRadius" />
+        <attr name="mc_strokeWidth" />
+        <attr name="mc_strokeColor" />
+        <attr name="mc_normalColor" />
+        <attr name="mc_pressedColor" />
+        <attr name="mc_disableColor" />
+        <attr name="mc_circle" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeFrameLayout">
+        <attr name="mc_useRipple" />
+        <attr name="mc_rippleColor" />
+        <attr name="mc_radius" />
+        <attr name="mc_leftTopRadius" />
+        <attr name="mc_leftBottomRadius" />
+        <attr name="mc_rightTopRadius" />
+        <attr name="mc_rightBottomRadius" />
+        <attr name="mc_strokeWidth" />
+        <attr name="mc_strokeColor" />
+        <attr name="mc_normalColor" />
+        <attr name="mc_pressedColor" />
+        <attr name="mc_disableColor" />
+        <attr name="mc_circle" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeConstraintLayout">
+        <attr name="mc_useRipple" />
+        <attr name="mc_rippleColor" />
+        <attr name="mc_radius" />
+        <attr name="mc_leftTopRadius" />
+        <attr name="mc_leftBottomRadius" />
+        <attr name="mc_rightTopRadius" />
+        <attr name="mc_rightBottomRadius" />
+        <attr name="mc_strokeWidth" />
+        <attr name="mc_strokeColor" />
+        <attr name="mc_normalColor" />
+        <attr name="mc_pressedColor" />
+        <attr name="mc_disableColor" />
+        <attr name="mc_circle" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeRelativeLayout">
+        <attr name="mc_useRipple" />
+        <attr name="mc_rippleColor" />
+        <attr name="mc_radius" />
+        <attr name="mc_leftTopRadius" />
+        <attr name="mc_leftBottomRadius" />
+        <attr name="mc_rightTopRadius" />
+        <attr name="mc_rightBottomRadius" />
+        <attr name="mc_strokeWidth" />
+        <attr name="mc_strokeColor" />
+        <attr name="mc_normalColor" />
+        <attr name="mc_pressedColor" />
+        <attr name="mc_disableColor" />
+        <attr name="mc_circle" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeImageView">
+        <attr name="mc_radius" />
+        <attr name="mc_leftTopRadius" />
+        <attr name="mc_leftBottomRadius" />
+        <attr name="mc_rightTopRadius" />
+        <attr name="mc_rightBottomRadius" />
+        <attr name="mc_strokeWidth" />
+        <attr name="mc_strokeColor" />
+        <attr name="mc_disableColor" />
+        <attr name="mc_circle" />
+    </declare-styleable>
+
+    <attr name="mc_shapeViewStyle" format="reference" />
+</resources>

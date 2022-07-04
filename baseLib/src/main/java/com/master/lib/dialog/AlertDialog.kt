@@ -246,7 +246,7 @@ class AlertDialog private constructor(context: Context) {
                 R.styleable.AlertDialog_mc_listTextSize, dp2px(16f)
             )
             listDividerColor = a.getColor(
-                R.styleable.AlertDialog_mc_listDividerColor, context.getColor(R.color.color_divider)
+                R.styleable.AlertDialog_mc_listDividerColor, context.getColor(R.color.color_alert_dialog_divider)
             )
             listDividerHeight = a.getDimension(
                 R.styleable.AlertDialog_mc_listDividerHeight, dp2px(0.5f)

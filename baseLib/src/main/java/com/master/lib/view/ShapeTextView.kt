@@ -1,4 +1,4 @@
-package com.master.lib.view.shapeview
+package com.master.lib.view
 
 import android.content.Context
 import android.util.AttributeSet
@@ -14,8 +14,11 @@ class ShapeTextView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AppCompatTextView(context, attrs, defStyleAttr) {
+) : AppCompatTextView(context, attrs, defStyleAttr), IShapeView {
+
+    override val shapeHelper: ShapeViewHelper by lazy { ShapeViewHelper(this, attrs, defStyleAttr) }
+
     init {
-        val a = ShapeViewHelper(this, attrs)
+        shapeHelper.into()
     }
 }

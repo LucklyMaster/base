@@ -1,9 +1,8 @@
-package com.master.lib.view.shapeview
+package com.master.lib.view
 
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Outline
-import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.RippleDrawable
@@ -13,6 +12,8 @@ import android.view.View
 import android.view.ViewOutlineProvider
 import androidx.annotation.ColorInt
 import com.google.android.material.color.MaterialColors
+import com.master.lib.ext.getColor
+import com.master.lib.ext.getColorInt
 import com.masterchan.lib.R
 import kotlin.math.min
 
@@ -22,86 +23,86 @@ import kotlin.math.min
  * @date 2021-12-10 10:18
  */
 @Suppress("MemberVisibilityCanBePrivate")
-class ShapeViewHelper(attrs: AttributeSet? = null) : IShapeView {
+class ShapeViewHelper(
+    val view: View,
+    attrs: AttributeSet? = null,
+    private val defStyleAttr: Int = 0
+) {
 
-    var view: View? = null
-    var useRipple = false
-    var strokeWidth = 0
-    var stokeColor = 0
-    var normalColor = 0
-    var disableColor = 0
-    var pressedColor = 0
-    var rippleColor = 0
-    var leftTopRadius = 0f
-    var leftBottomRadius = 0f
-    var rightTopRadius = 0f
-    var rightBottomRadius = 0f
     var isCircle = false
+        private set
+    var useRipple = false
+        private set
+    var strokeWidth = 0
+        private set
+    var stokeColor = 0
+        private set
+    var normalColor = 0
+        private set
+    var pressedColor = 0
+        private set
+    var disableColor = 0
+        private set
+    var rippleColor = 0
+        private set
+    var leftTopRadius = 0f
+        private set
+    var leftBottomRadius = 0f
+        private set
+    var rightTopRadius = 0f
+        private set
+    var rightBottomRadius = 0f
+        private set
 
     init {
-        // if (view != null && attrs != null) {
-        initWithAttrs(view!!, attrs)
-        // }
+        initWithAttrs(attrs)
     }
 
-    private fun initWithAttrs(view: View, attrs: AttributeSet?) {
+    private fun initWithAttrs(attrs: AttributeSet?) {
         val context = view.context
-        val controlColor = context.getColor(R.color.color_ripple)
-        var normalColor = MaterialColors.getColor(context, android.R.attr.colorPrimary, 0)
-
-        val a = context.obtainStyledAttributes(attrs, R.styleable.ShapeView)
-        val useRipple = a.getBoolean(R.styleable.ShapeView_mc_useRipple, true)
-        val radius = a.getDimension(R.styleable.ShapeView_mc_radius, 0f)
-        val ltRadius = a.getDimension(R.styleable.ShapeView_mc_leftTopRadius, radius)
-        val lbRadius = a.getDimension(R.styleable.ShapeView_mc_leftBottomRadius, radius)
-        val rtRadius = a.getDimension(R.styleable.ShapeView_mc_rightTopRadius, radius)
-        val rbRadius = a.getDimension(R.styleable.ShapeView_mc_rightBottomRadius, radius)
-        val strokeWidth = a.getDimensionPixelOffset(R.styleable.ShapeView_mc_strokeWidth, 0)
-
-        val rippleColor = a.getColor(R.styleable.ShapeView_mc_rippleColor, controlColor)
-        val pressedColor = a.getColor(R.styleable.ShapeView_mc_pressedColor, controlColor)
-        val strokeColor = a.getColor(R.styleable.ShapeView_mc_strokeColor, Color.GRAY)
-
-        normalColor = a.getColor(R.styleable.ShapeView_mc_normalColor, normalColor)
-        val disableColor = a.getColor(
-            R.styleable.ShapeView_mc_disableColor, context.getColor(R.color.color_disable)
+        val a = context.obtainStyledAttributes(
+            attrs, R.styleable.ShapeView, R.attr.mc_shapeViewStyle, defStyleAttr
         )
 
-        val circle = a.getBoolean(R.styleable.ShapeView_mc_circle, false)
+        isCircle = a.getBoolean(R.styleable.ShapeView_mc_circle, false)
+        useRipple = a.getBoolean(R.styleable.ShapeView_mc_useRipple, true)
+
+        rippleColor = a.getColor(
+            R.styleable.ShapeView_mc_rippleColor, context.getColor(R.color.color_ripple)
+        )
+        normalColor = if (view.isInEditMode) {
+            Color.parseColor("#FF6200EE")
+        } else {
+            MaterialColors.getColor(context, android.R.attr.colorPrimary, 0)
+        }
+        normalColor = a.getColor(R.styleable.ShapeView_mc_normalColor, normalColor)
+        pressedColor = a.getColor(R.styleable.ShapeView_mc_pressedColor, "#FF3700B3")
+        stokeColor = a.getColor(R.styleable.ShapeView_mc_strokeColor, Color.GRAY)
+        disableColor = a.getColorInt(R.styleable.ShapeView_mc_disableColor, R.color.color_disable)
+
+        strokeWidth = a.getDimensionPixelOffset(R.styleable.ShapeView_mc_strokeWidth, 0)
+        val radius = a.getDimension(R.styleable.ShapeView_mc_radius, 0f)
+        leftTopRadius = a.getDimension(R.styleable.ShapeView_mc_leftTopRadius, radius)
+        leftBottomRadius = a.getDimension(R.styleable.ShapeView_mc_leftBottomRadius, radius)
+        rightTopRadius = a.getDimension(R.styleable.ShapeView_mc_rightTopRadius, radius)
+        rightBottomRadius = a.getDimension(R.styleable.ShapeView_mc_rightBottomRadius, radius)
+
         a.recycle()
-
-        this.setStrokeWidth(strokeWidth)
-            .setStrokeColor(strokeColor)
-            .setRippleColor(rippleColor)
-            .setNormalColor(normalColor)
-            .setPressedColor(pressedColor)
-            .setDisableColor(disableColor)
-            .setLeftTopRadius(ltRadius)
-            .setLeftBottomRadius(lbRadius)
-            .setRightTopRadius(rtRadius)
-            .setRightBottomRadius(rbRadius)
-            .setUseRipple(useRipple)
-            .setCircle(circle)
-            .into(view)
     }
 
-    override fun bindView(view: View) = apply {
-        this.view = view
-    }
-
-    override fun setUseRipple(useRipple: Boolean) = apply {
+    fun setUseRipple(useRipple: Boolean) = apply {
         this.useRipple = useRipple
     }
 
-    override fun setStrokeWidth(stokeWidth: Int) = apply {
+    fun setStrokeWidth(stokeWidth: Int) = apply {
         this.strokeWidth = stokeWidth
     }
 
-    override fun setStrokeColor(@ColorInt stokeColor: Int) = apply {
+    fun setStrokeColor(@ColorInt stokeColor: Int) = apply {
         this.stokeColor = stokeColor
     }
 
-    override fun setNormalColor(@ColorInt normalColor: Int) = apply {
+    fun setNormalColor(@ColorInt normalColor: Int) = apply {
         this.normalColor = normalColor
     }
 
@@ -110,59 +111,55 @@ class ShapeViewHelper(attrs: AttributeSet? = null) : IShapeView {
      * @param pressedColor Int
      * @return ShapeViewHelper
      */
-    override fun setPressedColor(@ColorInt pressedColor: Int) = apply {
+    fun setPressedColor(@ColorInt pressedColor: Int) = apply {
         this.pressedColor = pressedColor
     }
 
-    override fun setDisableColor(@ColorInt disableColor: Int) = apply {
+    fun setDisableColor(@ColorInt disableColor: Int) = apply {
         this.disableColor = disableColor
     }
 
-    override fun setRippleColor(@ColorInt rippleColor: Int) = apply {
+    fun setRippleColor(@ColorInt rippleColor: Int) = apply {
         this.rippleColor = rippleColor
     }
 
-    override fun setLeftTopRadius(radius: Float) = apply {
+    fun setLeftTopRadius(radius: Float) = apply {
         leftTopRadius = radius
     }
 
-    override fun setLeftBottomRadius(radius: Float) = apply {
+    fun setLeftBottomRadius(radius: Float) = apply {
         leftBottomRadius = radius
     }
 
-    override fun setRightTopRadius(radius: Float) = apply {
+    fun setRightTopRadius(radius: Float) = apply {
         rightTopRadius = radius
     }
 
-    override fun setRightBottomRadius(radius: Float) = apply {
+    fun setRightBottomRadius(radius: Float) = apply {
         rightBottomRadius = radius
     }
 
-    override fun setRadius(radius: Float) = apply {
+    fun setRadius(radius: Float) = apply {
         leftTopRadius = radius
         leftBottomRadius = radius
         rightTopRadius = radius
         rightBottomRadius = radius
     }
 
-    override fun setCircle(isCircle: Boolean) = apply {
+    fun setCircle(isCircle: Boolean) = apply {
         this.isCircle = isCircle
     }
 
-    override fun into() {
-        if (view == null) {
-            throw IllegalArgumentException("the bind view is null")
-        }
-        into(view!!)
-    }
-
-    override fun into(view: View) {
+    fun into() {
         if (isCircle) {
             view.outlineProvider = object : ViewOutlineProvider() {
                 override fun getOutline(view: View, outline: Outline) {
                     val size = min(view.width, view.height)
-                    val rect = Rect(0, 0, size, size)
-                    outline.setRoundRect(rect, (size shr 1).toFloat())
+                    val left = (view.width - size) / 2
+                    val top = (view.height - size) / 2
+                    val right = left + size
+                    val bottom = top + size
+                    outline.setRoundRect(left, top, right, bottom, (size shr 1).toFloat())
                 }
             }
             view.clipToOutline = true

@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="mc_shapeViewDefaultStyle">
+        <item name="mc_circle">false</item>
+        <item name="mc_useRipple">true</item>
+        <item name="mc_strokeWidth">0dp</item>
+        <item name="mc_strokeColor">#D6D6D6</item>
+        <item name="mc_normalColor">?android:attr/colorPrimary</item>
+        <item name="mc_pressedColor">?android:attr/colorPrimaryDark</item>
+    </style>
+
     <style name="mc_TitleBar">
         <item name="mc_iconGravity">start</item>
         <item name="mc_leftIconWidth">40dp</item>
@@ -27,7 +36,7 @@
         <item name="mc_userIconTint">true</item>
         <item name="mc_iconPressedColor">@color/color_ripple</item>
         <item name="mc_dividerVisible">false</item>
-        <item name="mc_dividerColor">@color/color_divider</item>
+        <item name="mc_dividerColor">@color/color_alert_dialog_divider</item>
         <item name="mc_dividerHeight">0.5dp</item>
         <item name="mc_clickLeftFinish">true</item>
         <item name="mc_excludePaddingHeight">50dp</item>

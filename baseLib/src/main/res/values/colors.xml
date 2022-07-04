@@ -8,7 +8,7 @@
     <!--lib用到的颜色-->
     <color name="color_alert_dialog_text">#323232</color>
     <color name="color_alert_dialog_button">#4A4A4A</color>
-    <color name="color_divider">#D6D6D6</color>
+    <color name="color_alert_dialog_divider">#D6D6D6</color>
     <color name="color_disable">#BFBFBF</color>
 
     <!--需要适配黑暗模式的颜色-->
