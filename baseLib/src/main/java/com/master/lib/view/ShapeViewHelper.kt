@@ -3,6 +3,7 @@ package com.master.lib.view
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Outline
+import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.RippleDrawable
@@ -12,6 +13,7 @@ import android.view.View
 import android.view.ViewOutlineProvider
 import androidx.annotation.ColorInt
 import com.google.android.material.color.MaterialColors
+import com.master.lib.ext.equals
 import com.master.lib.ext.getColor
 import com.masterchan.lib.R
 import kotlin.math.min
@@ -30,7 +32,7 @@ class ShapeViewHelper(val view: View, attrs: AttributeSet? = null) {
         private set
     var strokeWidth = 0
         private set
-    var stokeColor = 0
+    var strokeColor = 0
         private set
     var normalColor = 0
         private set
@@ -68,7 +70,7 @@ class ShapeViewHelper(val view: View, attrs: AttributeSet? = null) {
         }
         normalColor = a.getColor(R.styleable.ShapeView_mc_normalColor, normalColor)
         pressedColor = a.getColor(R.styleable.ShapeView_mc_pressedColor, "#FF3700B3")
-        stokeColor = a.getColor(R.styleable.ShapeView_mc_strokeColor, "#D6D6D6")
+        strokeColor = a.getColor(R.styleable.ShapeView_mc_strokeColor, "#D6D6D6")
         disableColor = a.getColor(R.styleable.ShapeView_mc_disableColor, "#BFBFBF")
 
         strokeWidth = a.getDimensionPixelOffset(R.styleable.ShapeView_mc_strokeWidth, 0)
@@ -79,6 +81,8 @@ class ShapeViewHelper(val view: View, attrs: AttributeSet? = null) {
         rightBottomRadius = a.getDimension(R.styleable.ShapeView_mc_rightBottomRadius, radius)
 
         a.recycle()
+
+        // TODO: 资源文件按state切换
     }
 
     fun setUseRipple(useRipple: Boolean) = apply {
@@ -90,7 +94,7 @@ class ShapeViewHelper(val view: View, attrs: AttributeSet? = null) {
     }
 
     fun setStrokeColor(@ColorInt stokeColor: Int) = apply {
-        this.stokeColor = stokeColor
+        this.strokeColor = stokeColor
     }
 
     fun setNormalColor(@ColorInt normalColor: Int) = apply {
@@ -137,19 +141,31 @@ class ShapeViewHelper(val view: View, attrs: AttributeSet? = null) {
     }
 
     fun into() {
-        if (isCircle) {
-            view.outlineProvider = object : ViewOutlineProvider() {
-                override fun getOutline(view: View, outline: Outline) {
-                    val size = min(view.width, view.height)
-                    val left = (view.width - size) / 2
-                    val top = (view.height - size) / 2
-                    val right = left + size
-                    val bottom = top + size
-                    outline.setRoundRect(left, top, right, bottom, (size shr 1).toFloat())
+        rightTopRadius.inc()
+        val radiusEquals = leftTopRadius.equals(leftBottomRadius, rightTopRadius, rightBottomRadius)
+        view.outlineProvider = object : ViewOutlineProvider() {
+            override fun getOutline(view: View, outline: Outline) {
+                when {
+                    isCircle -> {
+                        val size = min(view.width, view.height)
+                        setRadius((size shr 1).toFloat())
+                        val left = (view.width - size) / 2
+                        val top = (view.height - size) / 2
+                        val right = left + size
+                        val bottom = top + size
+                        val rect = Rect(left, top, right, bottom)
+                        outline.setRoundRect(rect, (size shr 1).toFloat())
+                    }
+                    radiusEquals -> {
+                        outline.setRoundRect(0, 0, view.width, view.height, leftTopRadius)
+                    }
+                    else -> {
+                        outline.setRoundRect(0, 0, view.width, view.height, 0f)
+                    }
                 }
             }
-            view.clipToOutline = true
         }
+        view.clipToOutline = true
         setDrawable(view)
     }
 
@@ -171,9 +187,10 @@ class ShapeViewHelper(val view: View, attrs: AttributeSet? = null) {
         )
         //正常
         val content = GradientDrawable().apply {
+            if (isCircle) shape = GradientDrawable.OVAL else GradientDrawable.RECTANGLE
             cornerRadii = radii
             setColor(normalColor)
-            setStroke(strokeWidth, stokeColor)
+            setStroke(strokeWidth, strokeColor)
         }
         val normalDrawable = RippleDrawable(
             ColorStateList.valueOf(rippleColor), content, null
@@ -182,7 +199,8 @@ class ShapeViewHelper(val view: View, attrs: AttributeSet? = null) {
 
         //禁用
         val disableDrawable = GradientDrawable().apply {
-            setStroke(strokeWidth, stokeColor)
+            if (isCircle) shape = GradientDrawable.OVAL else GradientDrawable.RECTANGLE
+            setStroke(strokeWidth, strokeColor)
             setColor(disableColor)
             cornerRadii = radii.copyOf()
         }
@@ -203,8 +221,9 @@ class ShapeViewHelper(val view: View, attrs: AttributeSet? = null) {
 
         //正常
         val normalDrawable = GradientDrawable().apply {
+            if (isCircle) shape = GradientDrawable.OVAL else GradientDrawable.RECTANGLE
             cornerRadii = radii
-            setStroke(strokeWidth, stokeColor)
+            setStroke(strokeWidth, strokeColor)
             setColor(normalColor)
         }
         drawable.addState(
@@ -214,8 +233,9 @@ class ShapeViewHelper(val view: View, attrs: AttributeSet? = null) {
 
         //按下
         val pressedDrawable = GradientDrawable().apply {
+            if (isCircle) shape = GradientDrawable.OVAL else GradientDrawable.RECTANGLE
             cornerRadii = radii
-            setStroke(strokeWidth, stokeColor)
+            setStroke(strokeWidth, strokeColor)
             setColor(pressedColor)
         }
         drawable.addState(
@@ -225,8 +245,9 @@ class ShapeViewHelper(val view: View, attrs: AttributeSet? = null) {
 
         //禁用
         val disableDrawable = GradientDrawable().apply {
+            if (isCircle) shape = GradientDrawable.OVAL else GradientDrawable.RECTANGLE
             cornerRadii = radii
-            setStroke(strokeWidth, stokeColor)
+            setStroke(strokeWidth, strokeColor)
             setColor(Color.GRAY)
         }
         drawable.addState(intArrayOf(-android.R.attr.state_enabled), disableDrawable)

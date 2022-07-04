@@ -15,3 +15,8 @@ fun setOnClickListeners(clickListener: View.OnClickListener, vararg views: View)
 inline fun <T> T.orNull(condition: T.() -> Boolean): T? {
     return if (condition.invoke(this)) return this else null
 }
+
+fun <T> T.equals(vararg args: T): Boolean {
+    args.forEach { if (it != this) return false }
+    return true
+}

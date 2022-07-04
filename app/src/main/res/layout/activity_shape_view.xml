@@ -19,20 +19,44 @@
             android:gravity="center"
             android:onClick="onClick"
             android:text="ShapeTextView"
-            android:textColor="@color/white"
-            app:mc_leftTopRadius="40dp"
-            app:mc_rightBottomRadius="20dp" />
+            android:textColor="@color/white" />
 
-        <com.master.lib.view.ShapeButton
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="10dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/img" />
+
+        <com.master.lib.view.ShapeImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="10dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/img"
+            app:mc_radius="20dp"
+            app:mc_strokeColor="#0f0"
+            app:mc_strokeWidth="2dp" />
+
+        <com.master.lib.view.ShapeFrameLayout
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:onClick="onClick1"
-            android:text="ShapeButton"
-            android:textColor="@color/white"
-            app:mc_leftTopRadius="20dp"
-            app:mc_rightBottomRadius="20dp"
-            app:mc_useRipple="false" />
+            android:onClick="onClick"
+            app:mc_circle="true"
+            app:mc_strokeColor="#0f0"
+            app:mc_strokeWidth="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="测试测试"
+                android:textColor="@color/white" />
+
+        </com.master.lib.view.ShapeFrameLayout>
     </LinearLayout>
 </ScrollView>
