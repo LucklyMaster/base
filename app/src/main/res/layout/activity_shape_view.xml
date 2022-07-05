@@ -22,30 +22,33 @@
             android:textColor="@color/white"
             app:mc_dashGap="10dp"
             app:mc_dashWidth="10dp"
+            app:mc_effectDrawable="@mipmap/img"
             app:mc_gradientCenterColor="#0f0"
             app:mc_gradientEndColor="#ff0"
             app:mc_gradientStartColor="#00f"
             app:mc_radius="20dp"
             app:mc_strokeColor="@color/black"
             app:mc_strokeWidth="4dp"
-            app:mc_effectDrawable="@mipmap/img"
             app:mc_useRipple="false" />
 
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="200dp"
+            android:layout_height="80dp"
             android:layout_marginTop="10dp"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
+            android:scaleType="centerInside"
             android:src="@mipmap/img" />
 
         <com.master.lib.view.ShapeImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:id="@+id/shapeImageView"
+            android:layout_width="200dp"
+            android:layout_height="80dp"
             android:layout_marginTop="10dp"
             android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
+            android:onClick="onClick"
+            android:scaleType="fitXY"
             android:src="@mipmap/img"
+            app:mc_dashGap="0dp"
+            app:mc_dashWidth="10dp"
             app:mc_radius="20dp"
             app:mc_strokeColor="#0f0"
             app:mc_strokeWidth="2dp" />

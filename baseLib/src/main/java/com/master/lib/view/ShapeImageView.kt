@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.util.AttributeSet
+import androidx.annotation.ColorInt
 import androidx.appcompat.widget.AppCompatImageView
 import com.masterchan.lib.R
 import kotlin.math.min
@@ -24,107 +25,162 @@ class ShapeImageView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : AppCompatImageView(context, attrs, defStyleAttr) {
 
-    private val mCircle: Boolean
-    private val mStrokeColor: Int
-    private val mStrokeWidth: Float
-    private val mRadius: Float
-    private val mLeftTopRadius: Float
-    private val mLeftBottomRadius: Float
-    private val mRightTopRadius: Float
-    private val mRightBottomRadius: Float
+    var isCircle: Boolean
+        private set
+    var strokeColor: Int
+        private set
+    var strokeWidth: Float
+        private set
+    var dashWidth: Float
+        private set
+    var dashGap: Float
+        private set
+    var radius: Float
+        private set
+    var leftTopRadius: Float
+        private set
+    var leftBottomRadius: Float
+        private set
+    var rightTopRadius: Float
+        private set
+    var rightBottomRadius: Float
+        private set
 
-    private val mStokePaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val mBitmapPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val mStokeRect = RectF()
-    private val mBitmapRect = RectF()
-    private val mShaderMatrix = Matrix()
-    private var mShader: BitmapShader? = null
-    private var mBitmap: Bitmap? = null
-    private var mRebuildShader = true
-    private var mRebuildMatrix = true
-    private val mStokePath = Path()
-    private val mBitmapPath = Path()
+    private val stokePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val bitmapPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val stokeRect = RectF()
+    private val bitmapRect = RectF()
+    private val shaderMatrix = Matrix()
+    private var shader: BitmapShader? = null
+    private var bitmap: Bitmap? = null
+    private var rebuildShader = true
+    private var rebuildMatrix = true
+    private val strokePath = Path()
+    private val bitmapPath = Path()
 
     init {
         val a = context.obtainStyledAttributes(attrs, R.styleable.ShapeImageView)
-        mCircle = a.getBoolean(R.styleable.ShapeImageView_mc_isCircle, false)
-        mStrokeWidth = a.getDimension(R.styleable.ShapeImageView_mc_strokeWidth, 0f)
-        mStrokeColor = a.getColor(R.styleable.ShapeImageView_mc_strokeColor, Color.TRANSPARENT)
-        mRadius = a.getDimension(R.styleable.ShapeImageView_mc_radius, 0f)
-        mLeftTopRadius = a.getDimension(R.styleable.ShapeImageView_mc_leftTopRadius, mRadius)
-        mLeftBottomRadius = a.getDimension(R.styleable.ShapeImageView_mc_leftBottomRadius, mRadius)
-        mRightTopRadius = a.getDimension(R.styleable.ShapeImageView_mc_rightTopRadius, mRadius)
-        mRightBottomRadius = a.getDimension(
-            R.styleable.ShapeImageView_mc_rightBottomRadius, mRadius
-        )
+        isCircle = a.getBoolean(R.styleable.ShapeImageView_mc_isCircle, false)
+        strokeWidth = a.getDimension(R.styleable.ShapeImageView_mc_strokeWidth, 0f)
+        strokeColor = a.getColor(R.styleable.ShapeImageView_mc_strokeColor, 0)
+        dashWidth = a.getDimension(R.styleable.ShapeImageView_mc_dashWidth, 0f)
+        dashGap = a.getDimension(R.styleable.ShapeImageView_mc_dashGap, 0f)
+        radius = a.getDimension(R.styleable.ShapeImageView_mc_radius, 0f)
+        leftTopRadius = a.getDimension(R.styleable.ShapeImageView_mc_leftTopRadius, radius)
+        leftBottomRadius = a.getDimension(R.styleable.ShapeImageView_mc_leftBottomRadius, radius)
+        rightTopRadius = a.getDimension(R.styleable.ShapeImageView_mc_rightTopRadius, radius)
+        rightBottomRadius = a.getDimension(R.styleable.ShapeImageView_mc_rightBottomRadius, radius)
         a.recycle()
+        stokePaint.pathEffect = DashPathEffect(floatArrayOf(dashWidth, dashGap), 0f)
     }
 
     override fun setImageResource(resId: Int) {
+        rebuildShader = true
+        rebuildMatrix = true
         super.setImageResource(resId)
-        mRebuildShader = true
     }
 
     override fun setImageURI(uri: Uri?) {
+        rebuildShader = true
+        rebuildMatrix = true
         super.setImageURI(uri)
-        mRebuildShader = true
     }
 
     override fun setImageDrawable(drawable: Drawable?) {
+        rebuildShader = true
+        rebuildMatrix = true
         super.setImageDrawable(drawable)
-        mRebuildShader = true
     }
 
     override fun setImageBitmap(bm: Bitmap) {
+        rebuildShader = true
+        rebuildMatrix = true
         super.setImageBitmap(bm)
-        mRebuildShader = true
     }
 
     override fun setScaleType(scaleType: ScaleType) {
+        rebuildMatrix = true
         super.setScaleType(scaleType)
-        mRebuildMatrix = true
+    }
+
+    fun setCircle(isCircle: Boolean) = apply {
+        this.isCircle = isCircle
+        invalidate()
+    }
+
+    fun setStrokeWidth(width: Float) = apply {
+        this.strokeWidth = width
+        invalidate()
+    }
+
+    fun setStrokeColor(@ColorInt color: Int) = apply {
+        this.strokeColor = color
+        invalidate()
+    }
+
+    fun setDashWidth(dashWidth: Float) = apply {
+        this.dashWidth = dashWidth
+        invalidate()
+    }
+
+    fun setDashGap(dashGap: Float) = apply {
+        this.dashGap = dashGap
+        invalidate()
+    }
+
+    fun setRadius(radius: Float) = apply {
+        this.radius = radius
+        invalidate()
+    }
+
+    fun setRadius(leftTop: Float, leftBottom: Float, rightTop: Float, rightBottom: Float) = apply {
+        this.leftTopRadius = leftTop
+        this.leftBottomRadius = leftBottom
+        this.rightTopRadius = rightTop
+        this.rightBottomRadius = rightBottom
+        invalidate()
     }
 
     override fun onDraw(canvas: Canvas) {
-        mStokePaint.style = Paint.Style.STROKE
-        mStokePaint.strokeWidth = mStrokeWidth
-        mStokePaint.color = mStrokeColor
+        stokePaint.style = Paint.Style.STROKE
+        stokePaint.strokeWidth = strokeWidth
+        stokePaint.color = strokeColor
 
         if (drawable == null) {
             super.onDraw(canvas)
             return
         }
 
-        if (mRebuildShader) {
-            mBitmap = getBitmap(drawable)
-            mShader = BitmapShader(mBitmap!!, TileMode.CLAMP, TileMode.CLAMP)
-            mRebuildShader = false
+        if (rebuildShader) {
+            bitmap = getBitmap(drawable)
+            shader = BitmapShader(bitmap!!, TileMode.CLAMP, TileMode.CLAMP)
+            rebuildShader = false
         }
 
-        if (mRebuildMatrix) {
+        if (rebuildMatrix) {
             updateShaderMatrix()
-            mShader!!.setLocalMatrix(mShaderMatrix)
-            mBitmapPaint.shader = mShader
-            mRebuildMatrix = false
+            shader!!.setLocalMatrix(shaderMatrix)
+            bitmapPaint.shader = shader
+            rebuildMatrix = false
         }
 
-        if (mCircle) {
-            canvas.drawOval(mBitmapRect, mBitmapPaint)
-            if (mStrokeWidth > 0) {
-                canvas.drawOval(mStokeRect, mStokePaint)
+        if (isCircle) {
+            canvas.drawOval(bitmapRect, bitmapPaint)
+            if (strokeWidth > 0) {
+                canvas.drawOval(stokeRect, stokePaint)
             }
         } else {
             if (cornerHasRadius()) {
-                setRoundPath(mBitmapPath, mBitmapRect)
-                canvas.drawPath(mBitmapPath, mBitmapPaint)
-                if (mStrokeWidth > 0) {
-                    setRoundPath(mStokePath, mStokeRect)
-                    canvas.drawPath(mStokePath, mStokePaint)
+                setRoundPath(bitmapPath, bitmapRect)
+                canvas.drawPath(bitmapPath, bitmapPaint)
+                if (strokeWidth > 0) {
+                    setRoundPath(strokePath, stokeRect)
+                    canvas.drawPath(strokePath, stokePaint)
                 }
             } else {
-                canvas.drawRect(mBitmapRect, mBitmapPaint)
-                if (mStrokeWidth > 0) {
-                    canvas.drawRect(mStokeRect, mStokePaint)
+                canvas.drawRect(bitmapRect, bitmapPaint)
+                if (strokeWidth > 0) {
+                    canvas.drawRect(stokeRect, stokePaint)
                 }
             }
         }
@@ -154,70 +210,70 @@ class ShapeImageView @JvmOverloads constructor(
 
     private fun updateShaderMatrix() {
         val viewBounds = RectF(0f, 0f, width.toFloat(), height.toFloat())
-        mShaderMatrix.reset()
-        mStokeRect.set(viewBounds)
+        shaderMatrix.reset()
+        stokeRect.set(viewBounds)
         when (scaleType) {
             ScaleType.CENTER -> {
-                mStokeRect.inset(mStrokeWidth / 2f, mStrokeWidth / 2f)
-                mShaderMatrix.setTranslate(
-                    (mStokeRect.width() - mBitmap!!.width) * 0.5f + 0.5f,
-                    (mStokeRect.height() - mBitmap!!.height) * 0.5f + 0.5f
+                stokeRect.inset(strokeWidth / 2f, strokeWidth / 2f)
+                shaderMatrix.setTranslate(
+                    (stokeRect.width() - bitmap!!.width) * 0.5f + 0.5f,
+                    (stokeRect.height() - bitmap!!.height) * 0.5f + 0.5f
                 )
             }
             ScaleType.CENTER_CROP -> {
                 var dx = 0f
                 var dy = 0f
                 val scale: Float
-                mStokeRect.inset(mStrokeWidth / 2f, mStrokeWidth / 2f)
-                if (mBitmap!!.width * mStokeRect.height() > mStokeRect.width() * mBitmap!!.height) {
-                    scale = mStokeRect.height() / mBitmap!!.height.toFloat()
-                    dx = (mStokeRect.width() - mBitmap!!.width * scale) * 0.5f
+                stokeRect.inset(strokeWidth / 2f, strokeWidth / 2f)
+                if (bitmap!!.width * stokeRect.height() > stokeRect.width() * bitmap!!.height) {
+                    scale = stokeRect.height() / bitmap!!.height.toFloat()
+                    dx = (stokeRect.width() - bitmap!!.width * scale) * 0.5f
                 } else {
-                    scale = mStokeRect.width() / mBitmap!!.width.toFloat()
-                    dy = (mStokeRect.height() - mBitmap!!.height * scale) * 0.5f
+                    scale = stokeRect.width() / bitmap!!.width.toFloat()
+                    dy = (stokeRect.height() - bitmap!!.height * scale) * 0.5f
                 }
-                mShaderMatrix.setScale(scale, scale)
-                mShaderMatrix.postTranslate(
-                    dx + 0.5f + mStrokeWidth / 2f, dy + 0.5f + mStrokeWidth / 2f
+                shaderMatrix.setScale(scale, scale)
+                shaderMatrix.postTranslate(
+                    dx + 0.5f + strokeWidth / 2f, dy + 0.5f + strokeWidth / 2f
                 )
             }
-            ScaleType.MATRIX,
-            ScaleType.FIT_START,
+            ScaleType.FIT_CENTER,
             ScaleType.FIT_END,
             ScaleType.CENTER_INSIDE -> {
                 val width = viewBounds.width()
                 val height = viewBounds.height()
-                val scale = if (mBitmap!!.width <= width && mBitmap!!.height <= height) {
+                val scale = if (bitmap!!.width <= width && bitmap!!.height <= height) {
                     1.0f
                 } else {
-                    min(width / mBitmap!!.width.toFloat(), height / mBitmap!!.height.toFloat())
+                    min(width / bitmap!!.width.toFloat(), height / bitmap!!.height.toFloat())
                 }
-                val dx = (width - mBitmap!!.width * scale) * 0.5f + 0.5f
-                val dy = (height - mBitmap!!.height * scale) * 0.5f + 0.5f
-                mShaderMatrix.setScale(scale, scale)
-                mShaderMatrix.postTranslate(dx, dy)
-                mStokeRect.inset(mStrokeWidth / 2f, mStrokeWidth / 2f)
+                val dx = (width - bitmap!!.width * scale) * 0.5f + 0.5f
+                val dy = (height - bitmap!!.height * scale) * 0.5f + 0.5f
+                shaderMatrix.setScale(scale, scale)
+                shaderMatrix.postTranslate(dx, dy)
+                stokeRect.inset(strokeWidth / 2f, strokeWidth / 2f)
             }
-            ScaleType.FIT_CENTER -> {
-                mShaderMatrix.mapRect(mStokeRect)
-                mStokeRect.inset(mStrokeWidth / 2f, mStrokeWidth / 2f)
+            ScaleType.MATRIX,
+            ScaleType.FIT_START -> {
+                stokeRect.inset(strokeWidth / 2f, strokeWidth / 2f)
+                shaderMatrix.mapRect(stokeRect)
             }
             ScaleType.FIT_XY -> {
-                mStokeRect.inset(mStrokeWidth / 2f, mStrokeWidth / 2f)
-                mShaderMatrix.setRectToRect(
-                    RectF(0f, 0f, mBitmap!!.width.toFloat(), mBitmap!!.height.toFloat()),
-                    mStokeRect, ScaleToFit.FILL
+                stokeRect.inset(strokeWidth / 2f, strokeWidth / 2f)
+                shaderMatrix.setRectToRect(
+                    RectF(0f, 0f, bitmap!!.width.toFloat(), bitmap!!.height.toFloat()),
+                    stokeRect, ScaleToFit.FILL
                 )
             }
             else -> {}
         }
-        mBitmapRect.set(mStokeRect)
+        bitmapRect.set(stokeRect)
         if (hasPadding()) {
-            mBitmapRect.inset(mStrokeWidth / 2f, mStrokeWidth / 2f)
-            mBitmapRect.left += paddingStart
-            mBitmapRect.top += paddingTop
-            mBitmapRect.right -= paddingEnd
-            mBitmapRect.bottom -= paddingBottom
+            bitmapRect.inset(strokeWidth / 2f, strokeWidth / 2f)
+            bitmapRect.left += paddingStart
+            bitmapRect.top += paddingTop
+            bitmapRect.right -= paddingEnd
+            bitmapRect.bottom -= paddingBottom
         }
     }
 
@@ -226,15 +282,15 @@ class ShapeImageView @JvmOverloads constructor(
     }
 
     private fun cornerHasRadius(): Boolean {
-        return mLeftTopRadius > 0 || mLeftBottomRadius > 0 || mRightTopRadius > 0 || mRightBottomRadius > 0
+        return leftTopRadius > 0 || leftBottomRadius > 0 || rightTopRadius > 0 || rightBottomRadius > 0
     }
 
     private fun setRoundPath(path: Path, rect: RectF) {
         path.reset()
         path.addRoundRect(
             rect, floatArrayOf(
-                mLeftTopRadius, mLeftTopRadius, mRightTopRadius, mRightTopRadius,
-                mRightBottomRadius, mRightBottomRadius, mLeftBottomRadius, mLeftBottomRadius
+                leftTopRadius, leftTopRadius, rightTopRadius, rightTopRadius,
+                rightBottomRadius, rightBottomRadius, leftBottomRadius, leftBottomRadius
             ), Path.Direction.CW
         )
     }

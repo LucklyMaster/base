@@ -262,15 +262,16 @@
     </declare-styleable>
 
     <declare-styleable name="ShapeImageView">
+        <attr name="mc_isCircle" />
+        <attr name="mc_strokeWidth" />
+        <attr name="mc_strokeColor" />
+        <attr name="mc_dashWidth" />
+        <attr name="mc_dashGap" />
         <attr name="mc_radius" />
         <attr name="mc_leftTopRadius" />
         <attr name="mc_leftBottomRadius" />
         <attr name="mc_rightTopRadius" />
         <attr name="mc_rightBottomRadius" />
-        <attr name="mc_strokeWidth" />
-        <attr name="mc_strokeColor" />
-        <attr name="mc_disableColor" />
-        <attr name="mc_isCircle" />
     </declare-styleable>
 
     <attr name="mc_shapeViewDefaultStyle" format="reference" />
