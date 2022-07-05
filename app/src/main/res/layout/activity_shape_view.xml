@@ -19,7 +19,17 @@
             android:gravity="center"
             android:onClick="onClick"
             android:text="ShapeTextView"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            app:mc_dashGap="10dp"
+            app:mc_dashWidth="10dp"
+            app:mc_gradientCenterColor="#0f0"
+            app:mc_gradientEndColor="#ff0"
+            app:mc_gradientStartColor="#00f"
+            app:mc_radius="20dp"
+            app:mc_strokeColor="@color/black"
+            app:mc_strokeWidth="4dp"
+            app:mc_effectDrawable="@mipmap/img"
+            app:mc_useRipple="false" />
 
         <ImageView
             android:layout_width="100dp"
@@ -46,7 +56,6 @@
             android:layout_marginTop="10dp"
             android:gravity="center"
             android:onClick="onClick"
-            app:mc_circle="true"
             app:mc_strokeColor="#0f0"
             app:mc_strokeWidth="4dp">
 

@@ -47,7 +47,7 @@ class ShapeImageView @JvmOverloads constructor(
 
     init {
         val a = context.obtainStyledAttributes(attrs, R.styleable.ShapeImageView)
-        mCircle = a.getBoolean(R.styleable.ShapeImageView_mc_circle, false)
+        mCircle = a.getBoolean(R.styleable.ShapeImageView_mc_isCircle, false)
         mStrokeWidth = a.getDimension(R.styleable.ShapeImageView_mc_strokeWidth, 0f)
         mStrokeColor = a.getColor(R.styleable.ShapeImageView_mc_strokeColor, Color.TRANSPARENT)
         mRadius = a.getDimension(R.styleable.ShapeImageView_mc_radius, 0f)

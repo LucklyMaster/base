@@ -1,5 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="mc_icon" format="reference" />
+    <attr name="mc_iconColor" format="reference|color" />
+    <attr name="mc_iconWidth" format="dimension" />
+    <attr name="mc_iconHeight" format="dimension" />
+    <attr name="mc_text" format="reference|string" />
+    <attr name="mc_textColor" format="reference|color" />
+    <attr name="mc_textSize" format="dimension" />
+    <attr name="mc_textMaxWidth" format="dimension" />
+    <attr name="mc_textMinWidth" format="dimension" />
+    <attr name="mc_iconPadding" format="dimension" />
+    <attr name="mc_iconGravity" format="enum">
+        <enum name="start" value="0" />
+        <enum name="top" value="1" />
+        <enum name="end" value="2" />
+        <enum name="bottom" value="3" />
+    </attr>
+    <attr name="mc_textGravity" format="enum">
+        <enum name="start" value="0" />
+        <enum name="end" value="1" />
+        <enum name="center" value="2" />
+    </attr>
+    <attr name="mc_ellipsize" format="enum">
+        <enum name="start" value="1" />
+        <enum name="middle" value="2" />
+        <enum name="end" value="3" />
+        <enum name="marquee" value="4" />
+    </attr>
+    <attr name="mc_editable" format="boolean" />
+
+    <attr name="mc_windowColor" format="color" />
+    <attr name="mc_windowRadius" format="dimension" />
+    <attr name="mc_windowDrawable" format="reference" />
+    <attr name="mc_windowAmount" format="float" />
+    <attr name="mc_windowWidth" format="dimension" />
+    <attr name="mc_windowHeight" format="dimension" />
+    <attr name="mc_windowGravity" format="enum">
+        <enum name="start" value="0" />
+        <enum name="top" value="1" />
+        <enum name="end" value="2" />
+        <enum name="bottom" value="3" />
+        <enum name="center" value="4" />
+    </attr>
+
     <declare-styleable name="ShapeItemView">
         <attr name="mc_useRipple" />
         <attr name="mc_rippleColor" />
@@ -11,9 +54,9 @@
         <attr name="mc_strokeWidth" />
         <attr name="mc_strokeColor" />
         <attr name="mc_normalColor" />
-        <attr name="mc_pressedColor" />
+        <attr name="mc_effectColor" />
         <attr name="mc_disableColor" />
-        <attr name="mc_circle" />
+        <attr name="mc_isCircle" />
         <attr name="mc_leftEditable" format="boolean" />
         <attr name="mc_middleEditable" format="boolean" />
         <attr name="mc_rightEditable" format="boolean" />
