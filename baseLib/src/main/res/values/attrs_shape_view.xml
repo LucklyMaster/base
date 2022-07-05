@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--<editor-fold desc="common-shape相关">-->
     <attr name="mc_isCircle" format="boolean" />
     <attr name="mc_useRipple" format="boolean" />
     <attr name="mc_rippleColor" format="reference|color" />
@@ -36,6 +37,18 @@
     <attr name="mc_leftBottomRadius" format="dimension" />
     <attr name="mc_rightTopRadius" format="dimension" />
     <attr name="mc_rightBottomRadius" format="dimension" />
+    <!--</editor-fold>-->
+
+    <!--ShapeView全局默认配置-->
+    <attr name="mc_shapeViewDefaultStyle" format="reference" />
+
+    <!--<editor-fold desc="common-square">-->
+    <attr name="mc_forceSquare" format="boolean" />
+    <attr name="mc_squareBy" format="enum">
+        <enum name="width" value="0" />
+        <enum name="height" value="1" />
+    </attr>
+    <!--</editor-fold>-->
 
     <declare-styleable name="ShapeView">
         <attr name="mc_isCircle" />
@@ -272,7 +285,12 @@
         <attr name="mc_leftBottomRadius" />
         <attr name="mc_rightTopRadius" />
         <attr name="mc_rightBottomRadius" />
+        <attr name="mc_forceSquare" />
+        <attr name="mc_squareBy" />
     </declare-styleable>
 
-    <attr name="mc_shapeViewDefaultStyle" format="reference" />
+    <declare-styleable name="SquareImageView">
+        <attr name="mc_forceSquare" />
+        <attr name="mc_squareBy" />
+    </declare-styleable>
 </resources>

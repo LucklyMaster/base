@@ -10,5 +10,6 @@ class ShapeViewActivity : MyBaseActivity<ActivityShapeViewBinding>() {
     }
 
     fun onClick(v: View) {
+        binding.shapeImageView.setCircle(true).setForceSquare(true)
     }
 }

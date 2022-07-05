@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.util.AttributeSet
 import androidx.annotation.ColorInt
+import androidx.annotation.IntRange
 import androidx.appcompat.widget.AppCompatImageView
 import com.masterchan.lib.R
 import kotlin.math.min
@@ -45,6 +46,10 @@ class ShapeImageView @JvmOverloads constructor(
         private set
     var rightBottomRadius: Float
         private set
+    var isForceSquare: Boolean
+        private set
+    var squareBy: Int
+        private set
 
     private val stokePaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val bitmapPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -58,6 +63,11 @@ class ShapeImageView @JvmOverloads constructor(
     private val strokePath = Path()
     private val bitmapPath = Path()
 
+    companion object {
+        const val SQUARE_WIDTH = 0
+        const val SQUARE_HEIGHT = 1
+    }
+
     init {
         val a = context.obtainStyledAttributes(attrs, R.styleable.ShapeImageView)
         isCircle = a.getBoolean(R.styleable.ShapeImageView_mc_isCircle, false)
@@ -70,6 +80,8 @@ class ShapeImageView @JvmOverloads constructor(
         leftBottomRadius = a.getDimension(R.styleable.ShapeImageView_mc_leftBottomRadius, radius)
         rightTopRadius = a.getDimension(R.styleable.ShapeImageView_mc_rightTopRadius, radius)
         rightBottomRadius = a.getDimension(R.styleable.ShapeImageView_mc_rightBottomRadius, radius)
+        isForceSquare = a.getBoolean(R.styleable.ShapeImageView_mc_forceSquare, false)
+        squareBy = a.getInteger(R.styleable.ShapeImageView_mc_squareBy, SQUARE_WIDTH)
         a.recycle()
         stokePaint.pathEffect = DashPathEffect(floatArrayOf(dashWidth, dashGap), 0f)
     }
@@ -141,6 +153,16 @@ class ShapeImageView @JvmOverloads constructor(
         invalidate()
     }
 
+    fun setForceSquare(isForceSquare: Boolean) = apply {
+        this.isForceSquare = isForceSquare
+        invalidate()
+    }
+
+    fun setSquareBy(@IntRange(from = 0, to = 1) squareBy: Int) = apply {
+        this.squareBy = squareBy
+        invalidate()
+    }
+
     override fun onDraw(canvas: Canvas) {
         stokePaint.style = Paint.Style.STROKE
         stokePaint.strokeWidth = strokeWidth
@@ -184,6 +206,24 @@ class ShapeImageView @JvmOverloads constructor(
                 }
             }
         }
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        var widthSpec = widthMeasureSpec
+        var heightSpec = heightMeasureSpec
+        if (isForceSquare) {
+            when (squareBy) {
+                SQUARE_WIDTH -> {
+                    widthSpec = widthMeasureSpec
+                    heightSpec = widthMeasureSpec
+                }
+                SQUARE_HEIGHT -> {
+                    widthSpec = heightMeasureSpec
+                    heightSpec = heightMeasureSpec
+                }
+            }
+        }
+        super.onMeasure(widthSpec, heightSpec)
     }
 
     private fun getBitmap(drawable: Drawable?): Bitmap? {

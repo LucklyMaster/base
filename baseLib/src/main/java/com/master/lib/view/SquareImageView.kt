@@ -5,20 +5,19 @@ import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
 
 /**
- * SquareImageView
+ * 宽高相等的ImageView
  * @author MasterChan
  * @date 2021-12-29 14:58
  */
-class SquareImageView : AppCompatImageView {
+class SquareImageView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : AppCompatImageView(context, attrs, defStyleAttr) {
 
     private var byWidth = true
 
-    @JvmOverloads
-    constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : super(
-        context, attrs, defStyleAttr
-    )
-
-    constructor(context: Context, byWidth: Boolean = true) : super(context) {
+    constructor(context: Context, byWidth: Boolean = true) : this(context, null, 0) {
         this.byWidth = byWidth
     }
 
