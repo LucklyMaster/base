@@ -23,7 +23,7 @@
             app:mc_dashGap="10dp"
             app:mc_dashWidth="10dp"
             app:mc_effectDrawable="@mipmap/img"
-            app:mc_gradientCenterColor="#0f0"
+            app:mc_gradientCenterColor="@color/design_default_color_secondary"
             app:mc_gradientEndColor="#ff0"
             app:mc_gradientStartColor="#00f"
             app:mc_radius="20dp"

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="mc_icon" format="reference" />
-    <attr name="mc_iconColor" format="reference|color" />
+    <attr name="mc_iconColor" format="color" />
     <attr name="mc_iconWidth" format="dimension" />
     <attr name="mc_iconHeight" format="dimension" />
     <attr name="mc_text" format="reference|string" />
-    <attr name="mc_textColor" format="reference|color" />
+    <attr name="mc_textColor" format="color" />
     <attr name="mc_textSize" format="dimension" />
     <attr name="mc_textMaxWidth" format="dimension" />
     <attr name="mc_textMinWidth" format="dimension" />
@@ -106,9 +106,9 @@
         <attr name="mc_rightIcon" format="reference" />
         <!--icon color-->
         <attr name="mc_iconColor" />
-        <attr name="mc_leftIconColor" format="reference|color" />
-        <attr name="mc_middleIconColor" format="reference|color" />
-        <attr name="mc_rightIconColor" format="reference|color" />
+        <attr name="mc_leftIconColor" format="color" />
+        <attr name="mc_middleIconColor" format="color" />
+        <attr name="mc_rightIconColor" format="color" />
         <!--icon width-->
         <attr name="mc_iconWidth" />
         <attr name="mc_leftIconWidth" format="dimension" />
@@ -147,9 +147,9 @@
         <attr name="mc_rightTextSize" format="dimension" />
         <!--text color-->
         <attr name="mc_textColor" />
-        <attr name="mc_leftTextColor" format="reference|color" />
-        <attr name="mc_middleTextColor" format="reference|color" />
-        <attr name="mc_rightTextColor" format="reference|color" />
+        <attr name="mc_leftTextColor" format="color" />
+        <attr name="mc_middleTextColor" format="color" />
+        <attr name="mc_rightTextColor" format="color" />
 
         <!--text hint-->
         <attr name="mc_hintTextColor" format="color" />

@@ -44,10 +44,7 @@ class MenuItem @JvmOverloads constructor(
         addView(labelView)
 
         val a = context.theme.obtainStyledAttributes(
-            attrs,
-            R.styleable.MenuItem,
-            defStyleAttr,
-            defStyleRes
+            attrs, R.styleable.MenuItem, defStyleAttr, defStyleRes
         )
         if (a.hasValue(R.styleable.MenuItem_mc_icon)) {
             setIcon(a.getDrawable(R.styleable.MenuItem_mc_icon))

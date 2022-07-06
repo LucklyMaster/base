@@ -3,10 +3,10 @@
     <!--<editor-fold desc="common-shape相关">-->
     <attr name="mc_isCircle" format="boolean" />
     <attr name="mc_useRipple" format="boolean" />
-    <attr name="mc_rippleColor" format="reference|color" />
-    <attr name="mc_normalColor" format="reference|color" />
-    <attr name="mc_effectColor" format="reference|color" />
-    <attr name="mc_disableColor" format="reference|color" />
+    <attr name="mc_rippleColor" format="color" />
+    <attr name="mc_normalColor" format="color" />
+    <attr name="mc_effectColor" format="color" />
+    <attr name="mc_disableColor" format="color" />
     <attr name="mc_normalDrawable" format="reference" />
     <attr name="mc_effectDrawable" format="reference" />
     <attr name="mc_disableDrawable" format="reference" />
@@ -15,7 +15,7 @@
         <enum name="selected" value="1" />
     </attr>
     <attr name="mc_strokeWidth" format="dimension" />
-    <attr name="mc_strokeColor" format="reference|color" />
+    <attr name="mc_strokeColor" format="color" />
     <attr name="mc_dashWidth" format="dimension" />
     <attr name="mc_dashGap" format="dimension" />
     <attr name="mc_shapeWidth" format="dimension" />

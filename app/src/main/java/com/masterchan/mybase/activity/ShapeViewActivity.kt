@@ -3,7 +3,6 @@ package com.masterchan.mybase.activity
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import com.master.lib.view.ShapeImageView
 import com.masterchan.mybase.databinding.ActivityShapeViewBinding
 
 class ShapeViewActivity : MyBaseActivity<ActivityShapeViewBinding>() {
