@@ -11,21 +11,35 @@ import androidx.appcompat.widget.AppCompatImageView
  */
 class SquareImageView @JvmOverloads constructor(
     context: Context,
+    private var baseWith: Boolean = true,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : AppCompatImageView(context, attrs, defStyleAttr) {
 
-    private var byWidth = true
+    private var isForceSquare = true
 
-    constructor(context: Context, byWidth: Boolean = true) : this(context, null, 0) {
-        this.byWidth = byWidth
+    fun setForceSquare(isForceSquare: Boolean) = apply {
+        this.isForceSquare = isForceSquare
+        requestLayout()
+    }
+
+    fun setBaseWidth(baseWith: Boolean) = apply {
+        this.baseWith = baseWith
+        requestLayout()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        if (byWidth) {
-            super.onMeasure(widthMeasureSpec, widthMeasureSpec)
-        } else {
-            super.onMeasure(heightMeasureSpec, heightMeasureSpec)
+        var widthSpec = widthMeasureSpec
+        var heightSpec = heightMeasureSpec
+        if (isForceSquare) {
+            if (baseWith) {
+                widthSpec = widthMeasureSpec
+                heightSpec = widthMeasureSpec
+            } else {
+                widthSpec = heightMeasureSpec
+                heightSpec = heightMeasureSpec
+            }
         }
+        super.onMeasure(widthSpec, heightSpec)
     }
 }

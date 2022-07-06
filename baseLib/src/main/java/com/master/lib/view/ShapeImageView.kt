@@ -155,12 +155,16 @@ class ShapeImageView @JvmOverloads constructor(
 
     fun setForceSquare(isForceSquare: Boolean) = apply {
         this.isForceSquare = isForceSquare
-        invalidate()
+        rebuildMatrix = true
+        rebuildShader = true
+        requestLayout()
     }
 
     fun setSquareBy(@IntRange(from = 0, to = 1) squareBy: Int) = apply {
         this.squareBy = squareBy
-        invalidate()
+        rebuildMatrix = true
+        rebuildShader = true
+        requestLayout()
     }
 
     override fun onDraw(canvas: Canvas) {
