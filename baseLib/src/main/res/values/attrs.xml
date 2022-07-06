@@ -43,35 +43,21 @@
         <enum name="center" value="4" />
     </attr>
 
-    <declare-styleable name="ShapeItemView">
-        <attr name="mc_useRipple" />
-        <attr name="mc_rippleColor" />
-        <attr name="mc_radius" />
-        <attr name="mc_leftTopRadius" />
-        <attr name="mc_leftBottomRadius" />
-        <attr name="mc_rightTopRadius" />
-        <attr name="mc_rightBottomRadius" />
-        <attr name="mc_strokeWidth" />
-        <attr name="mc_strokeColor" />
-        <attr name="mc_normalColor" />
-        <attr name="mc_effectColor" />
-        <attr name="mc_disableColor" />
-        <attr name="mc_isCircle" />
-        <attr name="mc_leftEditable" format="boolean" />
-        <attr name="mc_middleEditable" format="boolean" />
-        <attr name="mc_rightEditable" format="boolean" />
-        <attr name="android:background" />
+    <declare-styleable name="EditableText">
+        <attr name="mc_editable" />
     </declare-styleable>
-    <attr name="mc_shapeItemViewDefaultStyle" format="reference" />
 
     <declare-styleable name="MenuItem">
         <attr name="mc_icon" />
         <attr name="mc_iconColor" />
         <attr name="mc_iconWidth" />
         <attr name="mc_iconHeight" />
+        <attr name="mc_iconVisible" format="boolean" />
+        <attr name="mc_textVisible" format="boolean" />
         <attr name="mc_text" />
         <attr name="mc_textColor" />
         <attr name="mc_textSize" />
+        <attr name="mc_textBackground" format="reference" />
         <attr name="mc_ellipsize" />
         <attr name="mc_textMaxWidth" />
         <attr name="mc_iconPadding" />

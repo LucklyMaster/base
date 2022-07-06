@@ -70,5 +70,30 @@
                 android:textColor="@color/white" />
 
         </com.master.lib.view.ShapeFrameLayout>
+
+        <com.master.lib.view.MenuItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:mc_editable="false"
+            app:mc_icon="@mipmap/ic_launcher"
+            app:mc_iconGravity="top"
+            app:mc_iconHeight="80dp"
+            app:mc_iconWidth="80dp"
+            app:mc_text="@string/app_name"
+            app:mc_textBackground="@color/design_default_color_secondary" />
+
+        <com.master.lib.view.EditableText
+            android:id="@+id/editText"
+            android:layout_width="200dp"
+            android:onClick="editTextClick"
+            android:layout_height="50dp"
+            android:gravity="start|center_vertical"
+            android:text="诉讼法"
+            app:mc_editable="true" />
     </LinearLayout>
 </ScrollView>

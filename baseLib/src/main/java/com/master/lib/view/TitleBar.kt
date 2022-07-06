@@ -12,9 +12,9 @@ import androidx.annotation.ColorInt
 import androidx.annotation.IntRange
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import com.masterchan.lib.R
 import com.master.lib.ext.activity
 import com.master.lib.ext.dp2px
+import com.masterchan.lib.R
 
 /**
  * TitleBar
@@ -504,7 +504,7 @@ open class TitleBar @JvmOverloads constructor(
         return this
     }
 
-    fun setTextEllipsize(ellipsize: Int): TitleBar {
+    private fun setTextEllipsize(ellipsize: Int): TitleBar {
         leftItem.setEllipsize(ellipsize)
         middleItem.setEllipsize(ellipsize)
         rightItem.setEllipsize(ellipsize)

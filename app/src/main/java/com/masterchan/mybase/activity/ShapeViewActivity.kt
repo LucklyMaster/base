@@ -15,4 +15,8 @@ class ShapeViewActivity : MyBaseActivity<ActivityShapeViewBinding>() {
             .setForceSquare(!binding.shapeImageView.isForceSquare)
             .setSquareBy(0)
     }
+
+    fun editTextClick(view: View) {
+        binding.editText.editable = !binding.editText.editable
+    }
 }

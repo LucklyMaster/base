@@ -2,9 +2,11 @@ package com.master.lib.view
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.MotionEvent
 import androidx.appcompat.widget.AppCompatEditText
+import com.masterchan.lib.R
 
 /**
  * EditableText
@@ -15,9 +17,10 @@ import androidx.appcompat.widget.AppCompatEditText
 class EditableText @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    defStyleAttr: Int =  androidx.appcompat.R.attr.editTextStyle
 ) : AppCompatEditText(context, attrs, defStyleAttr) {
 
+    private var drawable: Drawable? = null
     var editable: Boolean = true
         set(value) {
             isCursorVisible = value
@@ -30,7 +33,10 @@ class EditableText @JvmOverloads constructor(
     }
 
     init {
-        background = null
+        drawable = background
+        val a = context.obtainStyledAttributes(attrs, R.styleable.EditableText, defStyleAttr, 0)
+        setEditable(a.getBoolean(R.styleable.EditableText_mc_editable, false))
+        a.recycle()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -43,5 +49,13 @@ class EditableText @JvmOverloads constructor(
         isFocusable = editable
         isLongClickable = editable
         isFocusableInTouchMode = editable
+        background = if (editable) drawable else null
+        // if (editable) {
+        //     val a = context.obtainStyledAttributes(intArrayOf(android.R.attr.editTextBackground))
+        //     background = a.getDrawable(0)
+        //     a.recycle()
+        // } else {
+        //     background = null
+        // }
     }
 }
