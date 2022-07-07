@@ -13,7 +13,7 @@ import androidx.annotation.IntRange
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import com.master.lib.ext.activity
-import com.master.lib.ext.dp2px
+import com.master.lib.ext.dp2pxi
 import com.masterchan.lib.R
 
 /**
@@ -63,7 +63,7 @@ open class TitleBar @JvmOverloads constructor(
         setIcon(a, R.styleable.TitleBar_mc_rightIcon, rightItem)
 
         /**icon tint & icon color**/
-        val useIconTint = a.getBoolean(R.styleable.TitleBar_mc_userIconTint, true)
+        val useIconTint = a.getBoolean(R.styleable.TitleBar_mc_useIconTint, true)
         if (useIconTint) {
             setIconTintColor(a.getColorStateList(R.styleable.TitleBar_mc_iconColor))
             setIconTintColor(a, R.styleable.TitleBar_mc_leftIconColor, leftItem)
@@ -124,7 +124,7 @@ open class TitleBar @JvmOverloads constructor(
 
         /**text size**/
         if (a.hasValue(R.styleable.TitleBar_mc_textSize)) {
-            setTextSize(a.getDimension(R.styleable.TitleBar_mc_textSize, dp2px(16f)))
+            setTextSize(a.getDimension(R.styleable.TitleBar_mc_textSize, 0f))
         }
         setTextSize(a, R.styleable.TitleBar_mc_leftTextSize, leftItem)
         setTextSize(a, R.styleable.TitleBar_mc_middleTextSize, middleItem)
@@ -188,9 +188,9 @@ open class TitleBar @JvmOverloads constructor(
         val marginEnd = a.getDimensionPixelOffset(R.styleable.TitleBar_mc_dividerMarginEnd, 0)
         setDividerMargin(marginStart, marginEnd)
 
-        mExcludePaddingHeight = a.getDimension(
-            R.styleable.TitleBar_mc_excludePaddingHeight, dp2px(50f)
-        ).toInt()
+        mExcludePaddingHeight = a.getDimensionPixelOffset(
+            R.styleable.TitleBar_mc_excludePaddingHeight, context.dp2pxi(50f)
+        )
 
         if (a.hasValue(R.styleable.TitleBar_android_background)) {
             background = a.getDrawable(R.styleable.TitleBar_android_background)
@@ -396,12 +396,27 @@ open class TitleBar @JvmOverloads constructor(
     }
 
     fun setIconRippleColor(@ColorInt color: Int): TitleBar {
-        val mask = GradientDrawable()
-        mask.shape = GradientDrawable.OVAL
-        mask.color = ColorStateList.valueOf(color)
-        leftItem.iconView.background = RippleDrawable(ColorStateList.valueOf(color), null, mask)
-        middleItem.iconView.background = RippleDrawable(ColorStateList.valueOf(color), null, mask)
-        rightItem.iconView.background = RippleDrawable(ColorStateList.valueOf(color), null, mask)
+        leftItem.iconView.background = RippleDrawable(
+            ColorStateList.valueOf(color), null,
+            GradientDrawable().apply {
+                shape = GradientDrawable.OVAL
+                setColor(ColorStateList.valueOf(color))
+            }
+        )
+        middleItem.iconView.background = RippleDrawable(
+            ColorStateList.valueOf(color), null,
+            GradientDrawable().apply {
+                shape = GradientDrawable.OVAL
+                setColor(ColorStateList.valueOf(color))
+            }
+        )
+        rightItem.iconView.background = RippleDrawable(
+            ColorStateList.valueOf(color), null,
+            GradientDrawable().apply {
+                shape = GradientDrawable.OVAL
+                setColor(ColorStateList.valueOf(color))
+            }
+        )
         return this
     }
 

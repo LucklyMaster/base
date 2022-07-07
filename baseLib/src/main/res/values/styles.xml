@@ -5,9 +5,9 @@
         <item name="mc_iconGravity">start</item>
         <item name="mc_leftIconWidth">40dp</item>
         <item name="mc_leftIconHeight">40dp</item>
-        <item name="mc_iconColor">?android:attr/textColorPrimary</item>
+        <item name="mc_iconColor">@null</item>
         <item name="mc_leftIcon">@drawable/ic_arrow_left_black</item>
-        <item name="mc_textColor">?android:attr/textColorPrimary</item>
+        <item name="mc_textColor">?android:attr/textColorPrimaryInverse</item>
         <item name="mc_textSize">16sp</item>
         <item name="mc_leftMarginStart">4dp</item>
         <item name="mc_leftMarginTop">0dp</item>
@@ -24,14 +24,14 @@
         <item name="mc_ellipsize">end</item>
         <item name="mc_iconUseRipple">true</item>
         <item name="mc_iconRippleColor">@color/color_ripple</item>
-        <item name="mc_userIconTint">true</item>
+        <item name="mc_useIconTint">true</item>
         <item name="mc_iconPressedColor">@color/color_ripple</item>
         <item name="mc_dividerVisible">false</item>
         <item name="mc_dividerColor">@color/color_alert_dialog_divider</item>
         <item name="mc_dividerHeight">0.5dp</item>
         <item name="mc_clickLeftFinish">true</item>
         <item name="mc_excludePaddingHeight">50dp</item>
-        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:background">#FF6200EE</item>
     </style>
 
     <style name="mc_ShapeItemView" parent="mc_TitleBar">
@@ -46,7 +46,7 @@
         <item name="rippleColor">?attr/colorPrimary</item>
         <item name="mc_iconUseRipple">false</item>
         <item name="mc_iconPressedColor">@color/transparent</item>
-        <item name="mc_userIconTint">false</item>
+        <item name="mc_useIconTint">false</item>
         <item name="mc_dividerVisible">false</item>
         <item name="mc_leftMarginStart">16dp</item>
         <item name="mc_middleMarginStart">26dp</item>

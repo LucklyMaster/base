@@ -2,6 +2,7 @@ package com.master.lib.view
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.text.InputType
 import android.text.TextUtils
@@ -86,6 +87,9 @@ class MenuItem @JvmOverloads constructor(
         val a = context.obtainStyledAttributes(
             attrs, R.styleable.MenuItem, defStyleAttr, defStyleRes
         )
+        if (!a.hasValue(R.styleable.MenuItem_android_gravity)) {
+            gravity = Gravity.CENTER
+        }
         a.ifHas(R.styleable.MenuItem_mc_icon) {
             setIcon(a.getDrawable(R.styleable.MenuItem_mc_icon))
         }

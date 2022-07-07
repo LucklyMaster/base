@@ -48,6 +48,7 @@
     </declare-styleable>
 
     <declare-styleable name="MenuItem">
+        <attr name="android:gravity" />
         <attr name="mc_icon" />
         <attr name="mc_iconColor" />
         <attr name="mc_iconWidth" />
@@ -136,13 +137,11 @@
         <attr name="mc_leftTextColor" format="color" />
         <attr name="mc_middleTextColor" format="color" />
         <attr name="mc_rightTextColor" format="color" />
-
         <!--text hint-->
         <attr name="mc_hintTextColor" format="color" />
         <attr name="mc_leftTextHint" format="reference|string" />
         <attr name="mc_middleTextHint" format="reference|string" />
         <attr name="mc_rightTextHint" format="reference|string" />
-
         <!--text maxWidth-->
         <attr name="mc_textMaxWidth" />
         <attr name="mc_leftTextMaxWidth" format="dimension" />
@@ -175,7 +174,7 @@
         <attr name="mc_iconUseRipple" format="boolean" />
         <attr name="mc_iconRippleColor" format="color" />
         <attr name="mc_iconPressedColor" format="color" />
-        <attr name="mc_userIconTint" format="boolean" />
+        <attr name="mc_useIconTint" format="boolean" />
         <attr name="mc_dividerVisible" format="boolean" />
         <attr name="mc_dividerColor" format="color" />
         <attr name="mc_dividerHeight" format="dimension" />
