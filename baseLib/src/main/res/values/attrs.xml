@@ -176,7 +176,7 @@
         <attr name="mc_iconPressedColor" format="color" />
         <attr name="mc_useIconTint" format="boolean" />
         <attr name="mc_dividerVisible" format="boolean" />
-        <attr name="mc_dividerColor" format="color" />
+        <attr name="mc_dividerDrawable" format="reference|color" />
         <attr name="mc_dividerHeight" format="dimension" />
         <attr name="mc_dividerMarginStart" format="dimension" />
         <attr name="mc_dividerMarginEnd" format="dimension" />

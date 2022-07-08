@@ -9,7 +9,7 @@
         <item name="mc_leftIcon">@drawable/ic_arrow_left_black</item>
         <item name="mc_textColor">?android:attr/textColorPrimaryInverse</item>
         <item name="mc_textSize">16sp</item>
-        <item name="mc_leftMarginStart">4dp</item>
+        <item name="mc_leftMarginStart">10dp</item>
         <item name="mc_leftMarginTop">0dp</item>
         <item name="mc_leftMarginBottom">0dp</item>
         <item name="mc_middleMarginStart">0dp</item>
@@ -27,7 +27,7 @@
         <item name="mc_useIconTint">true</item>
         <item name="mc_iconPressedColor">@color/color_ripple</item>
         <item name="mc_dividerVisible">false</item>
-        <item name="mc_dividerColor">@color/color_alert_dialog_divider</item>
+        <item name="mc_dividerDrawable">@color/color_alert_dialog_divider</item>
         <item name="mc_dividerHeight">0.5dp</item>
         <item name="mc_clickLeftFinish">true</item>
         <item name="mc_excludePaddingHeight">50dp</item>

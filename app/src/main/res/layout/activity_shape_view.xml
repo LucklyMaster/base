@@ -97,18 +97,32 @@
 
         <com.master.lib.view.TitleBar
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="wrap_content"
             android:paddingTop="20dp"
-            app:mc_iconPadding="10dp"
+            app:mc_dividerDrawable="@drawable/bg_divider"
+            app:mc_dividerHeight="10dp"
+            app:mc_dividerMarginEnd="16dp"
+            app:mc_dividerMarginStart="16dp"
+            app:mc_dividerVisible="true"
+            app:mc_excludePaddingHeight="80dp"
+            app:mc_iconPadding="0dp"
             app:mc_leftText="@string/app_name"
-            app:mc_middleIcon="@mipmap/ic_launcher" />
+            app:mc_middleIcon="@mipmap/ic_launcher"
+            app:mc_middleIconHeight="60dp"
+            app:mc_middleIconWidth="60dp"
+            app:mc_middleItemLayoutGravity="start"
+            app:mc_middleMarginStart="20dp"
+            app:mc_rightIcon="@drawable/ic_launcher_foreground"
+            app:mc_rightIconGravity="end"
+            app:mc_rightIconHeight="40dp"
+            app:mc_rightIconWidth="30dp"
+            app:mc_rightMarginEnd="30dp"
+            app:mc_rightText="@string/app_name" />
 
         <com.master.lib.view.TitleBar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:paddingTop="20dp"
-            app:mc_excludePaddingHeight="80dp"
+            android:layout_height="80dp"
+            android:background="#606060"
             app:mc_iconPadding="10dp"
             app:mc_leftText="@string/app_name"
             app:mc_middleIcon="@mipmap/ic_launcher" />

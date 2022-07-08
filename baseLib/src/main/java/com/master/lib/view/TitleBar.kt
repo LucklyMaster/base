@@ -3,10 +3,12 @@ package com.master.lib.view
 import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.TypedArray
+import android.graphics.Color
 import android.graphics.drawable.*
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.Gravity
+import android.view.View
 import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.annotation.IntRange
@@ -32,6 +34,7 @@ open class TitleBar @JvmOverloads constructor(
     val leftItem = MenuItem(context)
     val middleItem = MenuItem(context)
     val rightItem = MenuItem(context)
+    private val backgroundView = View(context)
     private val mDividerView = TextView(context)
     private var mIconRippleColor = 0
     private var mIconPressedColor = 0
@@ -180,8 +183,8 @@ open class TitleBar @JvmOverloads constructor(
 
         /**divider**/
         setDividerVisible(a.getBoolean(R.styleable.TitleBar_mc_dividerVisible, false))
-        if (a.hasValue(R.styleable.TitleBar_mc_dividerColor)) {
-            setDividerColor(a.getColor(R.styleable.TitleBar_mc_dividerColor, 0))
+        if (a.hasValue(R.styleable.TitleBar_mc_dividerDrawable)) {
+            setDividerColor(a.getDrawable(R.styleable.TitleBar_mc_dividerDrawable))
         }
         setDividerHeight(a.getDimensionPixelOffset(R.styleable.TitleBar_mc_dividerHeight, 0))
         val marginStart = a.getDimensionPixelOffset(R.styleable.TitleBar_mc_dividerMarginStart, 0)
@@ -193,46 +196,60 @@ open class TitleBar @JvmOverloads constructor(
         )
 
         if (a.hasValue(R.styleable.TitleBar_android_background)) {
-            background = a.getDrawable(R.styleable.TitleBar_android_background)
+            backgroundView.background = a.getDrawable(R.styleable.TitleBar_android_background)
         }
         setClickLeftFinish(a.getBoolean(R.styleable.TitleBar_mc_clickLeftFinish, true))
-
         a.recycle()
+
+        //将背景颜色置为透明，背景由backgroundView来接收
+        background = ColorDrawable(Color.TRANSPARENT)
     }
 
     private fun layout() {
-        leftItem.id = Int.MAX_VALUE - 1000
-        middleItem.id = Int.MAX_VALUE - 1001
-        rightItem.id = Int.MAX_VALUE - 1002
-        mDividerView.id = Int.MAX_VALUE - 1003
+        backgroundView.id = Int.MAX_VALUE - 1000
+        leftItem.id = Int.MAX_VALUE - 1001
+        middleItem.id = Int.MAX_VALUE - 1002
+        rightItem.id = Int.MAX_VALUE - 1003
+        mDividerView.id = Int.MAX_VALUE - 1004
 
+        addView(backgroundView, LayoutParams(0, 0))
         addView(leftItem, LayoutParams(LayoutParams.WRAP_CONTENT, 0))
         addView(middleItem, LayoutParams(LayoutParams.WRAP_CONTENT, 0))
         addView(rightItem, LayoutParams(LayoutParams.WRAP_CONTENT, 0))
-        addView(mDividerView, LayoutParams(ConstraintSet.UNSET, 10))
+        addView(mDividerView, LayoutParams(0, LayoutParams.WRAP_CONTENT))
 
-        val set = ConstraintSet()
+        val sets = ConstraintSet()
         val parentId = ConstraintSet.PARENT_ID
-        set.clone(this)
-        set.connect(leftItem.id, ConstraintSet.START, parentId, ConstraintSet.START)
-        set.connect(leftItem.id, ConstraintSet.TOP, parentId, ConstraintSet.TOP)
-        set.connect(leftItem.id, ConstraintSet.BOTTOM, mDividerView.id, ConstraintSet.TOP)
+        sets.clone(this)
+        sets.connect(backgroundView.id, ConstraintSet.START, parentId, ConstraintSet.START)
+        sets.connect(backgroundView.id, ConstraintSet.TOP, parentId, ConstraintSet.TOP)
+        sets.connect(backgroundView.id, ConstraintSet.END, parentId, ConstraintSet.END)
+        sets.connect(backgroundView.id, ConstraintSet.BOTTOM, mDividerView.id, ConstraintSet.TOP)
 
-        set.connect(middleItem.id, ConstraintSet.START, parentId, ConstraintSet.START)
-        set.connect(middleItem.id, ConstraintSet.TOP, parentId, ConstraintSet.TOP)
-        set.connect(middleItem.id, ConstraintSet.BOTTOM, mDividerView.id, ConstraintSet.TOP)
-        set.connect(middleItem.id, ConstraintSet.END, parentId, ConstraintSet.END)
+        sets.connect(leftItem.id, ConstraintSet.START, parentId, ConstraintSet.START)
+        sets.connect(leftItem.id, ConstraintSet.TOP, parentId, ConstraintSet.TOP)
+        sets.connect(leftItem.id, ConstraintSet.BOTTOM, backgroundView.id, ConstraintSet.BOTTOM)
 
-        set.connect(rightItem.id, ConstraintSet.TOP, parentId, ConstraintSet.TOP)
-        set.connect(rightItem.id, ConstraintSet.END, parentId, ConstraintSet.END)
-        set.connect(rightItem.id, ConstraintSet.BOTTOM, mDividerView.id, ConstraintSet.TOP)
+        sets.connect(middleItem.id, ConstraintSet.START, parentId, ConstraintSet.START)
+        sets.connect(middleItem.id, ConstraintSet.TOP, parentId, ConstraintSet.TOP)
+        sets.connect(middleItem.id, ConstraintSet.END, parentId, ConstraintSet.END)
+        sets.connect(middleItem.id, ConstraintSet.BOTTOM, backgroundView.id, ConstraintSet.BOTTOM)
 
-        set.connect(mDividerView.id, ConstraintSet.START, parentId, ConstraintSet.START)
-        set.connect(mDividerView.id, ConstraintSet.END, parentId, ConstraintSet.END)
-        set.connect(mDividerView.id, ConstraintSet.BOTTOM, parentId, ConstraintSet.BOTTOM)
-        set.applyTo(this)
+        sets.connect(rightItem.id, ConstraintSet.TOP, parentId, ConstraintSet.TOP)
+        sets.connect(rightItem.id, ConstraintSet.END, parentId, ConstraintSet.END)
+        sets.connect(rightItem.id, ConstraintSet.BOTTOM, backgroundView.id, ConstraintSet.BOTTOM)
+
+        sets.connect(mDividerView.id, ConstraintSet.START, parentId, ConstraintSet.START)
+        sets.connect(mDividerView.id, ConstraintSet.END, parentId, ConstraintSet.END)
+        sets.connect(mDividerView.id, ConstraintSet.BOTTOM, parentId, ConstraintSet.BOTTOM)
+        sets.applyTo(this)
     }
 
+    /**
+     * 设置[middleItem]的布局方式，一共三个取值
+     * 0:Start,1:Center,2:End
+     * @param gravity Int
+     */
     fun setMiddleItemLayoutGravity(@IntRange(from = 0, to = 2) gravity: Int) {
         if (gravity == mMiddleItemLayoutGravity) {
             return
@@ -566,8 +583,8 @@ open class TitleBar @JvmOverloads constructor(
         return this
     }
 
-    fun setDividerColor(@ColorInt color: Int): TitleBar {
-        mDividerView.setBackgroundColor(color)
+    fun setDividerColor(drawable: Drawable?): TitleBar {
+        mDividerView.background = drawable
         return this
     }
 
