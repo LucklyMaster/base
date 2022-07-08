@@ -34,12 +34,19 @@ open class TitleBar @JvmOverloads constructor(
     val leftItem = MenuItem(context)
     val middleItem = MenuItem(context)
     val rightItem = MenuItem(context)
-    private val backgroundView = View(context)
-    private val mDividerView = TextView(context)
-    private var mIconRippleColor = 0
-    private var mIconPressedColor = 0
-    private var mMiddleItemLayoutGravity = 1
-    private var mExcludePaddingHeight = 0
+    val backgroundView = View(context)
+    private val dividerView = TextView(context)
+    private var iconRippleColor = 0
+    private var iconPressedColor = 0
+    private var middleItemLayoutGravity = 1
+
+    /**
+     * 除去Padding之后的高度，适用于[fitSystemWindows]时，系统为View添加Padding后，如果View
+     * 是固定高度，会被压缩场景；
+     * 此字段只有在[android:layout_height="wrap_content"]时生效，使用此字段后，View的实际
+     * 高度为[excludePaddingHeight]+[getPaddingBottom]+[getPaddingTop]
+     */
+    private var excludePaddingHeight = 0
 
     init {
         layout()
@@ -100,8 +107,8 @@ open class TitleBar @JvmOverloads constructor(
 
         /**icon active**/
         val userRipple = a.getBoolean(R.styleable.TitleBar_mc_iconUseRipple, true)
-        mIconRippleColor = a.getColor(R.styleable.TitleBar_mc_iconRippleColor, 0)
-        mIconPressedColor = a.getColor(R.styleable.TitleBar_mc_iconPressedColor, 0)
+        iconRippleColor = a.getColor(R.styleable.TitleBar_mc_iconRippleColor, 0)
+        iconPressedColor = a.getColor(R.styleable.TitleBar_mc_iconPressedColor, 0)
         setIconPressedEffect(userRipple)
 
         /**text**/
@@ -191,7 +198,7 @@ open class TitleBar @JvmOverloads constructor(
         val marginEnd = a.getDimensionPixelOffset(R.styleable.TitleBar_mc_dividerMarginEnd, 0)
         setDividerMargin(marginStart, marginEnd)
 
-        mExcludePaddingHeight = a.getDimensionPixelOffset(
+        excludePaddingHeight = a.getDimensionPixelOffset(
             R.styleable.TitleBar_mc_excludePaddingHeight, context.dp2pxi(50f)
         )
 
@@ -210,13 +217,13 @@ open class TitleBar @JvmOverloads constructor(
         leftItem.id = Int.MAX_VALUE - 1001
         middleItem.id = Int.MAX_VALUE - 1002
         rightItem.id = Int.MAX_VALUE - 1003
-        mDividerView.id = Int.MAX_VALUE - 1004
+        dividerView.id = Int.MAX_VALUE - 1004
 
         addView(backgroundView, LayoutParams(0, 0))
         addView(leftItem, LayoutParams(LayoutParams.WRAP_CONTENT, 0))
         addView(middleItem, LayoutParams(LayoutParams.WRAP_CONTENT, 0))
         addView(rightItem, LayoutParams(LayoutParams.WRAP_CONTENT, 0))
-        addView(mDividerView, LayoutParams(0, LayoutParams.WRAP_CONTENT))
+        addView(dividerView, LayoutParams(0, LayoutParams.WRAP_CONTENT))
 
         val sets = ConstraintSet()
         val parentId = ConstraintSet.PARENT_ID
@@ -224,7 +231,7 @@ open class TitleBar @JvmOverloads constructor(
         sets.connect(backgroundView.id, ConstraintSet.START, parentId, ConstraintSet.START)
         sets.connect(backgroundView.id, ConstraintSet.TOP, parentId, ConstraintSet.TOP)
         sets.connect(backgroundView.id, ConstraintSet.END, parentId, ConstraintSet.END)
-        sets.connect(backgroundView.id, ConstraintSet.BOTTOM, mDividerView.id, ConstraintSet.TOP)
+        sets.connect(backgroundView.id, ConstraintSet.BOTTOM, dividerView.id, ConstraintSet.TOP)
 
         sets.connect(leftItem.id, ConstraintSet.START, parentId, ConstraintSet.START)
         sets.connect(leftItem.id, ConstraintSet.TOP, parentId, ConstraintSet.TOP)
@@ -239,9 +246,9 @@ open class TitleBar @JvmOverloads constructor(
         sets.connect(rightItem.id, ConstraintSet.END, parentId, ConstraintSet.END)
         sets.connect(rightItem.id, ConstraintSet.BOTTOM, backgroundView.id, ConstraintSet.BOTTOM)
 
-        sets.connect(mDividerView.id, ConstraintSet.START, parentId, ConstraintSet.START)
-        sets.connect(mDividerView.id, ConstraintSet.END, parentId, ConstraintSet.END)
-        sets.connect(mDividerView.id, ConstraintSet.BOTTOM, parentId, ConstraintSet.BOTTOM)
+        sets.connect(dividerView.id, ConstraintSet.START, parentId, ConstraintSet.START)
+        sets.connect(dividerView.id, ConstraintSet.END, parentId, ConstraintSet.END)
+        sets.connect(dividerView.id, ConstraintSet.BOTTOM, parentId, ConstraintSet.BOTTOM)
         sets.applyTo(this)
     }
 
@@ -251,10 +258,10 @@ open class TitleBar @JvmOverloads constructor(
      * @param gravity Int
      */
     fun setMiddleItemLayoutGravity(@IntRange(from = 0, to = 2) gravity: Int) {
-        if (gravity == mMiddleItemLayoutGravity) {
+        if (gravity == middleItemLayoutGravity) {
             return
         }
-        mMiddleItemLayoutGravity = gravity
+        middleItemLayoutGravity = gravity
         val set = ConstraintSet()
         set.clone(this)
         val parentId = ConstraintSet.PARENT_ID
@@ -281,6 +288,11 @@ open class TitleBar @JvmOverloads constructor(
         }
     }
 
+    /**
+     * 将自定义的Gravity转换为系统Gravity
+     * @param value Int
+     * @return Int
+     */
     private fun getIconGravity(value: Int): Int {
         return when (value) {
             0 -> Gravity.START
@@ -374,7 +386,13 @@ open class TitleBar @JvmOverloads constructor(
         }
     }
 
-    fun setIconGravity(gravity: Int): TitleBar {
+    /**
+     * 设置所有item图标的gravity，一共4个取值
+     * 0:start,1:top,2:end,3:bottom
+     * @param gravity 0,1,2,3
+     * @return TitleBar
+     */
+    fun setIconGravity(@IntRange(from = 0, to = 3) gravity: Int): TitleBar {
         val gravityValue = getIconGravity(gravity)
         leftItem.setIconGravity(gravityValue)
         middleItem.setIconGravity(gravityValue)
@@ -405,9 +423,9 @@ open class TitleBar @JvmOverloads constructor(
 
     fun setIconPressedEffect(useRipple: Boolean): TitleBar {
         if (useRipple) {
-            setIconRippleColor(mIconRippleColor)
+            setIconRippleColor(iconRippleColor)
         } else {
-            setIconPressedColor(mIconPressedColor)
+            setIconPressedColor(iconPressedColor)
         }
         return this
     }
@@ -579,27 +597,27 @@ open class TitleBar @JvmOverloads constructor(
     }
 
     fun setDividerVisible(visible: Boolean): TitleBar {
-        mDividerView.visibility = if (visible) VISIBLE else GONE
+        dividerView.visibility = if (visible) VISIBLE else GONE
         return this
     }
 
     fun setDividerColor(drawable: Drawable?): TitleBar {
-        mDividerView.background = drawable
+        dividerView.background = drawable
         return this
     }
 
     fun setDividerHeight(height: Int): TitleBar {
-        val layoutParams = mDividerView.layoutParams as LayoutParams
+        val layoutParams = dividerView.layoutParams as LayoutParams
         layoutParams.height = height
-        mDividerView.layoutParams = layoutParams
+        dividerView.layoutParams = layoutParams
         return this
     }
 
     fun setDividerMargin(marginStart: Int, marginEnd: Int): TitleBar {
-        val layoutParams = mDividerView.layoutParams as LayoutParams
+        val layoutParams = dividerView.layoutParams as LayoutParams
         layoutParams.marginStart = marginStart
         layoutParams.marginEnd = marginEnd
-        mDividerView.layoutParams = layoutParams
+        dividerView.layoutParams = layoutParams
         return this
     }
 
@@ -623,7 +641,7 @@ open class TitleBar @JvmOverloads constructor(
         var heightMeasure = heightMeasureSpec
         val mode = MeasureSpec.getMode(heightMeasure)
         if (mode != MeasureSpec.EXACTLY) {
-            val height = mExcludePaddingHeight + paddingTop + paddingBottom
+            val height = excludePaddingHeight + paddingTop + paddingBottom
             heightMeasure = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY)
         }
         super.onMeasure(widthMeasureSpec, heightMeasure)
