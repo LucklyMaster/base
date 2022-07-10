@@ -47,7 +47,7 @@
         <attr name="mc_editable" />
     </declare-styleable>
 
-    <declare-styleable name="MenuItem">
+    <declare-styleable name="CellView">
         <attr name="android:gravity" />
         <attr name="mc_icon" />
         <attr name="mc_iconColor" />

@@ -20,12 +20,12 @@ import com.master.lib.ext.visible
 import com.masterchan.lib.R
 
 /**
- * MenuItem
+ * CellView
  * @author MasterChan
  * @date 2021-12-07 14:16
  */
 @Suppress("MemberVisibilityCanBePrivate")
-class MenuItem @JvmOverloads constructor(
+class CellView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
@@ -89,27 +89,27 @@ class MenuItem @JvmOverloads constructor(
         addView(labelView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
 
         val a = context.obtainStyledAttributes(
-            attrs, R.styleable.MenuItem, defStyleAttr, defStyleRes
+            attrs, R.styleable.CellView, defStyleAttr, defStyleRes
         )
-        if (!a.hasValue(R.styleable.MenuItem_android_gravity)) {
+        if (!a.hasValue(R.styleable.CellView_android_gravity)) {
             gravity = Gravity.CENTER
         }
-        a.ifHas(R.styleable.MenuItem_mc_icon) { setIcon(a.getDrawable(it)) }
-        a.ifHas(R.styleable.MenuItem_mc_icon) { setIcon(a.getDrawable(it)) }
-        a.ifHas(R.styleable.MenuItem_mc_iconColor) { setIconColor(a.getColorStateList(it)) }
-        a.ifHas(R.styleable.MenuItem_mc_iconWidth) {
+        a.ifHas(R.styleable.CellView_mc_icon) { setIcon(a.getDrawable(it)) }
+        a.ifHas(R.styleable.CellView_mc_icon) { setIcon(a.getDrawable(it)) }
+        a.ifHas(R.styleable.CellView_mc_iconColor) { setIconColor(a.getColorStateList(it)) }
+        a.ifHas(R.styleable.CellView_mc_iconWidth) {
             setIconWidth(a.getDimensionPixelOffset(it, 0))
         }
-        a.ifHas(R.styleable.MenuItem_mc_iconHeight) {
+        a.ifHas(R.styleable.CellView_mc_iconHeight) {
             setIconHeight(a.getDimensionPixelOffset(it, 0))
         }
-        setText(a.getString(R.styleable.MenuItem_mc_text))
-        a.ifHas(R.styleable.MenuItem_mc_textColor) { setTextColor(a.getColorStateList(it)) }
-        a.ifHas(R.styleable.MenuItem_mc_textSize) { setTextSize(a.getDimension(it, 0f)) }
-        a.ifHas(R.styleable.MenuItem_mc_textMaxWidth) {
+        setText(a.getString(R.styleable.CellView_mc_text))
+        a.ifHas(R.styleable.CellView_mc_textColor) { setTextColor(a.getColorStateList(it)) }
+        a.ifHas(R.styleable.CellView_mc_textSize) { setTextSize(a.getDimension(it, 0f)) }
+        a.ifHas(R.styleable.CellView_mc_textMaxWidth) {
             setTextMaxWidth(a.getDimensionPixelOffset(it, 0))
         }
-        a.ifHas(R.styleable.MenuItem_mc_iconGravity) {
+        a.ifHas(R.styleable.CellView_mc_iconGravity) {
             val gravity = a.getInt(it, 1)
             setIconGravity(
                 when (gravity) {
@@ -121,11 +121,11 @@ class MenuItem @JvmOverloads constructor(
                 }
             )
         }
-        a.ifHas(R.styleable.MenuItem_mc_iconPadding) {
+        a.ifHas(R.styleable.CellView_mc_iconPadding) {
             setIconPadding(a.getDimensionPixelOffset(it, 0))
         }
-        a.ifHas(R.styleable.MenuItem_mc_ellipsize) { setEllipsize(a.getInt(it, 0)) }
-        setTextBackground(a.getDrawable(R.styleable.MenuItem_mc_textBackground))
+        a.ifHas(R.styleable.CellView_mc_ellipsize) { setEllipsize(a.getInt(it, 0)) }
+        setTextBackground(a.getDrawable(R.styleable.CellView_mc_textBackground))
         a.recycle()
     }
 

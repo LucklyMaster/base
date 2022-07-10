@@ -33,9 +33,9 @@ open class TitleBar @JvmOverloads constructor(
     defStyleRes: Int = R.style.mc_TitleBar
 ) : ConstraintLayout(context, attrs, defStyleAttr, defStyleRes) {
 
-    val leftItem = MenuItem(context)
-    val middleItem = MenuItem(context)
-    val rightItem = MenuItem(context)
+    val leftItem = CellView(context)
+    val middleItem = CellView(context)
+    val rightItem = CellView(context)
     private var iconRippleColor = 0
     private var iconPressedColor = 0
     private var middleItemLayoutGravity = 1
@@ -291,7 +291,7 @@ open class TitleBar @JvmOverloads constructor(
         set.applyTo(this)
     }
 
-    private fun setIconGravity(a: TypedArray, styleable: Int, item: MenuItem) {
+    private fun setIconGravity(a: TypedArray, styleable: Int, item: CellView) {
         if (a.hasValue(styleable)) {
             item.setIconGravity(getIconGravity(a.getInt(styleable, 0)))
         }
@@ -321,7 +321,7 @@ open class TitleBar @JvmOverloads constructor(
         }
     }
 
-    private fun setIcon(a: TypedArray, styleable: Int, item: MenuItem) {
+    private fun setIcon(a: TypedArray, styleable: Int, item: CellView) {
         if (a.hasValue(styleable)) {
             item.setIcon(a.getDrawable(styleable))
         } else {
@@ -329,67 +329,67 @@ open class TitleBar @JvmOverloads constructor(
         }
     }
 
-    private fun setIconTintColor(a: TypedArray, styleable: Int, item: MenuItem) {
+    private fun setIconTintColor(a: TypedArray, styleable: Int, item: CellView) {
         if (a.hasValue(styleable)) {
             item.setIconColor(a.getColorStateList(styleable))
         }
     }
 
-    private fun setIconWidth(a: TypedArray, styleable: Int, item: MenuItem) {
+    private fun setIconWidth(a: TypedArray, styleable: Int, item: CellView) {
         if (a.hasValue(styleable)) {
             item.setIconWidth(a.getDimensionPixelOffset(styleable, 0))
         }
     }
 
-    private fun setIconHeight(a: TypedArray, styleable: Int, item: MenuItem) {
+    private fun setIconHeight(a: TypedArray, styleable: Int, item: CellView) {
         if (a.hasValue(styleable)) {
             item.setIconHeight(a.getDimensionPixelOffset(styleable, 0))
         }
     }
 
-    private fun setText(a: TypedArray, styleable: Int, item: MenuItem) {
+    private fun setText(a: TypedArray, styleable: Int, item: CellView) {
         if (a.hasValue(styleable)) {
             item.setText(a.getString(styleable)!!)
         }
     }
 
-    private fun setTextGravity(a: TypedArray, styleable: Int, item: MenuItem) {
+    private fun setTextGravity(a: TypedArray, styleable: Int, item: CellView) {
         if (a.hasValue(styleable)) {
             item.labelView.gravity = getTextGravity(a.getInt(styleable, 0))
         }
     }
 
-    private fun setTextSize(a: TypedArray, styleable: Int, item: MenuItem) {
+    private fun setTextSize(a: TypedArray, styleable: Int, item: CellView) {
         if (a.hasValue(styleable)) {
             item.setTextSize(a.getDimension(styleable, 0f))
         }
     }
 
-    private fun setHintText(a: TypedArray, styleable: Int, item: MenuItem) {
+    private fun setHintText(a: TypedArray, styleable: Int, item: CellView) {
         if (a.hasValue(styleable)) {
             item.labelView.hint = a.getString(styleable)
         }
     }
 
-    private fun setTextColor(a: TypedArray, styleable: Int, item: MenuItem) {
+    private fun setTextColor(a: TypedArray, styleable: Int, item: CellView) {
         if (a.hasValue(styleable)) {
             item.setTextColor(a.getColorStateList(styleable))
         }
     }
 
-    private fun setTextMaxWidth(a: TypedArray, styleable: Int, item: MenuItem) {
+    private fun setTextMaxWidth(a: TypedArray, styleable: Int, item: CellView) {
         if (a.hasValue(styleable)) {
             item.setTextMaxWidth(a.getDimensionPixelOffset(styleable, 0))
         }
     }
 
-    private fun setTextMinWidth(a: TypedArray, styleable: Int, item: MenuItem) {
+    private fun setTextMinWidth(a: TypedArray, styleable: Int, item: CellView) {
         if (a.hasValue(styleable)) {
             item.setTextMinWidth(a.getDimensionPixelOffset(styleable, 0))
         }
     }
 
-    private fun setIconPadding(a: TypedArray, styleable: Int, item: MenuItem) {
+    private fun setIconPadding(a: TypedArray, styleable: Int, item: CellView) {
         if (a.hasValue(styleable)) {
             item.setIconPadding(a.getDimensionPixelOffset(styleable, 0))
         }
