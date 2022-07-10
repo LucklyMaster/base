@@ -27,7 +27,7 @@
         <item name="mc_useIconTint">true</item>
         <item name="mc_iconPressedColor">@color/color_ripple</item>
         <item name="mc_dividerVisible">false</item>
-        <item name="mc_dividerDrawable">@color/color_alert_dialog_divider</item>
+        <item name="mc_dividerColor">#D6D6D6</item>
         <item name="mc_dividerHeight">0.5dp</item>
         <item name="mc_clickLeftFinish">true</item>
         <item name="mc_excludePaddingHeight">50dp</item>

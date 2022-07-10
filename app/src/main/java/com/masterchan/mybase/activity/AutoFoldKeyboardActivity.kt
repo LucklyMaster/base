@@ -9,7 +9,7 @@ class AutoFoldKeyboardActivity : MyBaseActivity<ActivityAutoFoldKeyboardBinding>
 
     override var isAutoFoldKeyboard = true
 
-    override fun onCreated(savedInstanceState: Bundle?) {
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
         supportFragmentManager.beginTransaction()
             .add(R.id.container1, AutoFoldKeyboardFragment())
             .commit()

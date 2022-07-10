@@ -40,7 +40,7 @@ class ScopedStorageActivity : MyBaseActivity<ActivityScopedStorageBinding>() {
 
     private var pathAccessMode = true
 
-    override fun onCreated(savedInstanceState: Bundle?) {
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
     }
 
     fun createFile(view: View) {

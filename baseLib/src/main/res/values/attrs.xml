@@ -53,12 +53,10 @@
         <attr name="mc_iconColor" />
         <attr name="mc_iconWidth" />
         <attr name="mc_iconHeight" />
-        <attr name="mc_iconVisible" format="boolean" />
-        <attr name="mc_textVisible" format="boolean" />
         <attr name="mc_text" />
         <attr name="mc_textColor" />
         <attr name="mc_textSize" />
-        <attr name="mc_textBackground" format="reference" />
+        <attr name="mc_textBackground" format="reference|color" />
         <attr name="mc_ellipsize" />
         <attr name="mc_textMaxWidth" />
         <attr name="mc_iconPadding" />
@@ -176,17 +174,17 @@
         <attr name="mc_iconPressedColor" format="color" />
         <attr name="mc_useIconTint" format="boolean" />
         <attr name="mc_dividerVisible" format="boolean" />
-        <attr name="mc_dividerDrawable" format="reference|color" />
+        <attr name="mc_dividerColor" format="color" />
         <attr name="mc_dividerHeight" format="dimension" />
         <attr name="mc_dividerMarginStart" format="dimension" />
         <attr name="mc_dividerMarginEnd" format="dimension" />
+        <attr name="mc_dividerMarginColor" format="color" />
         <attr name="mc_clickLeftFinish" format="boolean" />
         <attr name="mc_middleItemLayoutGravity" format="enum">
             <enum name="start" value="0" />
             <enum name="center" value="1" />
             <enum name="end" value="2" />
         </attr>
-        <attr name="android:background" />
         <attr name="mc_excludePaddingHeight" format="dimension" />
     </declare-styleable>
 

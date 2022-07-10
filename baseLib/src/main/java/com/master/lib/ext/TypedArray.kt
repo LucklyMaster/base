@@ -8,8 +8,8 @@ fun TypedArray.getColor(@StyleableRes index: Int, colorValue: String): Int {
     return getColor(index, Color.parseColor(colorValue))
 }
 
-inline fun TypedArray.ifHas(@StyleableRes index: Int, method: () -> Unit) {
+inline fun TypedArray.ifHas(@StyleableRes index: Int, method: (Int) -> Unit) {
     if (hasValue(index)) {
-        method.invoke()
+        method.invoke(index)
     }
 }

@@ -11,7 +11,7 @@ import com.masterchan.mybase.databinding.ActivityMainBinding
 
 class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener {
 
-    override fun onCreated(savedInstanceState: Bundle?) {
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
         printAppInfo()
         setOnClickListeners(this, binding.keyboard, binding.imageUtils, binding.scoped)
     }

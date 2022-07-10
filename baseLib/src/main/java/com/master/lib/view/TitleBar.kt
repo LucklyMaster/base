@@ -3,20 +3,22 @@ package com.master.lib.view
 import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.TypedArray
-import android.graphics.Color
+import android.graphics.Canvas
+import android.graphics.Paint
 import android.graphics.drawable.*
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.Gravity
-import android.view.View
-import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.annotation.IntRange
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import com.master.lib.ext.activity
 import com.master.lib.ext.dp2pxi
+import com.master.lib.ext.getColor
+import com.master.lib.ext.setPaddingBottom
 import com.masterchan.lib.R
+import kotlin.math.max
 
 /**
  * TitleBar
@@ -34,8 +36,6 @@ open class TitleBar @JvmOverloads constructor(
     val leftItem = MenuItem(context)
     val middleItem = MenuItem(context)
     val rightItem = MenuItem(context)
-    val backgroundView = View(context)
-    private val dividerView = TextView(context)
     private var iconRippleColor = 0
     private var iconPressedColor = 0
     private var middleItemLayoutGravity = 1
@@ -47,6 +47,15 @@ open class TitleBar @JvmOverloads constructor(
      * 高度为[excludePaddingHeight]+[getPaddingBottom]+[getPaddingTop]
      */
     private var excludePaddingHeight = 0
+
+    private var dividerVisible = false
+    private var dividerHeight = 0
+    private var dividerColor: Int = 0
+    private var dividerMarginStart = 0
+    private var dividerMarginEnd = 0
+    private var dividerMarginColor = 0
+
+    private val dividerPaint: Paint by lazy { Paint(Paint.ANTI_ALIAS_FLAG) }
 
     init {
         layout()
@@ -189,67 +198,67 @@ open class TitleBar @JvmOverloads constructor(
         setRightItemMargin(rightTop, rightEnd, rightBottom)
 
         /**divider**/
-        setDividerVisible(a.getBoolean(R.styleable.TitleBar_mc_dividerVisible, false))
-        if (a.hasValue(R.styleable.TitleBar_mc_dividerDrawable)) {
-            setDividerColor(a.getDrawable(R.styleable.TitleBar_mc_dividerDrawable))
-        }
-        setDividerHeight(a.getDimensionPixelOffset(R.styleable.TitleBar_mc_dividerHeight, 0))
-        val marginStart = a.getDimensionPixelOffset(R.styleable.TitleBar_mc_dividerMarginStart, 0)
-        val marginEnd = a.getDimensionPixelOffset(R.styleable.TitleBar_mc_dividerMarginEnd, 0)
-        setDividerMargin(marginStart, marginEnd)
+        dividerVisible = a.getBoolean(R.styleable.TitleBar_mc_dividerVisible, false)
+        dividerColor = a.getColor(R.styleable.TitleBar_mc_dividerColor, "#D6D6D6")
+        dividerMarginColor = a.getColor(R.styleable.TitleBar_mc_dividerMarginColor, "#00000000")
+        dividerHeight = a.getDimensionPixelOffset(R.styleable.TitleBar_mc_dividerHeight, 0)
+        dividerMarginStart = a.getDimensionPixelOffset(
+            R.styleable.TitleBar_mc_dividerMarginStart, 0
+        )
+        dividerMarginEnd = a.getDimensionPixelOffset(R.styleable.TitleBar_mc_dividerMarginEnd, 0)
+        setPaddingBottom()
 
         excludePaddingHeight = a.getDimensionPixelOffset(
             R.styleable.TitleBar_mc_excludePaddingHeight, context.dp2pxi(50f)
         )
-
-        if (a.hasValue(R.styleable.TitleBar_android_background)) {
-            backgroundView.background = a.getDrawable(R.styleable.TitleBar_android_background)
-        }
         setClickLeftFinish(a.getBoolean(R.styleable.TitleBar_mc_clickLeftFinish, true))
         a.recycle()
-
-        //将背景颜色置为透明，背景由backgroundView来接收
-        background = ColorDrawable(Color.TRANSPARENT)
     }
 
     private fun layout() {
-        backgroundView.id = Int.MAX_VALUE - 1000
         leftItem.id = Int.MAX_VALUE - 1001
         middleItem.id = Int.MAX_VALUE - 1002
         rightItem.id = Int.MAX_VALUE - 1003
-        dividerView.id = Int.MAX_VALUE - 1004
 
-        addView(backgroundView, LayoutParams(0, 0))
         addView(leftItem, LayoutParams(LayoutParams.WRAP_CONTENT, 0))
         addView(middleItem, LayoutParams(LayoutParams.WRAP_CONTENT, 0))
         addView(rightItem, LayoutParams(LayoutParams.WRAP_CONTENT, 0))
-        addView(dividerView, LayoutParams(0, LayoutParams.WRAP_CONTENT))
 
         val sets = ConstraintSet()
         val parentId = ConstraintSet.PARENT_ID
         sets.clone(this)
-        sets.connect(backgroundView.id, ConstraintSet.START, parentId, ConstraintSet.START)
-        sets.connect(backgroundView.id, ConstraintSet.TOP, parentId, ConstraintSet.TOP)
-        sets.connect(backgroundView.id, ConstraintSet.END, parentId, ConstraintSet.END)
-        sets.connect(backgroundView.id, ConstraintSet.BOTTOM, dividerView.id, ConstraintSet.TOP)
 
         sets.connect(leftItem.id, ConstraintSet.START, parentId, ConstraintSet.START)
         sets.connect(leftItem.id, ConstraintSet.TOP, parentId, ConstraintSet.TOP)
-        sets.connect(leftItem.id, ConstraintSet.BOTTOM, backgroundView.id, ConstraintSet.BOTTOM)
+        sets.connect(leftItem.id, ConstraintSet.BOTTOM, parentId, ConstraintSet.BOTTOM)
 
         sets.connect(middleItem.id, ConstraintSet.START, parentId, ConstraintSet.START)
         sets.connect(middleItem.id, ConstraintSet.TOP, parentId, ConstraintSet.TOP)
         sets.connect(middleItem.id, ConstraintSet.END, parentId, ConstraintSet.END)
-        sets.connect(middleItem.id, ConstraintSet.BOTTOM, backgroundView.id, ConstraintSet.BOTTOM)
+        sets.connect(middleItem.id, ConstraintSet.BOTTOM, parentId, ConstraintSet.BOTTOM)
 
         sets.connect(rightItem.id, ConstraintSet.TOP, parentId, ConstraintSet.TOP)
         sets.connect(rightItem.id, ConstraintSet.END, parentId, ConstraintSet.END)
-        sets.connect(rightItem.id, ConstraintSet.BOTTOM, backgroundView.id, ConstraintSet.BOTTOM)
+        sets.connect(rightItem.id, ConstraintSet.BOTTOM, parentId, ConstraintSet.BOTTOM)
 
-        sets.connect(dividerView.id, ConstraintSet.START, parentId, ConstraintSet.START)
-        sets.connect(dividerView.id, ConstraintSet.END, parentId, ConstraintSet.END)
-        sets.connect(dividerView.id, ConstraintSet.BOTTOM, parentId, ConstraintSet.BOTTOM)
         sets.applyTo(this)
+    }
+
+    override fun onDrawForeground(canvas: Canvas) {
+        super.onDrawForeground(canvas)
+        if (dividerVisible && dividerHeight > 0) {
+            dividerPaint.strokeWidth = dividerHeight.toFloat()
+            dividerPaint.color = dividerColor
+            val y = height.toFloat() - dividerHeight / 2f
+            canvas.drawLine(
+                dividerMarginStart.toFloat(), y, width.toFloat() - dividerMarginEnd, y, dividerPaint
+            )
+            dividerPaint.color = dividerMarginColor
+            canvas.drawLine(0f, y, dividerMarginStart.toFloat(), y, dividerPaint)
+            canvas.drawLine(
+                (width - dividerMarginEnd).toFloat(), y, width.toFloat(), y, dividerPaint
+            )
+        }
     }
 
     /**
@@ -386,51 +395,56 @@ open class TitleBar @JvmOverloads constructor(
         }
     }
 
+    private fun setPaddingBottom() {
+        if (dividerVisible) {
+            setPaddingBottom(max(dividerHeight, paddingBottom))
+        } else {
+            if (paddingBottom == dividerHeight) {
+                setPaddingBottom(0)
+            }
+        }
+    }
+
     /**
      * 设置所有item图标的gravity，一共4个取值
      * 0:start,1:top,2:end,3:bottom
      * @param gravity 0,1,2,3
      * @return TitleBar
      */
-    fun setIconGravity(@IntRange(from = 0, to = 3) gravity: Int): TitleBar {
+    fun setIconGravity(@IntRange(from = 0, to = 3) gravity: Int) = apply {
         val gravityValue = getIconGravity(gravity)
         leftItem.setIconGravity(gravityValue)
         middleItem.setIconGravity(gravityValue)
         rightItem.setIconGravity(gravityValue)
-        return this
     }
 
-    fun setIconTintColor(color: ColorStateList?): TitleBar {
+    fun setIconTintColor(color: ColorStateList?) = apply {
         leftItem.setIconColor(color)
         middleItem.setIconColor(color)
         rightItem.setIconColor(color)
-        return this
     }
 
-    fun setIconWidth(width: Int): TitleBar {
+    fun setIconWidth(width: Int) = apply {
         leftItem.setIconWidth(width)
         middleItem.setIconWidth(width)
         rightItem.setIconWidth(width)
-        return this
     }
 
-    fun setIconHeight(height: Int): TitleBar {
+    fun setIconHeight(height: Int) = apply {
         leftItem.setIconHeight(height)
         middleItem.setIconHeight(height)
         rightItem.setIconHeight(height)
-        return this
     }
 
-    fun setIconPressedEffect(useRipple: Boolean): TitleBar {
+    fun setIconPressedEffect(useRipple: Boolean) = apply {
         if (useRipple) {
             setIconRippleColor(iconRippleColor)
         } else {
             setIconPressedColor(iconPressedColor)
         }
-        return this
     }
 
-    fun setIconRippleColor(@ColorInt color: Int): TitleBar {
+    fun setIconRippleColor(@ColorInt color: Int) = apply {
         leftItem.iconView.background = RippleDrawable(
             ColorStateList.valueOf(color), null,
             GradientDrawable().apply {
@@ -452,17 +466,15 @@ open class TitleBar @JvmOverloads constructor(
                 setColor(ColorStateList.valueOf(color))
             }
         )
-        return this
     }
 
-    fun setIconPressedColor(@ColorInt pressedColor: Int): TitleBar {
+    fun setIconPressedColor(@ColorInt pressedColor: Int) = apply {
         setLeftIconDrawable(leftItem.iconView.background, ColorDrawable(pressedColor))
         setMiddleIconDrawable(middleItem.iconView.background, ColorDrawable(pressedColor))
         setRightIconDrawable(rightItem.iconView.background, ColorDrawable(pressedColor))
-        return this
     }
 
-    fun setLeftIconDrawable(normalDrawable: Drawable?, pressedDrawable: Drawable?): TitleBar {
+    fun setLeftIconDrawable(normalDrawable: Drawable?, pressedDrawable: Drawable?) = apply {
         val drawable = StateListDrawable()
         val normalState = intArrayOf(android.R.attr.state_enabled, -android.R.attr.state_pressed)
         val pressedState = intArrayOf(android.R.attr.state_enabled, android.R.attr.state_pressed)
@@ -473,10 +485,9 @@ open class TitleBar @JvmOverloads constructor(
             drawable.addState(pressedState, pressedDrawable)
         }
         leftItem.iconView.background = drawable
-        return this
     }
 
-    fun setMiddleIconDrawable(normalDrawable: Drawable?, pressedDrawable: Drawable?): TitleBar {
+    fun setMiddleIconDrawable(normalDrawable: Drawable?, pressedDrawable: Drawable?) = apply {
         val drawable = StateListDrawable()
         val normalState = intArrayOf(android.R.attr.state_enabled, -android.R.attr.state_pressed)
         val pressedState = intArrayOf(android.R.attr.state_enabled, android.R.attr.state_pressed)
@@ -487,10 +498,9 @@ open class TitleBar @JvmOverloads constructor(
             drawable.addState(pressedState, pressedDrawable)
         }
         middleItem.iconView.background = drawable
-        return this
     }
 
-    fun setRightIconDrawable(normalDrawable: Drawable?, pressedDrawable: Drawable?): TitleBar {
+    fun setRightIconDrawable(normalDrawable: Drawable?, pressedDrawable: Drawable?) = apply {
         val drawable = StateListDrawable()
         val normalState = intArrayOf(android.R.attr.state_enabled, -android.R.attr.state_pressed)
         val pressedState = intArrayOf(android.R.attr.state_enabled, android.R.attr.state_pressed)
@@ -501,146 +511,135 @@ open class TitleBar @JvmOverloads constructor(
             drawable.addState(pressedState, pressedDrawable)
         }
         rightItem.iconView.background = drawable
-        return this
     }
 
-    fun setTextGravity(gravity: Int): TitleBar {
+    fun setTextGravity(gravity: Int) = apply {
         val gravityValue = getTextGravity(gravity)
         leftItem.labelView.gravity = gravityValue
         middleItem.labelView.gravity = gravityValue
         rightItem.labelView.gravity = gravityValue
-        return this
     }
 
-    fun setTextColor(textColor: ColorStateList?): TitleBar {
+    fun setTextColor(textColor: ColorStateList?) = apply {
         leftItem.setTextColor(textColor)
         middleItem.setTextColor(textColor)
         rightItem.setTextColor(textColor)
-        return this
     }
 
-    fun setTextSize(textSize: Float): TitleBar {
+    fun setTextSize(textSize: Float) = apply {
         leftItem.setTextSize(textSize)
         middleItem.setTextSize(textSize)
         rightItem.setTextSize(textSize)
-        return this
     }
 
-    fun setHintTextColor(textColor: Int): TitleBar {
+    fun setHintTextColor(textColor: Int) = apply {
         leftItem.labelView.setHintTextColor(textColor)
         middleItem.labelView.setHintTextColor(textColor)
         rightItem.labelView.setHintTextColor(textColor)
-        return this
     }
 
-    fun setTextMaxWidth(maxWidth: Int): TitleBar {
+    fun setTextMaxWidth(maxWidth: Int) = apply {
         leftItem.setTextMaxWidth(maxWidth)
         middleItem.setTextMaxWidth(maxWidth)
         rightItem.setTextMaxWidth(maxWidth)
-        return this
     }
 
-    fun setTextMinWidth(minWidth: Int): TitleBar {
+    fun setTextMinWidth(minWidth: Int) = apply {
         leftItem.setTextMinWidth(minWidth)
         middleItem.setTextMinWidth(minWidth)
         rightItem.setTextMinWidth(minWidth)
-        return this
     }
 
-    fun setTextEllipsize(ellipsize: TextUtils.TruncateAt): TitleBar {
+    fun setTextEllipsize(ellipsize: TextUtils.TruncateAt) = apply {
         leftItem.setEllipsize(ellipsize)
         middleItem.setEllipsize(ellipsize)
         rightItem.setEllipsize(ellipsize)
-        return this
     }
 
-    private fun setTextEllipsize(ellipsize: Int): TitleBar {
+    private fun setTextEllipsize(ellipsize: Int) = apply {
         leftItem.setEllipsize(ellipsize)
         middleItem.setEllipsize(ellipsize)
         rightItem.setEllipsize(ellipsize)
-        return this
     }
 
-    fun setLeftItemMargin(left: Int, top: Int, bottom: Int): TitleBar {
+    fun setLeftItemMargin(left: Int, top: Int, bottom: Int) = apply {
         val layoutParams = leftItem.layoutParams as LayoutParams
         layoutParams.marginStart = left
         layoutParams.topMargin = top
         layoutParams.bottomMargin = bottom
         leftItem.layoutParams = layoutParams
-        return this
     }
 
-    fun setMiddleItemMargin(start: Int, top: Int, end: Int, bottom: Int): TitleBar {
+    fun setMiddleItemMargin(start: Int, top: Int, end: Int, bottom: Int) = apply {
         val layoutParams = middleItem.layoutParams as LayoutParams
         layoutParams.marginStart = start
         layoutParams.topMargin = top
         layoutParams.marginEnd = end
         layoutParams.bottomMargin = bottom
         middleItem.layoutParams = layoutParams
-        return this
     }
 
-    fun setRightItemMargin(top: Int, end: Int, bottom: Int): TitleBar {
+    fun setRightItemMargin(top: Int, end: Int, bottom: Int) = apply {
         val layoutParams = rightItem.layoutParams as LayoutParams
         layoutParams.topMargin = top
         layoutParams.marginEnd = end
         layoutParams.bottomMargin = bottom
         rightItem.layoutParams = layoutParams
-        return this
     }
 
-    fun setIconPadding(padding: Int): TitleBar {
+    fun setIconPadding(padding: Int) = apply {
         leftItem.setIconPadding(padding)
         middleItem.setIconPadding(padding)
         rightItem.setIconPadding(padding)
-        return this
     }
 
-    fun setDividerVisible(visible: Boolean): TitleBar {
-        dividerView.visibility = if (visible) VISIBLE else GONE
-        return this
+    fun setDividerVisible(visible: Boolean) = apply {
+        dividerVisible = visible
+        setPaddingBottom()
+        invalidate()
     }
 
-    fun setDividerColor(drawable: Drawable?): TitleBar {
-        dividerView.background = drawable
-        return this
+    fun setDividerColor(color: Int) = apply {
+        dividerColor = color
+        invalidate()
     }
 
-    fun setDividerHeight(height: Int): TitleBar {
-        val layoutParams = dividerView.layoutParams as LayoutParams
-        layoutParams.height = height
-        dividerView.layoutParams = layoutParams
-        return this
+    fun setDividerMarginColor(color: Int) = apply {
+        dividerMarginColor = color
+        invalidate()
     }
 
-    fun setDividerMargin(marginStart: Int, marginEnd: Int): TitleBar {
-        val layoutParams = dividerView.layoutParams as LayoutParams
-        layoutParams.marginStart = marginStart
-        layoutParams.marginEnd = marginEnd
-        dividerView.layoutParams = layoutParams
-        return this
+    fun setDividerHeight(height: Int) = apply {
+        dividerHeight = height
+        setPaddingBottom()
+        invalidate()
     }
 
-    fun setClickLeftFinish(finish: Boolean): TitleBar {
+    fun setDividerMargin(marginStart: Int, marginEnd: Int) = apply {
+        dividerMarginStart = marginStart
+        dividerMarginEnd = marginEnd
+        invalidate()
+    }
+
+    fun setClickLeftFinish(finish: Boolean) = apply {
         if (!finish) {
             leftItem.iconView.setOnClickListener(null)
             leftItem.labelView.setOnClickListener(null)
-            return this
+
         }
         if (leftItem.iconDrawable != null) {
             leftItem.iconView.setOnClickListener { activity?.finish() }
-            return this
+
         }
         if (leftItem.text.isNotEmpty()) {
             leftItem.labelView.setOnClickListener { activity?.finish() }
         }
-        return this
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         var heightMeasure = heightMeasureSpec
         val mode = MeasureSpec.getMode(heightMeasure)
-        if (mode != MeasureSpec.EXACTLY) {
+        if (mode != MeasureSpec.EXACTLY && excludePaddingHeight > 0) {
             val height = excludePaddingHeight + paddingTop + paddingBottom
             heightMeasure = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY)
         }

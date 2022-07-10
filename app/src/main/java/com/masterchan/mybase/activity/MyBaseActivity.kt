@@ -17,9 +17,9 @@ abstract class MyBaseActivity<T : ViewBinding> : BaseVBActivity<T>() {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         Log.d("onCreate: ${javaClass.simpleName}")
-        onCreated(savedInstanceState)
+        onActivityCreated(savedInstanceState)
     }
 
-    abstract fun onCreated(savedInstanceState: Bundle?)
+    abstract fun onActivityCreated(savedInstanceState: Bundle?)
 
 }

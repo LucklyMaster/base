@@ -11,10 +11,12 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.core.view.isVisible
+import com.master.lib.ext.gone
 import com.master.lib.ext.ifHas
+import com.master.lib.ext.visible
 import com.masterchan.lib.R
 
 /**
@@ -31,7 +33,7 @@ class MenuItem @JvmOverloads constructor(
 ) : LinearLayout(context, attrs, defStyleAttr, defStyleRes) {
 
     val iconView = ImageView(context)
-    val labelView = EditableText(context, false)
+    val labelView = TextView(context)
     var iconGravity = Gravity.TOP
         private set
 
@@ -80,9 +82,11 @@ class MenuItem @JvmOverloads constructor(
         labelView.gravity = Gravity.CENTER
         labelView.maxLines = 1
         labelView.inputType = InputType.TYPE_CLASS_TEXT
+        labelView.textSize = 16f
+        labelView.setTextColor(Color.BLACK)
         iconView.scaleType = ImageView.ScaleType.CENTER
-        addView(iconView)
-        addView(labelView)
+        addView(iconView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+        addView(labelView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
 
         val a = context.obtainStyledAttributes(
             attrs, R.styleable.MenuItem, defStyleAttr, defStyleRes
@@ -90,38 +94,23 @@ class MenuItem @JvmOverloads constructor(
         if (!a.hasValue(R.styleable.MenuItem_android_gravity)) {
             gravity = Gravity.CENTER
         }
-        a.ifHas(R.styleable.MenuItem_mc_icon) {
-            setIcon(a.getDrawable(R.styleable.MenuItem_mc_icon))
-        }
-        a.ifHas(R.styleable.MenuItem_mc_icon) {
-            setIcon(a.getDrawable(R.styleable.MenuItem_mc_icon))
-        }
-        a.ifHas(R.styleable.MenuItem_mc_iconColor) {
-            setIconColor(a.getColorStateList(R.styleable.MenuItem_mc_iconColor))
-        }
+        a.ifHas(R.styleable.MenuItem_mc_icon) { setIcon(a.getDrawable(it)) }
+        a.ifHas(R.styleable.MenuItem_mc_icon) { setIcon(a.getDrawable(it)) }
+        a.ifHas(R.styleable.MenuItem_mc_iconColor) { setIconColor(a.getColorStateList(it)) }
         a.ifHas(R.styleable.MenuItem_mc_iconWidth) {
-            setIconWidth(a.getDimensionPixelOffset(R.styleable.MenuItem_mc_iconWidth, 0))
+            setIconWidth(a.getDimensionPixelOffset(it, 0))
         }
         a.ifHas(R.styleable.MenuItem_mc_iconHeight) {
-            setIconHeight(a.getDimensionPixelOffset(R.styleable.MenuItem_mc_iconHeight, 0))
+            setIconHeight(a.getDimensionPixelOffset(it, 0))
         }
-        setIconVisible(a.getBoolean(R.styleable.MenuItem_mc_iconVisible, true))
-        setTextVisible(a.getBoolean(R.styleable.MenuItem_mc_textVisible, true))
-        setTextBackground(a.getDrawable(R.styleable.MenuItem_mc_textBackground))
-        a.ifHas(R.styleable.MenuItem_mc_text) {
-            setText(a.getString(R.styleable.MenuItem_mc_text)!!)
-        }
-        a.ifHas(R.styleable.MenuItem_mc_textColor) {
-            setTextColor(a.getColorStateList(R.styleable.MenuItem_mc_textColor))
-        }
-        a.ifHas(R.styleable.MenuItem_mc_textSize) {
-            setTextSize(a.getDimension(R.styleable.MenuItem_mc_textSize, 0f))
-        }
+        setText(a.getString(R.styleable.MenuItem_mc_text))
+        a.ifHas(R.styleable.MenuItem_mc_textColor) { setTextColor(a.getColorStateList(it)) }
+        a.ifHas(R.styleable.MenuItem_mc_textSize) { setTextSize(a.getDimension(it, 0f)) }
         a.ifHas(R.styleable.MenuItem_mc_textMaxWidth) {
-            setTextMaxWidth(a.getDimensionPixelOffset(R.styleable.MenuItem_mc_textMaxWidth, 0))
+            setTextMaxWidth(a.getDimensionPixelOffset(it, 0))
         }
         a.ifHas(R.styleable.MenuItem_mc_iconGravity) {
-            val gravity = a.getInt(R.styleable.MenuItem_mc_iconGravity, 1)
+            val gravity = a.getInt(it, 1)
             setIconGravity(
                 when (gravity) {
                     0 -> Gravity.START
@@ -133,14 +122,10 @@ class MenuItem @JvmOverloads constructor(
             )
         }
         a.ifHas(R.styleable.MenuItem_mc_iconPadding) {
-            setIconPadding(a.getDimensionPixelOffset(R.styleable.MenuItem_mc_iconPadding, 0))
+            setIconPadding(a.getDimensionPixelOffset(it, 0))
         }
-        a.ifHas(R.styleable.MenuItem_mc_ellipsize) {
-            setEllipsize(a.getInt(R.styleable.MenuItem_mc_ellipsize, 0))
-        }
-        a.ifHas(R.styleable.MenuItem_mc_editable) {
-            labelView.editable = a.getBoolean(R.styleable.MenuItem_mc_editable, false)
-        }
+        a.ifHas(R.styleable.MenuItem_mc_ellipsize) { setEllipsize(a.getInt(it, 0)) }
+        setTextBackground(a.getDrawable(R.styleable.MenuItem_mc_textBackground))
         a.recycle()
     }
 
@@ -180,19 +165,21 @@ class MenuItem @JvmOverloads constructor(
     }
 
     fun setIconWidth(width: Int) = apply {
-        val layoutParams = iconView.layoutParams as LayoutParams
+        iconView.left
+        iconView.right
+        val layoutParams = iconView.layoutParams
         layoutParams.width = width
         iconView.layoutParams = layoutParams
     }
 
     fun setIconHeight(height: Int) = apply {
-        val layoutParams = iconView.layoutParams as LayoutParams
+        val layoutParams = iconView.layoutParams
         layoutParams.height = height
         iconView.layoutParams = layoutParams
     }
 
     fun setIconSize(width: Int, height: Int) = apply {
-        val layoutParams = iconView.layoutParams as LayoutParams
+        val layoutParams = iconView.layoutParams
         layoutParams.width = width
         layoutParams.height = height
         iconView.layoutParams = layoutParams
@@ -202,22 +189,17 @@ class MenuItem @JvmOverloads constructor(
         iconView.imageTintList = color
     }
 
-    fun setIconVisible(visible: Boolean) = apply {
-        iconView.isVisible = visible
-    }
-
-    fun setTextVisible(visible: Boolean) = apply {
-        labelView.isVisible = visible
-    }
-
     fun setText(@StringRes text: Int) = apply {
-        labelView.setText(text)
-        labelView.requestLayout()
+        setText(resources.getText(text))
     }
 
-    fun setText(text: CharSequence) = apply {
-        labelView.setText(text)
-        labelView.requestLayout()
+    fun setText(text: CharSequence?) = apply {
+        if (text.isNullOrEmpty()) {
+            labelView.gone()
+        } else {
+            labelView.visible()
+            labelView.text = text
+        }
     }
 
     fun setTextColor(color: ColorStateList?) = apply {
