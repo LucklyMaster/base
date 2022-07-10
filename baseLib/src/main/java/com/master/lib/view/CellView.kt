@@ -25,15 +25,15 @@ import com.masterchan.lib.R
  * @date 2021-12-07 14:16
  */
 @Suppress("MemberVisibilityCanBePrivate")
-class CellView @JvmOverloads constructor(
+open class CellView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
     defStyleRes: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr, defStyleRes) {
 
-    val iconView = ImageView(context)
-    val labelView = TextView(context)
+    open val iconView = ImageView(context)
+    open val labelView = TextView(context)
     var iconGravity = Gravity.TOP
         private set
 
@@ -78,15 +78,7 @@ class CellView @JvmOverloads constructor(
         }
 
     init {
-        orientation = VERTICAL
-        labelView.gravity = Gravity.CENTER
-        labelView.maxLines = 1
-        labelView.inputType = InputType.TYPE_CLASS_TEXT
-        labelView.textSize = 16f
-        labelView.setTextColor(Color.BLACK)
-        iconView.scaleType = ImageView.ScaleType.CENTER
-        addView(iconView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-        addView(labelView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+        initView()
 
         val a = context.obtainStyledAttributes(
             attrs, R.styleable.CellView, defStyleAttr, defStyleRes
@@ -127,6 +119,18 @@ class CellView @JvmOverloads constructor(
         a.ifHas(R.styleable.CellView_mc_ellipsize) { setEllipsize(a.getInt(it, 0)) }
         setTextBackground(a.getDrawable(R.styleable.CellView_mc_textBackground))
         a.recycle()
+    }
+
+    protected open fun initView() {
+        orientation = VERTICAL
+        labelView.gravity = Gravity.CENTER
+        labelView.maxLines = 1
+        labelView.inputType = InputType.TYPE_CLASS_TEXT
+        labelView.textSize = 16f
+        labelView.setTextColor(Color.BLACK)
+        iconView.scaleType = ImageView.ScaleType.CENTER
+        addView(iconView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+        addView(labelView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
     }
 
     fun setIconGravity(gravity: Int) = apply {

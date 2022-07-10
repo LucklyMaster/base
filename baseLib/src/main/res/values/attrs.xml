@@ -43,7 +43,7 @@
         <enum name="center" value="4" />
     </attr>
 
-    <declare-styleable name="EditableText">
+    <declare-styleable name="EditCellView">
         <attr name="mc_editable" />
     </declare-styleable>
 
@@ -61,7 +61,6 @@
         <attr name="mc_textMaxWidth" />
         <attr name="mc_iconPadding" />
         <attr name="mc_iconGravity" />
-        <attr name="mc_editable" />
     </declare-styleable>
 
     <declare-styleable name="TitleBar">
