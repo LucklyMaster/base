@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="mc_TitleBar">
+    <style name="mc_ItemView">
         <item name="mc_iconGravity">start</item>
-        <item name="mc_leftIconWidth">40dp</item>
-        <item name="mc_leftIconHeight">40dp</item>
         <item name="mc_iconColor">@null</item>
-        <item name="mc_leftIcon">@drawable/ic_arrow_left_black</item>
+        <item name="mc_leftIcon">@null</item>
         <item name="mc_textColor">?android:attr/textColorPrimaryInverse</item>
         <item name="mc_textSize">16sp</item>
-        <item name="mc_leftMarginStart">10dp</item>
+        <item name="mc_leftMarginStart">0dp</item>
         <item name="mc_leftMarginTop">0dp</item>
         <item name="mc_leftMarginBottom">0dp</item>
         <item name="mc_middleMarginStart">0dp</item>
         <item name="mc_middleMarginTop">0dp</item>
         <item name="mc_middleMarginBottom">0dp</item>
         <item name="mc_middleMarginEnd">0dp</item>
-        <item name="mc_rightMarginEnd">10dp</item>
+        <item name="mc_rightMarginEnd">0dp</item>
         <item name="mc_rightMarginTop">0dp</item>
         <item name="mc_rightMarginBottom">0dp</item>
         <item name="mc_iconPadding">0dp</item>
@@ -29,16 +27,26 @@
         <item name="mc_dividerVisible">false</item>
         <item name="mc_dividerColor">#D6D6D6</item>
         <item name="mc_dividerHeight">0.5dp</item>
-        <item name="mc_clickLeftFinish">true</item>
-        <item name="mc_excludePaddingHeight">50dp</item>
+        <item name="mc_excludePaddingHeight">0dp</item>
         <item name="android:background">#FF6200EE</item>
+    </style>
+
+    <style name="mc_TitleBar" parent="mc_ItemView">
+        <item name="mc_iconGravity">start</item>
+        <item name="mc_leftIconWidth">40dp</item>
+        <item name="mc_leftIconHeight">40dp</item>
+        <item name="mc_leftIcon">@drawable/ic_arrow_left_black</item>
+        <item name="mc_textSize">16sp</item>
+        <item name="mc_leftMarginStart">10dp</item>
+        <item name="mc_rightMarginEnd">10dp</item>
+        <item name="mc_excludePaddingHeight">50dp</item>
     </style>
 
     <style name="mc_ShapeItemView" parent="mc_TitleBar">
         <item name="mc_leftIcon">@null</item>
         <item name="mc_iconWidth">-1dp</item>
         <item name="mc_iconHeight">-1dp</item>
-        <item name="mc_middleItemLayoutGravity">start</item>
+        <item name="mc_middleItemLayoutGravity">center</item>
         <item name="mc_leftIconGravity">start</item>
         <item name="mc_middleIconGravity">start</item>
         <item name="mc_rightIconGravity">end</item>

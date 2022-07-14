@@ -2,25 +2,106 @@
 <resources>
     <attr name="mc_icon" format="reference" />
     <attr name="mc_iconColor" format="color" />
-    <attr name="mc_iconWidth" format="dimension" />
-    <attr name="mc_iconHeight" format="dimension" />
-    <attr name="mc_text" format="reference|string" />
+    <attr name="mc_iconWidth" format="dimension">
+        <enum name="match_parent" value="-1" />
+        <enum name="wrap_content" value="-2" />
+    </attr>
+    <attr name="mc_iconHeight" format="dimension">
+        <enum name="match_parent" value="-1" />
+        <enum name="wrap_content" value="-2" />
+    </attr>
+    <attr name="mc_text" format="string" />
+    <attr name="mc_textWidth" format="dimension">
+        <enum name="match_parent" value="-1" />
+        <enum name="wrap_content" value="-2" />
+    </attr>
+    <attr name="mc_textHeight" format="dimension">
+        <enum name="match_parent" value="-1" />
+        <enum name="wrap_content" value="-2" />
+    </attr>
+    <attr name="mc_leftTextWidth" format="dimension">
+        <enum name="match_parent" value="-1" />
+        <enum name="wrap_content" value="-2" />
+    </attr>
+    <attr name="mc_leftTextHeight" format="dimension">
+        <enum name="match_parent" value="-1" />
+        <enum name="wrap_content" value="-2" />
+    </attr>
+    <attr name="mc_middleTextWidth" format="dimension">
+        <enum name="match_parent" value="-1" />
+        <enum name="wrap_content" value="-2" />
+    </attr>
+    <attr name="mc_middleTextHeight" format="dimension">
+        <enum name="match_parent" value="-1" />
+        <enum name="wrap_content" value="-2" />
+    </attr>
+    <attr name="mc_rightTextWidth" format="dimension">
+        <enum name="match_parent" value="-1" />
+        <enum name="wrap_content" value="-2" />
+    </attr>
+    <attr name="mc_rightTextHeight" format="dimension">
+        <enum name="match_parent" value="-1" />
+        <enum name="wrap_content" value="-2" />
+    </attr>
+    <attr name="mc_textPadding" format="dimension" />
+    <attr name="mc_textPaddingStart" format="dimension" />
+    <attr name="mc_textPaddingTop" format="dimension" />
+    <attr name="mc_textPaddingEnd" format="dimension" />
+    <attr name="mc_textPaddingBottom" format="dimension" />
     <attr name="mc_textColor" format="color" />
     <attr name="mc_textSize" format="dimension" />
     <attr name="mc_textMaxWidth" format="dimension" />
     <attr name="mc_textMinWidth" format="dimension" />
     <attr name="mc_iconPadding" format="dimension" />
-    <attr name="mc_iconGravity" format="enum">
-        <enum name="start" value="0" />
-        <enum name="top" value="1" />
-        <enum name="end" value="2" />
-        <enum name="bottom" value="3" />
+    <attr name="mc_iconGravity">
+        <flag name="start" value="0x00800003" />
+        <flag name="top" value="0x30" />
+        <flag name="end" value="0x00800005" />
+        <flag name="bottom" value="0x50" />
     </attr>
-    <attr name="mc_textGravity" format="enum">
-        <enum name="start" value="0" />
-        <enum name="end" value="1" />
-        <enum name="center" value="2" />
+    <attr name="mc_leftIconGravity">
+        <flag name="start" value="0x00800003" />
+        <flag name="top" value="0x30" />
+        <flag name="end" value="0x00800005" />
+        <flag name="bottom" value="0x50" />
     </attr>
+    <attr name="mc_middleIconGravity">
+        <flag name="start" value="0x00800003" />
+        <flag name="top" value="0x30" />
+        <flag name="end" value="0x00800005" />
+        <flag name="bottom" value="0x50" />
+    </attr>
+    <attr name="mc_rightIconGravity">
+        <flag name="start" value="0x00800003" />
+        <flag name="top" value="0x30" />
+        <flag name="end" value="0x00800005" />
+        <flag name="bottom" value="0x50" />
+    </attr>
+    <attr name="mc_textGravity">
+        <flag name="start" value="0x00800003" />
+        <flag name="end" value="0x00800005" />
+        <flag name="center" value="0x11" />
+        <flag name="center_vertical" value="0x10" />
+    </attr>
+    <attr name="mc_leftTextGravity">
+        <flag name="start" value="0x00800003" />
+        <flag name="end" value="0x00800005" />
+        <flag name="center" value="0x11" />
+        <flag name="center_vertical" value="0x10" />
+    </attr>
+    <attr name="mc_middleTextGravity">
+        <flag name="start" value="0x00800003" />
+        <flag name="end" value="0x00800005" />
+        <flag name="center" value="0x11" />
+        <flag name="center_vertical" value="0x10" />
+    </attr>
+    <attr name="mc_rightTextGravity">
+        <flag name="start" value="0x00800003" />
+        <flag name="end" value="0x00800005" />
+        <flag name="center" value="0x11" />
+        <flag name="center_vertical" value="0x10" />
+    </attr>
+    <attr name="mc_maxLines" format="integer" />
     <attr name="mc_ellipsize" format="enum">
         <enum name="start" value="1" />
         <enum name="middle" value="2" />
@@ -43,10 +124,6 @@
         <enum name="center" value="4" />
     </attr>
 
-    <declare-styleable name="EditCellView">
-        <attr name="mc_editable" />
-    </declare-styleable>
-
     <declare-styleable name="CellView">
         <attr name="android:gravity" />
         <attr name="mc_icon" />
@@ -54,36 +131,36 @@
         <attr name="mc_iconWidth" />
         <attr name="mc_iconHeight" />
         <attr name="mc_text" />
+        <attr name="mc_textWidth" />
+        <attr name="mc_textHeight" />
+        <attr name="mc_textPadding" />
+        <attr name="mc_textPaddingStart" />
+        <attr name="mc_textPaddingTop" />
+        <attr name="mc_textPaddingEnd" />
+        <attr name="mc_textPaddingBottom" />
         <attr name="mc_textColor" />
         <attr name="mc_textSize" />
+        <attr name="mc_textGravity" />
         <attr name="mc_textBackground" format="reference|color" />
         <attr name="mc_ellipsize" />
+        <attr name="maxLines" />
         <attr name="mc_textMaxWidth" />
         <attr name="mc_iconPadding" />
         <attr name="mc_iconGravity" />
     </declare-styleable>
 
-    <declare-styleable name="TitleBar">
+    <declare-styleable name="EditCellView">
+        <attr name="mc_editable" />
+        <attr name="android:inputType" />
+        <attr name="android:digits" />
+    </declare-styleable>
+
+    <declare-styleable name="ItemView">
         <!--iconGravity-->
         <attr name="mc_iconGravity" />
-        <attr name="mc_leftIconGravity" format="enum">
-            <enum name="start" value="0" />
-            <enum name="top" value="1" />
-            <enum name="end" value="2" />
-            <enum name="bottom" value="3" />
-        </attr>
-        <attr name="mc_middleIconGravity" format="enum">
-            <enum name="start" value="0" />
-            <enum name="top" value="1" />
-            <enum name="end" value="2" />
-            <enum name="bottom" value="3" />
-        </attr>
-        <attr name="mc_rightIconGravity" format="enum">
-            <enum name="start" value="0" />
-            <enum name="top" value="1" />
-            <enum name="end" value="2" />
-            <enum name="bottom" value="3" />
-        </attr>
+        <attr name="mc_leftIconGravity" />
+        <attr name="mc_middleIconGravity" />
+        <attr name="mc_rightIconGravity" />
         <!--icon-->
         <attr name="mc_leftIcon" format="reference" />
         <attr name="mc_middleIcon" format="reference" />
@@ -104,26 +181,21 @@
         <attr name="mc_middleIconHeight" format="dimension" />
         <attr name="mc_rightIconHeight" format="dimension" />
         <!--text-->
-        <attr name="mc_leftText" format="reference|string" />
-        <attr name="mc_middleText" format="reference|string" />
-        <attr name="mc_rightText" format="reference|string" />
+        <attr name="mc_leftText" format="string" />
+        <attr name="mc_middleText" format="string" />
+        <attr name="mc_rightText" format="string" />
+        <!--text size-->
+        <attr name="mc_leftTextWidth" />
+        <attr name="mc_leftTextHeight" />
+        <attr name="mc_middleTextWidth" />
+        <attr name="mc_middleTextHeight" />
+        <attr name="mc_rightTextWidth" />
+        <attr name="mc_rightTextHeight" />
         <!--text gravity-->
         <attr name="mc_textGravity" />
-        <attr name="mc_leftTextGravity" format="enum">
-            <enum name="start" value="0" />
-            <enum name="end" value="1" />
-            <enum name="center" value="2" />
-        </attr>
-        <attr name="mc_middleTextGravity" format="enum">
-            <enum name="start" value="0" />
-            <enum name="end" value="1" />
-            <enum name="center" value="2" />
-        </attr>
-        <attr name="mc_rightTextGravity" format="enum">
-            <enum name="start" value="0" />
-            <enum name="end" value="1" />
-            <enum name="center" value="2" />
-        </attr>
+        <attr name="mc_leftTextGravity" />
+        <attr name="mc_middleTextGravity" />
+        <attr name="mc_rightTextGravity" />
         <!--text size-->
         <attr name="mc_textSize" />
         <attr name="mc_leftTextSize" format="dimension" />
@@ -134,11 +206,15 @@
         <attr name="mc_leftTextColor" format="color" />
         <attr name="mc_middleTextColor" format="color" />
         <attr name="mc_rightTextColor" format="color" />
+        <!--text background-->
+        <attr name="mc_leftTextBackground" format="reference|color" />
+        <attr name="mc_middleTextBackground" format="reference|color" />
+        <attr name="mc_rightTextBackground" format="reference|color" />
         <!--text hint-->
         <attr name="mc_hintTextColor" format="color" />
-        <attr name="mc_leftTextHint" format="reference|string" />
-        <attr name="mc_middleTextHint" format="reference|string" />
-        <attr name="mc_rightTextHint" format="reference|string" />
+        <attr name="mc_leftTextHint" format="string" />
+        <attr name="mc_middleTextHint" format="string" />
+        <attr name="mc_rightTextHint" format="string" />
         <!--text maxWidth-->
         <attr name="mc_textMaxWidth" />
         <attr name="mc_leftTextMaxWidth" format="dimension" />
@@ -178,7 +254,6 @@
         <attr name="mc_dividerMarginStart" format="dimension" />
         <attr name="mc_dividerMarginEnd" format="dimension" />
         <attr name="mc_dividerMarginColor" format="color" />
-        <attr name="mc_clickLeftFinish" format="boolean" />
         <attr name="mc_middleItemLayoutGravity" format="enum">
             <enum name="start" value="0" />
             <enum name="center" value="1" />
@@ -186,7 +261,11 @@
         </attr>
         <attr name="mc_excludePaddingHeight" format="dimension" />
     </declare-styleable>
+    <attr name="mc_itemViewDefaultStyle" format="reference" />
 
+    <declare-styleable name="TitleBar">
+        <attr name="mc_clickLeftFinish" format="boolean" />
+    </declare-styleable>
     <attr name="mc_titleBarDefaultStyle" format="reference" />
 
     <declare-styleable name="AlertDialog">

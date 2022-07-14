@@ -1,6 +1,9 @@
 package com.master.lib.ext
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
+import android.text.method.DigitsKeyListener
+import android.view.GestureDetector
 import android.view.Gravity
 import android.view.MotionEvent
 import android.widget.EditText
@@ -16,19 +19,29 @@ fun TextView.setDrawable(drawable: Drawable?, gravity: Int) {
     }
 }
 
+fun TextView.setDigits(digits: String) {
+    keyListener = DigitsKeyListener.getInstance(digits)
+}
+
 var EditText.isEditable: Boolean
     get() {
         return isFocusable && isLongClickable && isFocusableInTouchMode
     }
+    @SuppressLint("ClickableViewAccessibility")
     set(value) {
         isFocusable = value
         isLongClickable = value
         isFocusableInTouchMode = value
         if (!value) {
-            setOnTouchListener { v, event ->
-                if (event.action == MotionEvent.ACTION_UP) {
-                    v.performClick()
+            val gestureDetector = GestureDetector(context, object :
+                GestureDetector.SimpleOnGestureListener() {
+                override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
+                    performClick()
+                    return true
                 }
+            })
+            setOnTouchListener { _, event ->
+                gestureDetector.onTouchEvent(event)
                 true
             }
         } else {

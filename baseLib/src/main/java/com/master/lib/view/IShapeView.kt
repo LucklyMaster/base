@@ -6,7 +6,5 @@ package com.master.lib.view
  * @date: 2022-06-29 22:30
  */
 interface IShapeView {
-
     val shapeHelper: ShapeViewHelper
-
 }

@@ -2,9 +2,9 @@ package com.master.lib.view
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.content.res.TypedArray
 import android.graphics.Color
 import android.graphics.drawable.Drawable
-import android.text.InputType
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.TypedValue
@@ -24,7 +24,7 @@ import com.masterchan.lib.R
  * @author MasterChan
  * @date 2021-12-07 14:16
  */
-@Suppress("MemberVisibilityCanBePrivate")
+@Suppress("MemberVisibilityCanBePrivate", "LeakingThis")
 open class CellView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -32,49 +32,20 @@ open class CellView @JvmOverloads constructor(
     defStyleRes: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr, defStyleRes) {
 
-    open val iconView = ImageView(context)
+    val iconView = ImageView(context)
     open val labelView = TextView(context)
+
     var iconGravity = Gravity.TOP
         private set
 
-    val iconDrawable: Drawable?
+    val icon: Drawable?
         get() {
             return iconView.drawable
-        }
-
-    val iconWidth: Int
-        get() {
-            return iconView.layoutParams.width
-        }
-
-    val iconHeight: Int
-        get() {
-            return iconView.layoutParams.height
-        }
-
-    val labelWidth: Int
-        get() {
-            return iconView.layoutParams.width
-        }
-
-    val labelHeight: Int
-        get() {
-            return iconView.layoutParams.height
         }
 
     val text: CharSequence
         get() {
             return labelView.text.toString()
-        }
-
-    val textSize: Float
-        get() {
-            return labelView.textSize
-        }
-
-    val space: Int
-        get() {
-            return (labelView.layoutParams as LayoutParams).topMargin
         }
 
     init {
@@ -90,47 +61,55 @@ open class CellView @JvmOverloads constructor(
         a.ifHas(R.styleable.CellView_mc_icon) { setIcon(a.getDrawable(it)) }
         a.ifHas(R.styleable.CellView_mc_iconColor) { setIconColor(a.getColorStateList(it)) }
         a.ifHas(R.styleable.CellView_mc_iconWidth) {
-            setIconWidth(a.getDimensionPixelOffset(it, 0))
+            setIconWidth(a.getLayoutDimension(it, 0))
         }
         a.ifHas(R.styleable.CellView_mc_iconHeight) {
-            setIconHeight(a.getDimensionPixelOffset(it, 0))
+            setIconHeight(a.getLayoutDimension(it, 0))
         }
         setText(a.getString(R.styleable.CellView_mc_text))
+        a.ifHas(R.styleable.CellView_mc_textWidth) {
+            setTextWidth(a.getLayoutDimension(it, 0))
+        }
+        a.ifHas(R.styleable.CellView_mc_textHeight) {
+            setTextHeight(a.getLayoutDimension(it, 0))
+        }
+        setTextPadding(a)
+        labelView.gravity = a.getInteger(R.styleable.CellView_mc_textGravity, Gravity.CENTER)
         a.ifHas(R.styleable.CellView_mc_textColor) { setTextColor(a.getColorStateList(it)) }
         a.ifHas(R.styleable.CellView_mc_textSize) { setTextSize(a.getDimension(it, 0f)) }
         a.ifHas(R.styleable.CellView_mc_textMaxWidth) {
             setTextMaxWidth(a.getDimensionPixelOffset(it, 0))
         }
-        a.ifHas(R.styleable.CellView_mc_iconGravity) {
-            val gravity = a.getInt(it, 1)
-            setIconGravity(
-                when (gravity) {
-                    0 -> Gravity.START
-                    1 -> Gravity.TOP
-                    2 -> Gravity.END
-                    3 -> Gravity.BOTTOM
-                    else -> Gravity.TOP
-                }
-            )
-        }
+        a.ifHas(R.styleable.CellView_mc_iconGravity) { setIconGravity(a.getInt(it, 0)) }
         a.ifHas(R.styleable.CellView_mc_iconPadding) {
             setIconPadding(a.getDimensionPixelOffset(it, 0))
         }
         a.ifHas(R.styleable.CellView_mc_ellipsize) { setEllipsize(a.getInt(it, 0)) }
-        setTextBackground(a.getDrawable(R.styleable.CellView_mc_textBackground))
+        a.ifHas(R.styleable.CellView_maxLines) { labelView.maxLines = a.getInteger(it, 0) }
+        a.ifHas(R.styleable.CellView_mc_textBackground) { setTextBackground(a.getDrawable(it)) }
         a.recycle()
     }
 
-    protected open fun initView() {
+    protected fun initView() {
         orientation = VERTICAL
-        labelView.gravity = Gravity.CENTER
-        labelView.maxLines = 1
-        labelView.inputType = InputType.TYPE_CLASS_TEXT
         labelView.textSize = 16f
         labelView.setTextColor(Color.BLACK)
         iconView.scaleType = ImageView.ScaleType.CENTER
         addView(iconView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
         addView(labelView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+    }
+
+    private fun setTextPadding(a: TypedArray) {
+        val start: Int
+        val top: Int
+        val end: Int
+        val bottom: Int
+        val padding = a.getDimensionPixelOffset(R.styleable.CellView_mc_textPadding, 0)
+        start = a.getDimensionPixelOffset(R.styleable.CellView_mc_textPaddingStart, padding)
+        top = a.getDimensionPixelOffset(R.styleable.CellView_mc_textPaddingTop, padding)
+        end = a.getDimensionPixelOffset(R.styleable.CellView_mc_textPaddingEnd, padding)
+        bottom = a.getDimensionPixelOffset(R.styleable.CellView_mc_textPaddingBottom, padding)
+        setTextPadding(start, top, end, bottom)
     }
 
     fun setIconGravity(gravity: Int) = apply {
@@ -202,8 +181,24 @@ open class CellView @JvmOverloads constructor(
             labelView.gone()
         } else {
             labelView.visible()
-            labelView.text = text
+            labelView.setText(text)
         }
+    }
+
+    fun setTextWidth(width: Int) = apply {
+        val lp = labelView.layoutParams
+        lp.width = width
+        labelView.layoutParams = lp
+    }
+
+    fun setTextHeight(height: Int) = apply {
+        val lp = labelView.layoutParams
+        lp.height = height
+        labelView.layoutParams = lp
+    }
+
+    fun setTextPadding(start: Int, top: Int, end: Int, bottom: Int) = apply {
+        labelView.setPadding(start, top, end, bottom)
     }
 
     fun setTextColor(color: ColorStateList?) = apply {

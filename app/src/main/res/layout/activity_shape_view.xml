@@ -11,7 +11,6 @@
     <com.master.lib.view.TitleBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         app:mc_leftText="ShapeView" />
 
     <ScrollView
@@ -89,18 +88,45 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:mc_editable="false"
+                app:maxLines="1"
+                app:mc_editable="true"
+                app:mc_ellipsize="marquee"
+                app:mc_icon="@mipmap/ic_launcher"
+                app:mc_iconGravity="start"
+                app:mc_iconHeight="wrap_content"
+                app:mc_iconPadding="30dp"
+                app:mc_iconWidth="wrap_content"
+                app:mc_text="abcdefghijklmnopqrstuvwxyz"
+                app:mc_textBackground="@color/design_default_color_error"
+                app:mc_textGravity="center_vertical"
+                app:mc_textHeight="40dp"
+                app:mc_textSize="18sp"
+                app:mc_textWidth="100dp" />
+
+            <com.master.lib.view.EditCellView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:maxLines="1"
+                app:mc_editable="true"
                 app:mc_icon="@mipmap/ic_launcher"
                 app:mc_iconGravity="top"
-                app:mc_iconHeight="80dp"
-                app:mc_iconPadding="0dp"
-                app:mc_iconWidth="80dp"
-                app:mc_text="@string/app_name"
-                app:mc_textBackground="#ff0" />
+                app:mc_iconHeight="wrap_content"
+                app:mc_iconWidth="wrap_content"
+                app:mc_text=" "
+                app:mc_textGravity="center_vertical"
+                app:mc_textHeight="40dp"
+                app:mc_textSize="18sp"
+                app:mc_textWidth="100dp" />
 
             <com.master.lib.view.TitleBar
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 app:mc_dividerColor="#F11645"
                 app:mc_dividerHeight="10dp"
                 app:mc_dividerMarginColor="@color/white"
@@ -122,12 +148,14 @@
                 app:mc_rightMarginEnd="30dp"
                 app:mc_rightText="@string/app_name" />
 
-            <com.master.lib.view.TitleBar
+            <com.master.lib.view.ItemView
                 android:id="@+id/title_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="editTextClick"
-                app:mc_excludePaddingHeight="80dp"
+                app:mc_dividerColor="@color/black"
+                app:mc_dividerHeight="6dp"
+                app:mc_dividerVisible="true"
                 app:mc_leftIconGravity="top"
                 app:mc_leftText="@string/app_name"
                 app:mc_middleIcon="@mipmap/ic_launcher"
@@ -135,6 +163,25 @@
                 app:mc_middleIconHeight="40dp"
                 app:mc_middleIconWidth="40dp"
                 app:mc_middleText="@string/app_name" />
+
+            <com.master.lib.view.ShapeItemView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:onClick="editTextClick"
+                app:mc_iconPadding="0dp"
+                app:mc_leftTopRadius="20dp"
+                app:mc_middleEditable="true"
+                app:mc_middleItemLayoutGravity="center"
+                app:mc_middleText=" "
+                app:mc_middleTextBackground="#00f"
+                app:mc_middleTextGravity="start"
+                app:mc_middleTextWidth="100dp"
+                app:mc_normalColor="#669D66"
+                app:mc_rightBottomRadius="20dp"
+                app:mc_rightMarginEnd="0dp"
+                app:mc_rightText="设置》" />
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
