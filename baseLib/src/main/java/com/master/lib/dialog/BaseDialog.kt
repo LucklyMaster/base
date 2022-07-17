@@ -12,32 +12,32 @@ import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.core.view.setPadding
 import androidx.fragment.app.DialogFragment
-import com.masterchan.lib.R
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.master.lib.ext.isPortrait
 import com.master.lib.ext.screenWidth
+import com.masterchan.lib.R
 
 /**
  * BaseDialog
  * @author MasterChan
  * @date 2021-12-14 14:30
  */
-open class BaseDialog(private var contentView: View?) : DialogFragment() {
+open class BaseDialog(private var contentView: View? = null) : DialogFragment() {
 
-    constructor() : this(null)
-
-    private var mWindowDrawable: Drawable? = null
-    private var mWindowColor = Color.WHITE
-    private var mWindowRadius = 12f
-    private var mWindowAmount = 1f
-    private var mWindowWidth = ViewGroup.LayoutParams.WRAP_CONTENT
-    private var mWindowHeight = ViewGroup.LayoutParams.WRAP_CONTENT
-    private var mWindowGravity = Gravity.CENTER
-    private var mWindowAnimate: Int? = null
-    private var mXOffset = 0
-    private var mYOffset = 0
-    private var mCanceledOnTouchOutside = true
-    private var mDismissListener: DialogInterface.OnDismissListener? = null
-    private var mCancelListener: DialogInterface.OnCancelListener? = null
+    protected var windowDrawable: Drawable? = null
+    protected var windowColor = Color.WHITE
+    protected var windowRadius = 6f
+    protected var windowAmount = 0.6f
+    protected var windowWidth = ViewGroup.LayoutParams.WRAP_CONTENT
+    protected var windowHeight = ViewGroup.LayoutParams.WRAP_CONTENT
+    protected var windowGravity = Gravity.CENTER
+    protected var windowAnimate: Int? = null
+    protected var xOffset = 0
+    protected var yOffset = 0
+    protected var canceledOnTouchOutside = true
+    protected var dismissListener: DialogInterface.OnDismissListener? = null
+    protected var cancelListener: DialogInterface.OnCancelListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,54 +45,54 @@ open class BaseDialog(private var contentView: View?) : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         //没有背景时，默认设置一个白色的背景
-        if (mWindowDrawable == null) {
-            mWindowDrawable = GradientDrawable()
-            (mWindowDrawable as GradientDrawable).cornerRadius = mWindowRadius
-            (mWindowDrawable as GradientDrawable).color = ColorStateList.valueOf(mWindowColor)
+        if (windowDrawable == null) {
+            windowDrawable = GradientDrawable()
+            (windowDrawable as GradientDrawable).cornerRadius = windowRadius
+            (windowDrawable as GradientDrawable).color = ColorStateList.valueOf(windowColor)
         }
         dialog?.window?.decorView?.setPadding(0)
-        dialog?.window?.setBackgroundDrawable(mWindowDrawable)
-        dialog?.window?.setDimAmount(mWindowAmount)
-        dialog?.window?.setGravity(mWindowGravity)
-        dialog?.setCanceledOnTouchOutside(mCanceledOnTouchOutside)
+        dialog?.window?.setBackgroundDrawable(windowDrawable)
+        dialog?.window?.setDimAmount(windowAmount)
+        dialog?.window?.setGravity(windowGravity)
+        dialog?.setCanceledOnTouchOutside(canceledOnTouchOutside)
         //设置进出场动画
-        if (mWindowAnimate != null) {
-            mWindowAnimate = when (mWindowAnimate) {
+        if (windowAnimate != null) {
+            windowAnimate = when (windowAnimate) {
                 WindowAni.START -> R.style.mc_fromStart
                 WindowAni.TOP -> R.style.mc_fromTop
                 WindowAni.END -> R.style.mc_fromEnd
                 WindowAni.BOTTOM -> R.style.mc_fromBottom
                 WindowAni.CENTER -> R.style.mc_fromCenter
-                else -> mWindowAnimate
+                else -> windowAnimate
             }
-            dialog?.window?.setWindowAnimations(mWindowAnimate!!)
+            dialog?.window?.setWindowAnimations(windowAnimate!!)
         }
 
         val attributes = dialog?.window?.attributes
         //根据横竖屏不同，设置不同的宽度
-        if (mWindowWidth == ViewGroup.LayoutParams.WRAP_CONTENT) {
+        if (windowWidth == ViewGroup.LayoutParams.WRAP_CONTENT) {
             val widthScale = if (isPortrait) 0.85f else 0.6f
             attributes?.width = (screenWidth * widthScale).toInt()
         } else {
-            attributes?.width = mWindowWidth
+            attributes?.width = windowWidth
         }
-        if (mWindowHeight != ViewGroup.LayoutParams.WRAP_CONTENT) {
-            attributes?.height = mWindowHeight
+        if (windowHeight != ViewGroup.LayoutParams.WRAP_CONTENT) {
+            attributes?.height = windowHeight
         }
-        attributes?.x = mXOffset
-        attributes?.y = mYOffset
+        attributes?.x = xOffset
+        attributes?.y = yOffset
         dialog?.window?.attributes = attributes
         return contentView
     }
 
     override fun onDismiss(dialog: android.content.DialogInterface) {
         super.onDismiss(dialog)
-        mDismissListener?.onDismiss(requireDialog())
+        dismissListener?.onDismiss(requireDialog())
     }
 
     override fun onCancel(dialog: android.content.DialogInterface) {
         super.onCancel(dialog)
-        mCancelListener?.onCancel(requireDialog())
+        cancelListener?.onCancel(requireDialog())
     }
 
     /**
@@ -100,43 +100,43 @@ open class BaseDialog(private var contentView: View?) : DialogFragment() {
      * @param canceled Boolean
      */
     fun setCanceledOnTouchOutside(canceled: Boolean) = apply {
-        mCanceledOnTouchOutside = canceled
+        canceledOnTouchOutside = canceled
     }
 
     fun setOnDismissListener(listener: DialogInterface.OnDismissListener?) = apply {
-        mDismissListener = listener
+        dismissListener = listener
     }
 
     fun setOnCancelListener(listener: DialogInterface.OnCancelListener?) = apply {
-        mCancelListener = listener
+        cancelListener = listener
     }
 
     fun setWindowColor(@ColorInt color: Int) = apply {
-        mWindowColor = color
+        windowColor = color
     }
 
     fun setWindowRadius(radius: Float) = apply {
-        mWindowRadius = radius
+        windowRadius = radius
     }
 
     fun setWindowDrawable(drawable: Drawable?) = apply {
-        mWindowDrawable = drawable
+        windowDrawable = drawable
     }
 
     fun setWindowAmount(amount: Float) = apply {
-        mWindowAmount = amount
+        windowAmount = amount
     }
 
     fun setWindowWidth(width: Int) = apply {
-        mWindowWidth = width
+        windowWidth = width
     }
 
     fun setWindowHeight(height: Int) = apply {
-        mWindowHeight = height
+        windowHeight = height
     }
 
     fun setWindowGravity(gravity: Int) = apply {
-        mWindowGravity = gravity
+        windowGravity = gravity
     }
 
     /**
@@ -144,14 +144,46 @@ open class BaseDialog(private var contentView: View?) : DialogFragment() {
      * @param animate Int?
      */
     fun setWindowAnimate(animate: Int?) = apply {
-        mWindowAnimate = animate
+        windowAnimate = animate
     }
 
     fun setXOffset(offset: Int) = apply {
-        mXOffset = offset
+        xOffset = offset
     }
 
     fun setYOffset(offset: Int) = apply {
-        mYOffset = offset
+        yOffset = offset
+    }
+
+    override fun show(manager: FragmentManager, tag: String?) {
+        super.show(manager, tag)
+    }
+
+    override fun show(transaction: FragmentTransaction, tag: String?): Int {
+        return super.show(transaction, tag)
+    }
+
+    override fun showNow(manager: FragmentManager, tag: String?) {
+        super.showNow(manager, tag)
+    }
+
+    fun showAllowingStateLoss(manager: FragmentManager, tag: String?) {
+        try {
+            val dismissed = DialogFragment::class.java.getDeclaredField("mDismissed")
+            dismissed.isAccessible = true
+            dismissed.set(this, false)
+
+            val shown = DialogFragment::class.java.getDeclaredField("mShownByMe")
+            shown.isAccessible = true
+            shown.set(this, true)
+
+            val ft = manager.beginTransaction()
+            ft.add(this, tag)
+            ft.commitAllowingStateLoss()
+        } catch (e: NoSuchFieldException) {
+            e.printStackTrace()
+        } catch (e: IllegalAccessException) {
+            e.printStackTrace()
+        }
     }
 }

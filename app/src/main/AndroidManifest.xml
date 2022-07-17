@@ -10,6 +10,15 @@
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
 
+    <queries package="${applicationId}">
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+        <intent>
+            <action android:name="android.media.action.ACTION_VIDEO_CAPTURE" />
+        </intent>
+    </queries>
+
     <application
         android:name=".activity.MyApplication"
         android:allowBackup="true"
@@ -21,6 +30,9 @@
         android:supportsRtl="true"
         android:theme="@style/SplashTheme"
         tools:targetApi="31">
+        <activity
+            android:name=".DialogActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.ScopedStorageActivity"
             android:exported="false" />
@@ -39,14 +51,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.DialogActivity" />
     </application>
 
-    <queries package="${applicationId}">
-        <intent>
-            <action android:name="android.media.action.IMAGE_CAPTURE" />
-        </intent>
-        <intent>
-            <action android:name="android.media.action.ACTION_VIDEO_CAPTURE" />
-        </intent>
-    </queries>
 </manifest>

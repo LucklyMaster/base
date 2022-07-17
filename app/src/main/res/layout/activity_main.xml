@@ -37,5 +37,10 @@
             android:layout_height="wrap_content"
             android:text="分区存储" />
 
+        <Button
+            android:id="@+id/dialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Dialog" />
     </LinearLayout>
 </ScrollView>
