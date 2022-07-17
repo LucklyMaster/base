@@ -8,9 +8,9 @@ import android.graphics.Paint
 import android.graphics.drawable.*
 import android.text.TextUtils
 import android.util.AttributeSet
+import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.GravityInt
-import androidx.annotation.IntRange
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import com.master.lib.ext.dp2pxi
@@ -35,25 +35,23 @@ open class ItemView @JvmOverloads constructor(
     open val leftItem = CellView(context)
     open val middleItem = CellView(context)
     open val rightItem = CellView(context)
-    private var iconRippleColor = 0
-    private var iconPressedColor = 0
-    private var middleItemLayoutGravity = 1
+    protected var iconRippleColor = 0
+    protected var iconPressedColor = 0
 
     /**
      * 除去Padding之后的高度
      * 此字段只有在[android:layout_height="wrap_content"]时生效，使用此字段后，View的实际
      * 高度为[excludePaddingHeight]+[getPaddingBottom]+[getPaddingTop]
      */
-    private var excludePaddingHeight = 0
+    protected var excludePaddingHeight = 0
 
-    private var dividerVisible = false
-    private var dividerHeight = 0
-    private var dividerColor: Int = 0
-    private var dividerMarginStart = 0
-    private var dividerMarginEnd = 0
-    private var dividerMarginColor = 0
-
-    private val dividerPaint: Paint by lazy { Paint(Paint.ANTI_ALIAS_FLAG) }
+    protected var dividerVisible = false
+    protected var dividerHeight = 0
+    protected var dividerColor: Int = 0
+    protected var dividerMarginStart = 0
+    protected var dividerMarginEnd = 0
+    protected var dividerMarginColor = 0
+    protected val dividerPaint: Paint by lazy { Paint(Paint.ANTI_ALIAS_FLAG) }
 
     init {
         initView()
@@ -62,10 +60,7 @@ open class ItemView @JvmOverloads constructor(
             attrs, R.styleable.ItemView, defStyleAttr, defStyleRes
         )
 
-        if (a.hasValue(R.styleable.ItemView_mc_middleItemLayoutGravity)) {
-            val gravity = a.getInt(R.styleable.ItemView_mc_middleItemLayoutGravity, 0)
-            setMiddleItemLayoutGravity(gravity)
-        }
+        setMiddleItemLayoutGravity(a.getInt(R.styleable.ItemView_mc_middleItemLayoutGravity, 0))
         /**icon gravity**/
         if (a.hasValue(R.styleable.ItemView_mc_iconGravity)) {
             setIconGravity(a.getInt(R.styleable.ItemView_mc_iconGravity, 0))
@@ -160,6 +155,9 @@ open class ItemView @JvmOverloads constructor(
         setTextSize(a, R.styleable.ItemView_mc_middleTextSize, middleItem)
         setTextSize(a, R.styleable.ItemView_mc_rightTextSize, rightItem)
 
+        /**text padding**/
+        setTextPadding(a)
+
         /**text hint**/
         if (a.hasValue(R.styleable.ItemView_mc_hintTextColor)) {
             setHintTextColor(a.getColor(R.styleable.ItemView_mc_hintTextColor, 0))
@@ -231,7 +229,7 @@ open class ItemView @JvmOverloads constructor(
         rightItem.id = Int.MAX_VALUE - 1003
 
         addView(leftItem, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
-        addView(middleItem, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
+        addView(middleItem, LayoutParams(0, LayoutParams.WRAP_CONTENT))
         addView(rightItem, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
 
         val sets = ConstraintSet()
@@ -242,9 +240,9 @@ open class ItemView @JvmOverloads constructor(
         sets.connect(leftItem.id, ConstraintSet.TOP, parentId, ConstraintSet.TOP)
         sets.connect(leftItem.id, ConstraintSet.BOTTOM, parentId, ConstraintSet.BOTTOM)
 
-        sets.connect(middleItem.id, ConstraintSet.START, parentId, ConstraintSet.START)
+        sets.connect(middleItem.id, ConstraintSet.START, leftItem.id, ConstraintSet.END)
         sets.connect(middleItem.id, ConstraintSet.TOP, parentId, ConstraintSet.TOP)
-        sets.connect(middleItem.id, ConstraintSet.END, parentId, ConstraintSet.END)
+        sets.connect(middleItem.id, ConstraintSet.END, rightItem.id, ConstraintSet.START)
         sets.connect(middleItem.id, ConstraintSet.BOTTOM, parentId, ConstraintSet.BOTTOM)
 
         sets.connect(rightItem.id, ConstraintSet.TOP, parentId, ConstraintSet.TOP)
@@ -269,36 +267,6 @@ open class ItemView @JvmOverloads constructor(
                 (width - dividerMarginEnd).toFloat(), y, width.toFloat(), y, dividerPaint
             )
         }
-    }
-
-    /**
-     * 设置[middleItem]的布局方式，一共三个取值
-     * 0:Start,1:Center,2:End
-     * @param gravity Int
-     */
-    fun setMiddleItemLayoutGravity(@IntRange(from = 0, to = 2) gravity: Int) {
-        if (gravity == middleItemLayoutGravity) {
-            return
-        }
-        middleItemLayoutGravity = gravity
-        val set = ConstraintSet()
-        set.clone(this)
-        val parentId = ConstraintSet.PARENT_ID
-        set.clear(middleItem.id, ConstraintSet.START)
-        set.clear(middleItem.id, ConstraintSet.END)
-        when (gravity) {
-            0 -> {
-                set.connect(middleItem.id, ConstraintSet.START, leftItem.id, ConstraintSet.END)
-            }
-            1 -> {
-                set.connect(middleItem.id, ConstraintSet.START, parentId, ConstraintSet.START)
-                set.connect(middleItem.id, ConstraintSet.BOTTOM, parentId, ConstraintSet.BOTTOM)
-            }
-            2 -> {
-                set.connect(middleItem.id, ConstraintSet.END, rightItem.id, ConstraintSet.START)
-            }
-        }
-        set.applyTo(this)
     }
 
     private fun setIconGravity(a: TypedArray, styleable: Int, item: CellView) {
@@ -363,6 +331,61 @@ open class ItemView @JvmOverloads constructor(
         }
     }
 
+    private fun setTextPadding(a: TypedArray) {
+        var start: Int
+        var top: Int
+        var end: Int
+        var bottom: Int
+        var padding = a.getDimensionPixelOffset(R.styleable.ItemView_mc_leftTextPadding, 0)
+        start = a.getDimensionPixelOffset(
+            R.styleable.ItemView_mc_leftTextPaddingStart, padding
+        )
+        top = a.getDimensionPixelOffset(
+            R.styleable.ItemView_mc_leftTextPaddingTop, padding
+        )
+        end = a.getDimensionPixelOffset(
+            R.styleable.ItemView_mc_leftTextPaddingEnd, padding
+        )
+        bottom = a.getDimensionPixelOffset(
+            R.styleable.ItemView_mc_leftTextPaddingBottom, padding
+        )
+        setTextPadding(leftItem, start, top, end, bottom)
+
+        padding = a.getDimensionPixelOffset(R.styleable.ItemView_mc_middleTextPadding, 0)
+        start = a.getDimensionPixelOffset(
+            R.styleable.ItemView_mc_middleTextPaddingStart, padding
+        )
+        top = a.getDimensionPixelOffset(
+            R.styleable.ItemView_mc_middleTextPaddingTop, padding
+        )
+        end = a.getDimensionPixelOffset(
+            R.styleable.ItemView_mc_middleTextPaddingEnd, padding
+        )
+        bottom = a.getDimensionPixelOffset(
+            R.styleable.ItemView_mc_middleTextPaddingBottom, padding
+        )
+        setTextPadding(middleItem, start, top, end, bottom)
+
+        padding = a.getDimensionPixelOffset(R.styleable.ItemView_mc_rightTextPadding, 0)
+        start = a.getDimensionPixelOffset(
+            R.styleable.ItemView_mc_rightTextPaddingStart, padding
+        )
+        top = a.getDimensionPixelOffset(
+            R.styleable.ItemView_mc_rightTextPaddingTop, padding
+        )
+        end = a.getDimensionPixelOffset(
+            R.styleable.ItemView_mc_rightTextPaddingEnd, padding
+        )
+        bottom = a.getDimensionPixelOffset(
+            R.styleable.ItemView_mc_rightTextPaddingBottom, padding
+        )
+        setTextPadding(rightItem, start, top, end, bottom)
+    }
+
+    private fun setTextPadding(item: View, start: Int, top: Int, end: Int, bottom: Int) = apply {
+        item.setPadding(start, top, end, bottom)
+    }
+
     private fun setHintText(a: TypedArray, styleable: Int, item: CellView) {
         if (a.hasValue(styleable)) {
             item.labelView.hint = a.getString(styleable)
@@ -409,31 +432,35 @@ open class ItemView @JvmOverloads constructor(
         }
     }
 
-    fun setIconGravity(@GravityInt gravity: Int) = apply {
+    open fun setMiddleItemLayoutGravity(@GravityInt gravity: Int) {
+        middleItem.gravity = gravity
+    }
+
+    open fun setIconGravity(@GravityInt gravity: Int) = apply {
         leftItem.setIconGravity(gravity)
         middleItem.setIconGravity(gravity)
         rightItem.setIconGravity(gravity)
     }
 
-    fun setIconTintColor(color: ColorStateList?) = apply {
+    open fun setIconTintColor(color: ColorStateList?) = apply {
         leftItem.setIconColor(color)
         middleItem.setIconColor(color)
         rightItem.setIconColor(color)
     }
 
-    fun setIconWidth(width: Int) = apply {
+    open fun setIconWidth(width: Int) = apply {
         leftItem.setIconWidth(width)
         middleItem.setIconWidth(width)
         rightItem.setIconWidth(width)
     }
 
-    fun setIconHeight(height: Int) = apply {
+    open fun setIconHeight(height: Int) = apply {
         leftItem.setIconHeight(height)
         middleItem.setIconHeight(height)
         rightItem.setIconHeight(height)
     }
 
-    fun setIconPressedEffect(useRipple: Boolean) = apply {
+    open fun setIconPressedEffect(useRipple: Boolean) = apply {
         if (useRipple) {
             setIconRippleColor(iconRippleColor)
         } else {
@@ -441,7 +468,7 @@ open class ItemView @JvmOverloads constructor(
         }
     }
 
-    fun setIconRippleColor(@ColorInt color: Int) = apply {
+    open fun setIconRippleColor(@ColorInt color: Int) = apply {
         leftItem.iconView.background = RippleDrawable(
             ColorStateList.valueOf(color), null,
             GradientDrawable().apply {
@@ -465,13 +492,13 @@ open class ItemView @JvmOverloads constructor(
         )
     }
 
-    fun setIconPressedColor(@ColorInt pressedColor: Int) = apply {
+    open fun setIconPressedColor(@ColorInt pressedColor: Int) = apply {
         setLeftIconDrawable(leftItem.iconView.background, ColorDrawable(pressedColor))
         setMiddleIconDrawable(middleItem.iconView.background, ColorDrawable(pressedColor))
         setRightIconDrawable(rightItem.iconView.background, ColorDrawable(pressedColor))
     }
 
-    fun setLeftIconDrawable(normalDrawable: Drawable?, pressedDrawable: Drawable?) = apply {
+    open fun setLeftIconDrawable(normalDrawable: Drawable?, pressedDrawable: Drawable?) = apply {
         val drawable = StateListDrawable()
         val normalState = intArrayOf(android.R.attr.state_enabled, -android.R.attr.state_pressed)
         val pressedState = intArrayOf(android.R.attr.state_enabled, android.R.attr.state_pressed)
@@ -484,7 +511,7 @@ open class ItemView @JvmOverloads constructor(
         leftItem.iconView.background = drawable
     }
 
-    fun setMiddleIconDrawable(normalDrawable: Drawable?, pressedDrawable: Drawable?) = apply {
+    open fun setMiddleIconDrawable(normalDrawable: Drawable?, pressedDrawable: Drawable?) = apply {
         val drawable = StateListDrawable()
         val normalState = intArrayOf(android.R.attr.state_enabled, -android.R.attr.state_pressed)
         val pressedState = intArrayOf(android.R.attr.state_enabled, android.R.attr.state_pressed)
@@ -497,7 +524,7 @@ open class ItemView @JvmOverloads constructor(
         middleItem.iconView.background = drawable
     }
 
-    fun setRightIconDrawable(normalDrawable: Drawable?, pressedDrawable: Drawable?) = apply {
+    open fun setRightIconDrawable(normalDrawable: Drawable?, pressedDrawable: Drawable?) = apply {
         val drawable = StateListDrawable()
         val normalState = intArrayOf(android.R.attr.state_enabled, -android.R.attr.state_pressed)
         val pressedState = intArrayOf(android.R.attr.state_enabled, android.R.attr.state_pressed)
@@ -510,43 +537,43 @@ open class ItemView @JvmOverloads constructor(
         rightItem.iconView.background = drawable
     }
 
-    fun setTextGravity(gravity: Int) = apply {
+    open fun setTextGravity(gravity: Int) = apply {
         leftItem.labelView.gravity = gravity
         middleItem.labelView.gravity = gravity
         rightItem.labelView.gravity = gravity
     }
 
-    fun setTextColor(textColor: ColorStateList?) = apply {
+    open fun setTextColor(textColor: ColorStateList?) = apply {
         leftItem.setTextColor(textColor)
         middleItem.setTextColor(textColor)
         rightItem.setTextColor(textColor)
     }
 
-    fun setTextSize(textSize: Float) = apply {
+    open fun setTextSize(textSize: Float) = apply {
         leftItem.setTextSize(textSize)
         middleItem.setTextSize(textSize)
         rightItem.setTextSize(textSize)
     }
 
-    fun setHintTextColor(textColor: Int) = apply {
+    open fun setHintTextColor(textColor: Int) = apply {
         leftItem.labelView.setHintTextColor(textColor)
         middleItem.labelView.setHintTextColor(textColor)
         rightItem.labelView.setHintTextColor(textColor)
     }
 
-    fun setTextMaxWidth(maxWidth: Int) = apply {
+    open fun setTextMaxWidth(maxWidth: Int) = apply {
         leftItem.setTextMaxWidth(maxWidth)
         middleItem.setTextMaxWidth(maxWidth)
         rightItem.setTextMaxWidth(maxWidth)
     }
 
-    fun setTextMinWidth(minWidth: Int) = apply {
+    open fun setTextMinWidth(minWidth: Int) = apply {
         leftItem.setTextMinWidth(minWidth)
         middleItem.setTextMinWidth(minWidth)
         rightItem.setTextMinWidth(minWidth)
     }
 
-    fun setTextEllipsize(ellipsize: TextUtils.TruncateAt) = apply {
+    open fun setTextEllipsize(ellipsize: TextUtils.TruncateAt) = apply {
         leftItem.setEllipsize(ellipsize)
         middleItem.setEllipsize(ellipsize)
         rightItem.setEllipsize(ellipsize)
@@ -558,7 +585,7 @@ open class ItemView @JvmOverloads constructor(
         rightItem.setEllipsize(ellipsize)
     }
 
-    fun setLeftItemMargin(left: Int, top: Int, bottom: Int) = apply {
+    open fun setLeftItemMargin(left: Int, top: Int, bottom: Int) = apply {
         val layoutParams = leftItem.layoutParams as LayoutParams
         layoutParams.marginStart = left
         layoutParams.topMargin = top
@@ -566,7 +593,7 @@ open class ItemView @JvmOverloads constructor(
         leftItem.layoutParams = layoutParams
     }
 
-    fun setMiddleItemMargin(start: Int, top: Int, end: Int, bottom: Int) = apply {
+    open fun setMiddleItemMargin(start: Int, top: Int, end: Int, bottom: Int) = apply {
         val layoutParams = middleItem.layoutParams as LayoutParams
         layoutParams.marginStart = start
         layoutParams.topMargin = top
@@ -575,7 +602,7 @@ open class ItemView @JvmOverloads constructor(
         middleItem.layoutParams = layoutParams
     }
 
-    fun setRightItemMargin(top: Int, end: Int, bottom: Int) = apply {
+    open fun setRightItemMargin(top: Int, end: Int, bottom: Int) = apply {
         val layoutParams = rightItem.layoutParams as LayoutParams
         layoutParams.topMargin = top
         layoutParams.marginEnd = end
@@ -583,35 +610,35 @@ open class ItemView @JvmOverloads constructor(
         rightItem.layoutParams = layoutParams
     }
 
-    fun setIconPadding(padding: Int) = apply {
+    open fun setIconPadding(padding: Int) = apply {
         leftItem.setIconPadding(padding)
         middleItem.setIconPadding(padding)
         rightItem.setIconPadding(padding)
     }
 
-    fun setDividerVisible(visible: Boolean) = apply {
+    open fun setDividerVisible(visible: Boolean) = apply {
         dividerVisible = visible
         setPaddingBottom()
         invalidate()
     }
 
-    fun setDividerColor(color: Int) = apply {
+    open fun setDividerColor(color: Int) = apply {
         dividerColor = color
         invalidate()
     }
 
-    fun setDividerMarginColor(color: Int) = apply {
+    open fun setDividerMarginColor(color: Int) = apply {
         dividerMarginColor = color
         invalidate()
     }
 
-    fun setDividerHeight(height: Int) = apply {
+    open fun setDividerHeight(height: Int) = apply {
         dividerHeight = height
         setPaddingBottom()
         invalidate()
     }
 
-    fun setDividerMargin(marginStart: Int, marginEnd: Int) = apply {
+    open fun setDividerMargin(marginStart: Int, marginEnd: Int) = apply {
         dividerMarginStart = marginStart
         dividerMarginEnd = marginEnd
         invalidate()

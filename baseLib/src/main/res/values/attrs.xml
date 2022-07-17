@@ -206,6 +206,22 @@
         <attr name="mc_leftTextColor" format="color" />
         <attr name="mc_middleTextColor" format="color" />
         <attr name="mc_rightTextColor" format="color" />
+        <!--text padding-->
+        <attr name="mc_leftTextPadding" format="dimension" />
+        <attr name="mc_leftTextPaddingStart" format="dimension" />
+        <attr name="mc_leftTextPaddingTop" format="dimension" />
+        <attr name="mc_leftTextPaddingEnd" format="dimension" />
+        <attr name="mc_leftTextPaddingBottom" format="dimension" />
+        <attr name="mc_middleTextPadding" format="dimension" />
+        <attr name="mc_middleTextPaddingStart" format="dimension" />
+        <attr name="mc_middleTextPaddingTop" format="dimension" />
+        <attr name="mc_middleTextPaddingEnd" format="dimension" />
+        <attr name="mc_middleTextPaddingBottom" format="dimension" />
+        <attr name="mc_rightTextPadding" format="dimension" />
+        <attr name="mc_rightTextPaddingStart" format="dimension" />
+        <attr name="mc_rightTextPaddingTop" format="dimension" />
+        <attr name="mc_rightTextPaddingEnd" format="dimension" />
+        <attr name="mc_rightTextPaddingBottom" format="dimension" />
         <!--text background-->
         <attr name="mc_leftTextBackground" format="reference|color" />
         <attr name="mc_middleTextBackground" format="reference|color" />
@@ -254,10 +270,11 @@
         <attr name="mc_dividerMarginStart" format="dimension" />
         <attr name="mc_dividerMarginEnd" format="dimension" />
         <attr name="mc_dividerMarginColor" format="color" />
-        <attr name="mc_middleItemLayoutGravity" format="enum">
-            <enum name="start" value="0" />
-            <enum name="center" value="1" />
-            <enum name="end" value="2" />
+        <attr name="mc_middleItemLayoutGravity">
+            <flag name="start" value="0x00800003" />
+            <flag name="end" value="0x00800005" />
+            <flag name="center" value="0x11" />
+            <flag name="center_vertical" value="0x10" />
         </attr>
         <attr name="mc_excludePaddingHeight" format="dimension" />
     </declare-styleable>

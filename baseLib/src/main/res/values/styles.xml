@@ -10,6 +10,7 @@
         <item name="mc_leftMarginStart">0dp</item>
         <item name="mc_leftMarginTop">0dp</item>
         <item name="mc_leftMarginBottom">0dp</item>
+        <item name="mc_middleItemLayoutGravity">start|center_vertical</item>
         <item name="mc_middleMarginStart">0dp</item>
         <item name="mc_middleMarginTop">0dp</item>
         <item name="mc_middleMarginBottom">0dp</item>
@@ -71,7 +72,7 @@
         <item name="mc_titleTextSize">18sp</item>
         <item name="mc_messageTextColor">?android:attr/textColorPrimary</item>
         <item name="mc_messageTextSize">16sp</item>
-        <item name="mc_btnBackground">@drawable/ripple_active</item>
+        <item name="mc_btnBackground">@drawable/dialog_alert_ripple_active</item>
         <item name="mc_windowAmount">0.5</item>
         <item name="mc_windowColor">@color/white</item>
         <item name="mc_windowRadius">6dp</item>

@@ -1,9 +1,8 @@
 package com.master.lib.view
 
 import android.content.Context
-import android.os.Build
 import android.util.AttributeSet
-import android.view.WindowInsets
+import androidx.constraintlayout.widget.ConstraintSet
 import com.master.lib.ext.activity
 import com.masterchan.lib.R
 
@@ -28,6 +27,22 @@ open class TitleBar @JvmOverloads constructor(
         a.recycle()
     }
 
+    override fun initView() {
+        super.initView()
+        val layoutParams = middleItem.layoutParams
+        layoutParams.width = LayoutParams.WRAP_CONTENT
+        middleItem.layoutParams = layoutParams
+
+        val sets = ConstraintSet()
+        val parentId = ConstraintSet.PARENT_ID
+        sets.clone(this)
+
+        sets.connect(middleItem.id, ConstraintSet.START, parentId, ConstraintSet.START)
+        sets.connect(middleItem.id, ConstraintSet.END, parentId, ConstraintSet.END)
+
+        sets.applyTo(this)
+    }
+
     fun setClickLeftFinish(finish: Boolean) = apply {
         if (!finish) {
             leftItem.iconView.setOnClickListener(null)
@@ -39,15 +54,5 @@ open class TitleBar @JvmOverloads constructor(
         if (leftItem.text.isNotEmpty()) {
             leftItem.labelView.setOnClickListener { activity?.finish() }
         }
-    }
-
-    override fun dispatchApplyWindowInsets(insets: WindowInsets?): WindowInsets {
-        if (fitsSystemWindows) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                insets?.inset(0, 0, 0, 0)
-            }
-            return WindowInsets(insets)
-        }
-        return super.dispatchApplyWindowInsets(insets)
     }
 }

@@ -307,21 +307,6 @@
         <attr name="mc_leftEditable" format="boolean" />
         <attr name="mc_middleEditable" format="boolean" />
         <attr name="mc_rightEditable" format="boolean" />
-        <attr name="mc_leftTextPadding" format="dimension" />
-        <attr name="mc_leftTextPaddingStart" format="dimension" />
-        <attr name="mc_leftTextPaddingTop" format="dimension" />
-        <attr name="mc_leftTextPaddingEnd" format="dimension" />
-        <attr name="mc_leftTextPaddingBottom" format="dimension" />
-        <attr name="mc_middleTextPadding" format="dimension" />
-        <attr name="mc_middleTextPaddingStart" format="dimension" />
-        <attr name="mc_middleTextPaddingTop" format="dimension" />
-        <attr name="mc_middleTextPaddingEnd" format="dimension" />
-        <attr name="mc_middleTextPaddingBottom" format="dimension" />
-        <attr name="mc_rightTextPadding" format="dimension" />
-        <attr name="mc_rightTextPaddingStart" format="dimension" />
-        <attr name="mc_rightTextPaddingTop" format="dimension" />
-        <attr name="mc_rightTextPaddingEnd" format="dimension" />
-        <attr name="mc_rightTextPaddingBottom" format="dimension" />
         <attr name="mc_leftInputType">
             <flag name="none" value="0x00000000" />
             <flag name="text" value="0x00000001" />

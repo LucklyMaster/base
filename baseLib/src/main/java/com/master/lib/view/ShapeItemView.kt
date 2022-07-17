@@ -3,7 +3,6 @@ package com.master.lib.view
 import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
-import android.view.View
 import com.master.lib.ext.ifHas
 import com.master.lib.ext.isEditable
 import com.masterchan.lib.R
@@ -57,61 +56,9 @@ class ShapeItemView @JvmOverloads constructor(
         setLeftEditable(a.getBoolean(R.styleable.ShapeItemView_mc_leftEditable, false))
         setMiddleEditable(a.getBoolean(R.styleable.ShapeItemView_mc_middleEditable, false))
         setRightEditable(a.getBoolean(R.styleable.ShapeItemView_mc_rightEditable, false))
-        setTextPadding(a)
         setTextInputType(a)
         setTextDigits(a)
         a.recycle()
-    }
-
-    private fun setTextPadding(a: TypedArray) {
-        var start: Int
-        var top: Int
-        var end: Int
-        var bottom: Int
-        var padding = a.getDimensionPixelOffset(R.styleable.ShapeItemView_mc_leftTextPadding, 0)
-        start = a.getDimensionPixelOffset(
-            R.styleable.ShapeItemView_mc_leftTextPaddingStart, padding
-        )
-        top = a.getDimensionPixelOffset(
-            R.styleable.ShapeItemView_mc_leftTextPaddingTop, padding
-        )
-        end = a.getDimensionPixelOffset(
-            R.styleable.ShapeItemView_mc_leftTextPaddingEnd, padding
-        )
-        bottom = a.getDimensionPixelOffset(
-            R.styleable.ShapeItemView_mc_leftTextPaddingBottom, padding
-        )
-        setTextPadding(leftItem, start, top, end, bottom)
-
-        padding = a.getDimensionPixelOffset(R.styleable.ShapeItemView_mc_middleTextPadding, 0)
-        start = a.getDimensionPixelOffset(
-            R.styleable.ShapeItemView_mc_middleTextPaddingStart, padding
-        )
-        top = a.getDimensionPixelOffset(
-            R.styleable.ShapeItemView_mc_middleTextPaddingTop, padding
-        )
-        end = a.getDimensionPixelOffset(
-            R.styleable.ShapeItemView_mc_middleTextPaddingEnd, padding
-        )
-        bottom = a.getDimensionPixelOffset(
-            R.styleable.ShapeItemView_mc_middleTextPaddingBottom, padding
-        )
-        setTextPadding(middleItem, start, top, end, bottom)
-
-        padding = a.getDimensionPixelOffset(R.styleable.ShapeItemView_mc_rightTextPadding, 0)
-        start = a.getDimensionPixelOffset(
-            R.styleable.ShapeItemView_mc_rightTextPaddingStart, padding
-        )
-        top = a.getDimensionPixelOffset(
-            R.styleable.ShapeItemView_mc_rightTextPaddingTop, padding
-        )
-        end = a.getDimensionPixelOffset(
-            R.styleable.ShapeItemView_mc_rightTextPaddingEnd, padding
-        )
-        bottom = a.getDimensionPixelOffset(
-            R.styleable.ShapeItemView_mc_rightTextPaddingBottom, padding
-        )
-        setTextPadding(rightItem, start, top, end, bottom)
     }
 
     private fun setTextInputType(a: TypedArray) {
@@ -130,10 +77,6 @@ class ShapeItemView @JvmOverloads constructor(
         a.ifHas(R.styleable.ShapeItemView_mc_leftDigits) { leftItem.setDigits(a.getText(it)) }
         a.ifHas(R.styleable.ShapeItemView_mc_middleDigits) { leftItem.setDigits(a.getText(it)) }
         a.ifHas(R.styleable.ShapeItemView_mc_rightDigits) { leftItem.setDigits(a.getText(it)) }
-    }
-
-    private fun setTextPadding(item: View, start: Int, top: Int, end: Int, bottom: Int) = apply {
-        item.setPadding(start, top, end, bottom)
     }
 
     fun setLeftEditable(editable: Boolean) = apply {

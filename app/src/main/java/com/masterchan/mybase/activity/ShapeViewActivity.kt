@@ -8,7 +8,6 @@ import com.masterchan.mybase.databinding.ActivityShapeViewBinding
 class ShapeViewActivity : MyBaseActivity<ActivityShapeViewBinding>() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        // TODO: ShapeItemView middleItem match_parent
     }
 
     fun onClick(v: View) {
