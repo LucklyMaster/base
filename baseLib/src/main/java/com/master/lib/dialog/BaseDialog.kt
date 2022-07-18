@@ -11,6 +11,7 @@ import android.view.WindowManager.LayoutParams.FLAG_BLUR_BEHIND
 import androidx.annotation.ColorInt
 import androidx.core.view.setPadding
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.master.lib.ext.dp2px
@@ -184,19 +185,31 @@ open class BaseDialog(var contentView: View? = null) : DialogFragment() {
         windowElevation = elevation
     }
 
-    override fun show(manager: FragmentManager, tag: String?) {
-        super.show(manager, tag)
+    open fun show(activity: FragmentActivity, tag: String? = "default") = apply {
+        show(activity.supportFragmentManager, tag)
     }
 
-    override fun show(transaction: FragmentTransaction, tag: String?): Int {
-        return super.show(transaction, tag)
+    open fun showNow(activity: FragmentActivity, tag: String? = "default") = apply {
+        showNow(activity.supportFragmentManager, tag)
+    }
+
+    override fun show(manager: FragmentManager, tag: String?) {
+        showAllowingStateLoss(manager, tag) { commitAllowingStateLoss() }
     }
 
     override fun showNow(manager: FragmentManager, tag: String?) {
-        super.showNow(manager, tag)
+        showAllowingStateLoss(manager, tag) { commitNowAllowingStateLoss() }
     }
 
-    fun showAllowingStateLoss(manager: FragmentManager, tag: String?) {
+    override fun dismiss() {
+        super.dismissAllowingStateLoss()
+    }
+
+    private fun showAllowingStateLoss(
+        manager: FragmentManager,
+        tag: String?,
+        action: FragmentTransaction.() -> Unit
+    ) {
         try {
             val dismissed = DialogFragment::class.java.getDeclaredField("mDismissed")
             dismissed.isAccessible = true
@@ -208,7 +221,7 @@ open class BaseDialog(var contentView: View? = null) : DialogFragment() {
 
             val ft = manager.beginTransaction()
             ft.add(this, tag)
-            ft.commitAllowingStateLoss()
+            action.invoke(ft)
         } catch (e: NoSuchFieldException) {
             e.printStackTrace()
         } catch (e: IllegalAccessException) {
