@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="mc_fromStart">
+    <style name="mc_slideFromStart">
         <item name="android:windowEnterAnimation">@anim/slide_left_in</item>
         <item name="android:windowExitAnimation">@anim/slide_left_out</item>
     </style>
 
-    <style name="mc_fromTop">
+    <style name="mc_slideFromTop">
         <item name="android:windowEnterAnimation">@anim/slide_top_in</item>
         <item name="android:windowExitAnimation">@anim/slide_top_out</item>
     </style>
 
-    <style name="mc_fromEnd">
+    <style name="mc_slideFromEnd">
         <item name="android:windowEnterAnimation">@anim/slide_right_in</item>
         <item name="android:windowExitAnimation">@anim/slide_right_out</item>
     </style>
 
-    <style name="mc_fromBottom">
+    <style name="mc_slideFromBottom">
         <item name="android:windowEnterAnimation">@anim/slide_bottom_in</item>
         <item name="android:windowExitAnimation">@anim/slide_bottom_out</item>
     </style>
 
-    <style name="mc_fromCenter">
+    <style name="mc_scaleFromCenter">
         <item name="android:windowEnterAnimation">@anim/scale_center_in</item>
         <item name="android:windowExitAnimation">@anim/scale_center_out</item>
     </style>

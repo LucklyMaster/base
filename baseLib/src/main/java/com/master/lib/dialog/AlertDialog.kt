@@ -686,14 +686,14 @@ class AlertDialog private constructor(context: Context) {
                 .setOnCancelListener(onCancelListener)
                 .setXOffset(xOffset)
                 .setYOffset(yOffset)
-                .setWindowAnimate(windowAnimation)
-                .setWindowAmount(windowAmount)
-                .setWindowGravity(windowGravity)
+                .setAnimate(windowAnimation)
+                .setAmount(windowAmount)
+                .setGravity(windowGravity)
                 .setWindowColor(windowColor)
-                .setWindowRadius(windowRadius)
-                .setWindowDrawable(windowDrawable)
-                .setWindowWidth(windowWidth)
-                .setWindowHeight(windowHeight)
+                .setRadius(windowRadius)
+                .setBackground(windowDrawable)
+                .setWidth(windowWidth)
+                .setHeight(windowHeight)
             return alertDialog
         }
 

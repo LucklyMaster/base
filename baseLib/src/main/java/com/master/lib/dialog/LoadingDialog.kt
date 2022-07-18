@@ -77,12 +77,12 @@ class LoadingDialog(
                 pbLoading.progressTintList = it
             }
         }
-        mDialogFragment.setWindowAmount(windowAmount)
+        mDialogFragment.setAmount(windowAmount)
         mDialogFragment.setWindowColor(windowColor)
-        mDialogFragment.setWindowDrawable(windowDrawable)
-        mDialogFragment.setWindowRadius(windowRadius)
-        mDialogFragment.setWindowWidth(windowWidth.toInt())
-        mDialogFragment.setWindowHeight(windowHeight.toInt())
+        mDialogFragment.setBackground(windowDrawable)
+        mDialogFragment.setRadius(windowRadius)
+        mDialogFragment.setWidth(windowWidth.toInt())
+        mDialogFragment.setHeight(windowHeight.toInt())
         mDialogFragment.isCancelable = mCancelable
         if (!mCancelable) {
             mDialogFragment.setCanceledOnTouchOutside(false)
@@ -254,12 +254,12 @@ class LoadingDialog(
                 mProgressColor?.let { pbLoading.progressTintList = ColorStateList.valueOf(it) }
                 mProgressDrawable?.let { pbLoading.progressDrawable = it }
             }
-            mWindowAmount?.let { dialog.mDialogFragment.setWindowAmount(it) }
+            mWindowAmount?.let { dialog.mDialogFragment.setAmount(it) }
             mWindowColor?.let { dialog.mDialogFragment.setWindowColor(it) }
-            mWindowDrawable?.let { dialog.mDialogFragment.setWindowDrawable(it) }
-            mWindowRadius?.let { dialog.mDialogFragment.setWindowRadius(it) }
-            mWindowWidth?.let { dialog.mDialogFragment.setWindowWidth(it) }
-            mWindowHeight?.let { dialog.mDialogFragment.setWindowHeight(it) }
+            mWindowDrawable?.let { dialog.mDialogFragment.setBackground(it) }
+            mWindowRadius?.let { dialog.mDialogFragment.setRadius(it) }
+            mWindowWidth?.let { dialog.mDialogFragment.setWidth(it) }
+            mWindowHeight?.let { dialog.mDialogFragment.setHeight(it) }
             return dialog.setCancelable(mCancelable)
                 .setCanceledOnTouchOutside(mCanceledOnTouchOutside)
                 .setOnCancelListener(mOnCancelListener)
