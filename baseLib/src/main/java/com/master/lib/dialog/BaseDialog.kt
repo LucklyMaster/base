@@ -1,5 +1,6 @@
 package com.master.lib.dialog
 
+import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.Drawable
@@ -14,9 +15,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import com.master.lib.ext.dp2px
-import com.master.lib.ext.isPortrait
-import com.master.lib.ext.screenWidth
+import com.master.lib.ext.*
 import com.masterchan.lib.R
 
 /**
@@ -24,7 +23,13 @@ import com.masterchan.lib.R
  * @author MasterChan
  * @date 2021-12-14 14:30
  */
-open class BaseDialog(var contentView: View? = null) : DialogFragment() {
+open class BaseDialog @JvmOverloads constructor(
+    context: Context,
+    var contentView: View? = null,
+    var layoutRes: Int = 0
+) : DialogFragment() {
+
+    protected val mActivity: FragmentActivity
 
     protected var windowDrawable: Drawable? = null
     protected var windowColor = Color.WHITE
@@ -43,13 +48,23 @@ open class BaseDialog(var contentView: View? = null) : DialogFragment() {
     protected var dismissListener: DialogInterface.OnDismissListener? = null
     protected var cancelListener: DialogInterface.OnCancelListener? = null
 
+    init {
+        val activityContext = context.activity
+        require(activityContext is FragmentActivity) { "the Context must be a FragmentActivity" }
+        mActivity = activityContext
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         initDialog()
-        return contentView
+        return if (contentView != null) {
+            contentView
+        } else {
+            LayoutInflater.from(context).inflate(layoutRes, container)
+        }
     }
 
     protected open fun initDialog() {
@@ -185,24 +200,32 @@ open class BaseDialog(var contentView: View? = null) : DialogFragment() {
         windowElevation = elevation
     }
 
-    open fun show(activity: FragmentActivity, tag: String? = "default") = apply {
-        show(activity.supportFragmentManager, tag)
+    open fun show(tag: String? = "default") = apply {
+        show(mActivity.supportFragmentManager, tag)
     }
 
-    open fun showNow(activity: FragmentActivity, tag: String? = "default") = apply {
-        showNow(activity.supportFragmentManager, tag)
+    open fun showNow(tag: String? = "default") = apply {
+        showNow(mActivity.supportFragmentManager, tag)
     }
 
     override fun show(manager: FragmentManager, tag: String?) {
-        showAllowingStateLoss(manager, tag) { commitAllowingStateLoss() }
+        if (isMainThread()) {
+            showAllowingStateLoss(manager, tag) { commitAllowingStateLoss() }
+        } else {
+            requireActivity().runOnUiThread {
+                showAllowingStateLoss(manager, tag) { commitAllowingStateLoss() }
+            }
+        }
     }
 
     override fun showNow(manager: FragmentManager, tag: String?) {
-        showAllowingStateLoss(manager, tag) { commitNowAllowingStateLoss() }
-    }
-
-    override fun dismiss() {
-        super.dismissAllowingStateLoss()
+        if (isMainThread()) {
+            showAllowingStateLoss(manager, tag) { commitNowAllowingStateLoss() }
+        } else {
+            requireActivity().runOnUiThread {
+                showAllowingStateLoss(manager, tag) { commitNowAllowingStateLoss() }
+            }
+        }
     }
 
     private fun showAllowingStateLoss(

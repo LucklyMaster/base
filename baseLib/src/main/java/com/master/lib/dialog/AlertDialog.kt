@@ -16,10 +16,12 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.master.lib.ext.*
+import com.master.lib.ext.dp2px
+import com.master.lib.ext.inflater
+import com.master.lib.ext.setPaddingBottom
+import com.master.lib.ext.setPaddingTop
 import com.master.lib.widget.RecyclerViewDivider
 import com.master.lib.widget.ViewHolder
 import com.masterchan.lib.R
@@ -31,7 +33,7 @@ import com.masterchan.lib.databinding.McDialogAlertBinding
  * @date 2021-12-14 10:51
  */
 @Suppress("MemberVisibilityCanBePrivate")
-class AlertDialog private constructor(context: Context) {
+class AlertDialog private constructor(context: Context) : BaseDialog(context) {
 
     private val binding: McDialogAlertBinding = McDialogAlertBinding.bind(
         View.inflate(context, R.layout.mc_dialog_alert, null)
@@ -43,32 +45,7 @@ class AlertDialog private constructor(context: Context) {
     val neutralButton = binding.btnNeutral
     val viewContainer = binding.viewContainer
 
-    private val dialogFragment: BaseDialog = BaseDialog(binding.root)
-    val activity: FragmentActivity
-
-    init {
-        val con = context.activity ?: throw Exception("the Context not attach a Activity")
-        if (con !is FragmentActivity) {
-            throw Exception("the Context must be a FragmentActivity")
-        }
-        this.activity = con
-    }
-
-    fun show(tag: String? = "default") {
-        if (isMainThread()) {
-            dialogFragment.showNow(activity.supportFragmentManager, tag)
-        } else {
-            activity.runOnUiThread { dialogFragment.showNow(activity.supportFragmentManager, tag) }
-        }
-    }
-
-    fun dismiss() {
-        if (isMainThread()) {
-            dialogFragment.dismissAllowingStateLoss()
-        } else {
-            activity.runOnUiThread { dialogFragment.dismissAllowingStateLoss() }
-        }
-    }
+    private val dialogFragment: BaseDialog = BaseDialog(context)
 
     fun interface OnClickListener {
         fun onClick(dialog: AlertDialog)

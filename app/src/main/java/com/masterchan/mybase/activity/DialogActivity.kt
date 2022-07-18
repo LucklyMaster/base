@@ -1,9 +1,11 @@
 package com.masterchan.mybase.activity
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
-import android.widget.TextView
 import com.master.lib.dialog.BaseDialog
+import com.master.lib.dialog.WindowAni
+import com.masterchan.mybase.R
 import com.masterchan.mybase.databinding.ActivityDialogBinding
 
 class DialogActivity : MyBaseActivity<ActivityDialogBinding>() {
@@ -12,9 +14,15 @@ class DialogActivity : MyBaseActivity<ActivityDialogBinding>() {
     }
 
     fun baseDialogClick(view: View) {
-        BaseDialog(TextView(this).apply { setText("测试测试") })
-            .showAllowingStateLoss(supportFragmentManager, "1")
-        BaseDialog(TextView(this).apply { setText("2222") })
-            .showAllowingStateLoss(supportFragmentManager, "1")
+        // BaseDialog(this, TextView(this).apply { setText("测试测试") }).setGravity(Gravity.CENTER)
+        //     .setAnimate(WindowAni.BOTTOM)
+        //     .setCanceledOnTouchOutside(false)
+        //     .setCancellable(true)
+        //     .show()
+        BaseDialog(this, layoutRes = R.layout.activity_dialog).setGravity(Gravity.CENTER)
+            .setAnimate(WindowAni.BOTTOM)
+            .setCanceledOnTouchOutside(false)
+            .setCancellable(true)
+            .show()
     }
 }

@@ -31,7 +31,7 @@ class LoadingDialog(
     private val mBinding = McDialogLoadingBinding.bind(
         View.inflate(context, R.layout.mc_dialog_loading, null)
     )
-    private val mDialogFragment: BaseDialog = BaseDialog(mBinding.root)
+    private val mDialogFragment: BaseDialog = BaseDialog(context, mBinding.root)
     private var mText = text
     private var mCancelable = cancelable
     val context: FragmentActivity
