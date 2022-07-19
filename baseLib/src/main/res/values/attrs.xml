@@ -116,12 +116,13 @@
     <attr name="mc_windowAmount" format="float" />
     <attr name="mc_windowWidth" format="dimension" />
     <attr name="mc_windowHeight" format="dimension" />
-    <attr name="mc_windowGravity" format="enum">
-        <enum name="start" value="0" />
-        <enum name="top" value="1" />
-        <enum name="end" value="2" />
-        <enum name="bottom" value="3" />
-        <enum name="center" value="4" />
+    <attr name="mc_windowGravity">
+        <flag name="start" value="0x00800003" />
+        <flag name="top" value="0x30" />
+        <flag name="end" value="0x00800005" />
+        <flag name="bottom" value="0x50" />
+        <flag name="center" value="0x11" />
+        <flag name="center_vertical" value="0x10" />
     </attr>
 
     <declare-styleable name="CellView">
@@ -290,12 +291,13 @@
         <attr name="mc_titleTextSize" format="dimension" />
         <attr name="mc_messageTextColor" format="color|reference" />
         <attr name="mc_messageTextSize" format="dimension" />
-        <attr name="mc_titleGravity" format="enum">
-            <enum name="start" value="0" />
-            <enum name="top" value="1" />
-            <enum name="end" value="2" />
-            <enum name="bottom" value="3" />
-            <enum name="center" value="4" />
+        <attr name="mc_titleGravity">
+            <flag name="start" value="0x00800003" />
+            <flag name="top" value="0x30" />
+            <flag name="end" value="0x00800005" />
+            <flag name="bottom" value="0x50" />
+            <flag name="center" value="0x11" />
+            <flag name="center_vertical" value="0x10" />
         </attr>
 
         <attr name="mc_btnTextColor" format="color|reference" />
@@ -323,14 +325,6 @@
         <attr name="mc_listDividerVisible" format="boolean" />
         <attr name="mc_listDividerHeight" format="dimension" />
         <attr name="mc_listDividerColor" format="color" />
-
-        <attr name="mc_windowColor" />
-        <attr name="mc_windowRadius" />
-        <attr name="mc_windowDrawable" />
-        <attr name="mc_windowAmount" />
-        <attr name="mc_windowWidth" />
-        <attr name="mc_windowHeight" />
-        <attr name="mc_windowGravity" />
     </declare-styleable>
 
     <attr name="mc_AlertDialogDefaultStyle" format="reference" />

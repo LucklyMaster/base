@@ -2,30 +2,25 @@ package com.master.lib.dialog
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.annotation.ArrayRes
-import androidx.annotation.ColorInt
-import androidx.annotation.DrawableRes
-import androidx.annotation.LayoutRes
+import androidx.annotation.*
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.master.lib.ext.dp2px
-import com.master.lib.ext.inflater
-import com.master.lib.ext.setPaddingBottom
-import com.master.lib.ext.setPaddingTop
+import com.master.lib.dialog.AlertDialog.Companion.TYPE_ITEM
+import com.master.lib.dialog.AlertDialog.Companion.TYPE_MULTI_CHOICE
+import com.master.lib.dialog.AlertDialog.Companion.TYPE_SINGLE_CHOICE
+import com.master.lib.ext.*
 import com.master.lib.widget.RecyclerViewDivider
 import com.master.lib.widget.ViewHolder
 import com.masterchan.lib.R
-import com.masterchan.lib.databinding.McDialogAlertBinding
 
 /**
  * AlertDialog
@@ -33,36 +28,67 @@ import com.masterchan.lib.databinding.McDialogAlertBinding
  * @date 2021-12-14 10:51
  */
 @Suppress("MemberVisibilityCanBePrivate")
-class AlertDialog private constructor(context: Context) : BaseDialog(context) {
+open class AlertDialog private constructor(context: Context) :
+    BaseDialog(context, R.layout.mc_dialog_alert) {
 
-    private val binding: McDialogAlertBinding = McDialogAlertBinding.bind(
-        View.inflate(context, R.layout.mc_dialog_alert, null)
-    )
-    val titleView = binding.tvTitle
-    val messageView = binding.tvMessage
-    val positiveButton = binding.btnPositive
-    val negativeButton = binding.btnNegative
-    val neutralButton = binding.btnNeutral
-    val viewContainer = binding.viewContainer
+    val titleView: TextView
+    val messageView: TextView
+    val positiveButton: Button
+    val negativeButton: Button
+    val neutralButton: Button
+    val viewContainer: FrameLayout
+    private val titleSpace: Space
+    private val scrollView: ScrollView
+    private val btnContainer: LinearLayout
+    private val btnDivider: View
+    private val titleDivider: View
 
-    private val dialogFragment: BaseDialog = BaseDialog(context)
+    init {
+        titleView = contentView!!.findViewById(R.id.tv_title)
+        messageView = contentView!!.findViewById(R.id.tv_message)
+        positiveButton = contentView!!.findViewById(R.id.btn_positive)
+        negativeButton = contentView!!.findViewById(R.id.btn_negative)
+        neutralButton = contentView!!.findViewById(R.id.btn_neutral)
+        viewContainer = contentView!!.findViewById(R.id.view_container)
+        titleSpace = contentView!!.findViewById(R.id.titleSpace)
+        scrollView = contentView!!.findViewById(R.id.scrollView)
+        btnContainer = contentView!!.findViewById(R.id.container_btn)
+        btnDivider = contentView!!.findViewById(R.id.btnDivider)
+        titleDivider = contentView!!.findViewById(R.id.titleDivider)
+    }
 
+    /**
+     * dialog的button点击事件，包括[positiveButton]、[negativeButton]、[neutralButton]
+     */
     fun interface OnClickListener {
         fun onClick(dialog: AlertDialog)
     }
 
+    /**
+     * [Adapter.showType]为[TYPE_ITEM]时的item点击事件，会和[OnItemSelectedListener]一起触发
+     */
     fun interface OnItemClickListener {
-        fun onItemClick(dialog: AlertDialog, view: View, which: Int)
+        fun onItemClick(dialog: AlertDialog, view: View, position: Int)
     }
 
+    /**
+     * [Adapter.showType]为[TYPE_MULTI_CHOICE]时的item点击事件，会和[OnItemSelectedListener]一起触发
+     */
     fun interface OnMultiItemClickListener {
-        fun onItemClick(dialog: AlertDialog, view: View, checked: Boolean, which: Int)
+        fun onItemClick(dialog: AlertDialog, view: View, checked: Boolean, position: Int)
     }
 
+    /**
+     * [Adapter.showType]为[TYPE_SINGLE_CHOICE]或者[TYPE_MULTI_CHOICE]时的item点击事件，
+     * 和[OnItemClickListener]、[OnMultiItemClickListener]一起触发
+     */
     fun interface OnItemSelectedListener {
         fun onItemSelected(dialog: AlertDialog, view: CompoundButton, checkedItems: List<Int>)
     }
 
+    /**
+     * [Builder.setItems]方法设置的Entity可以扩展该接口，返回需要在列表中显示的数据
+     */
     fun interface IListItemData {
         fun getItemText(): String
     }
@@ -73,11 +99,13 @@ class AlertDialog private constructor(context: Context) : BaseDialog(context) {
         private var negativeTextSize: Float
         private var neutralTextSize: Float
 
-        private var positiveTextColor = context.getColorStateList(R.color.color_alert_dialog_button)
-        private var negativeTextColor = context.getColorStateList(R.color.color_alert_dialog_button)
-        private var neutralTextColor = context.getColorStateList(R.color.color_alert_dialog_button)
-        private var titleTextColor = context.getColorStateList(R.color.color_alert_dialog_text)
-        private var messageTextColor = context.getColorStateList(R.color.color_alert_dialog_text)
+        private val btnTextColor = context.getColorStateList(R.color.color_alert_dialog_button)
+        private val contentTextColor = context.getColorStateList(R.color.color_alert_dialog_text)
+        private var positiveTextColor = btnTextColor
+        private var negativeTextColor = btnTextColor
+        private var neutralTextColor = btnTextColor
+        private var titleTextColor = contentTextColor
+        private var messageTextColor = contentTextColor
 
         private var titleGravity: Int
         private var titleTextSize: Float
@@ -105,35 +133,18 @@ class AlertDialog private constructor(context: Context) : BaseDialog(context) {
         private var negativeClickListener: OnClickListener? = null
         private var neutralClickListener: OnClickListener? = null
         private var onItemSelectedListener: OnItemSelectedListener? = null
-        private var onCancelListener: DialogInterface.OnCancelListener? = null
-        private var onDismissListener: DialogInterface.OnDismissListener? = null
 
         private var customView: View? = null
-        private var cancelable = true
-        private var canceledOnTouchOutside = true
         private var viewLayoutRes = 0
         private var viewLayoutParams: FrameLayout.LayoutParams? = null
-        private var windowGravity = Gravity.CENTER
-        private var windowAmount = 1f
-        private var windowAnimation: Int? = null
-        private var xOffset = 0
-        private var yOffset = 0
-        private var windowColor = Color.WHITE
-        private var windowDrawable: Drawable? = null
-        private var windowRadius: Float = dp2px(6f)
-        private var windowWidth = ViewGroup.LayoutParams.WRAP_CONTENT
-        private var windowHeight = ViewGroup.LayoutParams.WRAP_CONTENT
 
         init {
             val a = context.theme.obtainStyledAttributes(
-                null, R.styleable.AlertDialog, R.attr.mc_AlertDialogDefaultStyle,
-                styleRes
+                null, R.styleable.AlertDialog, R.attr.mc_AlertDialogDefaultStyle, styleRes
             )
 
             //button textSize
-            val btnTextSize = a.getDimension(
-                R.styleable.AlertDialog_mc_btnTextSize, dp2px(16f)
-            )
+            val btnTextSize = a.getDimension(R.styleable.AlertDialog_mc_btnTextSize, dp2px(16f))
             positiveTextSize = a.getDimension(
                 R.styleable.AlertDialog_mc_positiveTextSize, btnTextSize
             )
@@ -146,24 +157,19 @@ class AlertDialog private constructor(context: Context) : BaseDialog(context) {
 
             //button textColor
             if (a.hasValue(R.styleable.AlertDialog_mc_btnTextColor)) {
-                positiveTextColor = a.getColorStateList(R.styleable.AlertDialog_mc_btnTextColor)!!
-                negativeTextColor = a.getColorStateList(R.styleable.AlertDialog_mc_btnTextColor)!!
-                neutralTextColor = a.getColorStateList(R.styleable.AlertDialog_mc_btnTextColor)!!
+                val textColor = a.getColorStateList(R.styleable.AlertDialog_mc_btnTextColor)!!
+                positiveTextColor = textColor
+                negativeTextColor = textColor
+                neutralTextColor = textColor
             }
-            if (a.hasValue(R.styleable.AlertDialog_mc_positiveTextColor)) {
-                positiveTextColor = a.getColorStateList(
-                    R.styleable.AlertDialog_mc_positiveTextColor
-                )!!
+            a.ifHas(R.styleable.AlertDialog_mc_positiveTextColor) {
+                positiveTextColor = a.getColorStateList(it)!!
             }
-            if (a.hasValue(R.styleable.AlertDialog_mc_negativeTextColor)) {
-                positiveTextColor = a.getColorStateList(
-                    R.styleable.AlertDialog_mc_negativeTextColor
-                )!!
+            a.ifHas(R.styleable.AlertDialog_mc_negativeTextColor) {
+                negativeTextColor = a.getColorStateList(it)!!
             }
-            if (a.hasValue(R.styleable.AlertDialog_mc_neutralTextColor)) {
-                neutralTextColor = a.getColorStateList(
-                    R.styleable.AlertDialog_mc_neutralTextColor
-                )!!
+            a.ifHas(R.styleable.AlertDialog_mc_neutralTextColor) {
+                neutralTextColor = a.getColorStateList(it)!!
             }
 
             //button text
@@ -194,10 +200,8 @@ class AlertDialog private constructor(context: Context) : BaseDialog(context) {
             }
 
             //title
-            titleGravity = getGravity(a.getInt(R.styleable.AlertDialog_mc_titleGravity, 0))
-            titleTextSize = a.getDimension(
-                R.styleable.AlertDialog_mc_titleTextSize, dp2px(18f)
-            )
+            titleGravity = a.getInt(R.styleable.AlertDialog_mc_titleGravity, Gravity.START)
+            titleTextSize = a.getDimension(R.styleable.AlertDialog_mc_titleTextSize, dp2px(18f))
             if (a.hasValue(R.styleable.AlertDialog_mc_titleTextColor)) {
                 titleTextColor = a.getColorStateList(R.styleable.AlertDialog_mc_titleTextColor)!!
             }
@@ -206,10 +210,8 @@ class AlertDialog private constructor(context: Context) : BaseDialog(context) {
             messageTextSize = a.getDimension(
                 R.styleable.AlertDialog_mc_messageTextSize, btnTextSize
             )
-            if (a.hasValue(R.styleable.AlertDialog_mc_messageTextColor)) {
-                messageTextColor = a.getColorStateList(
-                    R.styleable.AlertDialog_mc_messageTextColor
-                )!!
+            a.ifHas(R.styleable.AlertDialog_mc_messageTextColor) {
+                messageTextColor = a.getColorStateList(it)!!
             }
 
             //list
@@ -219,9 +221,7 @@ class AlertDialog private constructor(context: Context) : BaseDialog(context) {
             if (a.hasValue(R.styleable.AlertDialog_mc_listTextColor)) {
                 listTextColor = a.getColorStateList(R.styleable.AlertDialog_mc_listTextColor)!!
             }
-            listTextSize = a.getDimension(
-                R.styleable.AlertDialog_mc_listTextSize, dp2px(16f)
-            )
+            listTextSize = a.getDimension(R.styleable.AlertDialog_mc_listTextSize, dp2px(16f))
             listDividerColor = a.getColor(
                 R.styleable.AlertDialog_mc_listDividerColor,
                 context.getColor(R.color.color_alert_dialog_divider)
@@ -231,221 +231,176 @@ class AlertDialog private constructor(context: Context) : BaseDialog(context) {
             )
             listDividerVisible = a.getBoolean(R.styleable.AlertDialog_mc_listDividerVisible, false)
 
-            //window
-            windowWidth = a.getDimensionPixelOffset(R.styleable.AlertDialog_mc_windowWidth, -2)
-            windowHeight = a.getDimensionPixelOffset(R.styleable.AlertDialog_mc_windowHeight, -2)
-            windowColor = a.getColor(R.styleable.AlertDialog_mc_windowColor, Color.WHITE)
-            windowAmount = a.getFloat(R.styleable.AlertDialog_mc_windowAmount, 0.5f)
-            windowRadius = a.getDimension(
-                R.styleable.AlertDialog_mc_windowRadius, dp2px(6f)
-            )
-            windowGravity = getGravity(a.getInt(R.styleable.AlertDialog_mc_windowGravity, 4))
-            windowDrawable = a.getDrawable(R.styleable.AlertDialog_mc_windowDrawable)
             a.recycle()
         }
 
-        private fun getGravity(gravity: Int): Int {
-            return when (gravity) {
-                0 -> Gravity.START
-                1 -> Gravity.TOP
-                2 -> Gravity.END
-                3 -> Gravity.BOTTOM
-                4 -> Gravity.CENTER
-                else -> Gravity.START
-            }
-        }
-
-        fun setTitle(title: CharSequence): Builder {
+        fun setTitle(title: CharSequence) = apply {
             titleText = title
-            return this
         }
 
-        fun setTitleTextSize(textSize: Float): Builder {
+        fun setTitle(@StringRes idRes: Int) = apply {
+            titleText = context.getText(idRes)
+        }
+
+        fun setTitleTextSize(textSize: Float) = apply {
             titleTextSize = textSize
-            return this
         }
 
-        fun setTitleTextColor(@ColorInt textColor: Int): Builder {
+        fun setTitleTextColor(@ColorInt textColor: Int) = apply {
             titleTextColor = ColorStateList.valueOf(textColor)
-            return this
         }
 
-        fun setTitleTextColor(textColor: ColorStateList): Builder {
+        fun setTitleTextColor(textColor: ColorStateList) = apply {
             titleTextColor = textColor
-            return this
         }
 
-        fun setMessage(message: CharSequence): Builder {
+        fun setMessage(message: CharSequence) = apply {
             messageText = message
-            return this
         }
 
-        fun setMessageTextSize(textSize: Float): Builder {
+        fun setMessage(@StringRes idRes: Int) = apply {
+            messageText = context.getText(idRes)
+        }
+
+        fun setMessageTextSize(textSize: Float) = apply {
             messageTextSize = textSize
-            return this
         }
 
-        fun setMessageTextColor(@ColorInt textColor: Int): Builder {
+        fun setMessageTextColor(@ColorInt textColor: Int) = apply {
             messageTextColor = ColorStateList.valueOf(textColor)
-            return this
         }
 
-        fun setMessageTextColor(textColor: ColorStateList): Builder {
+        fun setMessageTextColor(textColor: ColorStateList) = apply {
             messageTextColor = textColor
-            return this
         }
 
-        fun setPositiveText(text: CharSequence): Builder {
+        fun setPositiveText(text: CharSequence) = apply {
             positiveText = text
-            return this
         }
 
-        fun setNegativeText(text: CharSequence): Builder {
+        fun setPositiveText(@StringRes idRes: Int) = apply {
+            positiveText = context.getText(idRes)
+        }
+
+        fun setNegativeText(text: CharSequence) = apply {
             negativeText = text
-            return this
         }
 
-        fun setNeutralText(text: CharSequence): Builder {
+        fun setNegativeText(@StringRes idRes: Int) = apply {
+            negativeText = context.getText(idRes)
+        }
+
+        fun setNeutralText(text: CharSequence) = apply {
             neutralText = text
-            return this
         }
 
-        fun setOnPositiveClickListener(listener: OnClickListener?): Builder {
+        fun setNeutralText(@StringRes idRes: Int) = apply {
+            neutralText = context.getText(idRes)
+        }
+
+        fun setOnPositiveClickListener(listener: OnClickListener?) = apply {
             positiveClickListener = listener
-            return this
         }
 
-        fun setOnNegativeClickListener(listener: OnClickListener?): Builder {
+        fun setOnNegativeClickListener(listener: OnClickListener?) = apply {
             negativeClickListener = listener
-            return this
         }
 
-        fun setOnNeutralClickListener(listener: OnClickListener?): Builder {
+        fun setOnNeutralClickListener(listener: OnClickListener?) = apply {
             neutralClickListener = listener
-            return this
         }
 
-        fun setOnItemSelectedListener(listener: OnItemSelectedListener?): Builder {
+        fun setOnItemSelectedListener(listener: OnItemSelectedListener?) = apply {
             onItemSelectedListener = listener
-            return this
         }
 
-        fun setPositiveButton(text: CharSequence, listener: OnClickListener? = null): Builder {
+        fun setPositiveButton(text: CharSequence, listener: OnClickListener? = null) = apply {
             positiveText = text
             positiveClickListener = listener
-            return this
         }
 
-        fun setNegativeButton(text: CharSequence, listener: OnClickListener? = null): Builder {
+        fun setNegativeButton(text: CharSequence, listener: OnClickListener? = null) = apply {
             negativeText = text
             negativeClickListener = listener
-            return this
         }
 
-        fun setNeutralButton(text: CharSequence, listener: OnClickListener? = null): Builder {
+        fun setNeutralButton(text: CharSequence, listener: OnClickListener? = null) = apply {
             neutralText = text
             neutralClickListener = listener
-            return this
         }
 
-        fun setPositiveTextColor(color: ColorStateList): Builder {
+        fun setPositiveTextColor(color: ColorStateList) = apply {
             positiveTextColor = color
-            return this
         }
 
-        fun setNegativeTextColor(color: ColorStateList): Builder {
+        fun setNegativeTextColor(color: ColorStateList) = apply {
             negativeTextColor = color
-            return this
         }
 
-        fun setNeutralTextColor(color: ColorStateList): Builder {
+        fun setNeutralTextColor(color: ColorStateList) = apply {
             neutralTextColor = color
-            return this
         }
 
-        fun setPositiveTextColor(drawable: Int): Builder {
+        fun setPositiveTextColor(drawable: Int) = apply {
             positiveTextColor = context.getColorStateList(drawable)
-            return this
         }
 
-        fun setNegativeTextColor(drawable: Int): Builder {
+        fun setNegativeTextColor(drawable: Int) = apply {
             negativeTextColor = context.getColorStateList(drawable)
-            return this
         }
 
-        fun setNeutralTextColor(drawable: Int): Builder {
+        fun setNeutralTextColor(drawable: Int) = apply {
             neutralTextColor = context.getColorStateList(drawable)
-            return this
         }
 
-        fun setPositiveTextSize(textSize: Float): Builder {
+        fun setPositiveTextSize(textSize: Float) = apply {
             positiveTextSize = textSize
-            return this
         }
 
-        fun setNegativeTextSize(textSize: Float): Builder {
+        fun setNegativeTextSize(textSize: Float) = apply {
             negativeTextSize = textSize
-            return this
         }
 
-        fun setNeutralTextSize(textSize: Float): Builder {
+        fun setNeutralTextSize(textSize: Float) = apply {
             neutralTextSize = textSize
-            return this
         }
 
-        fun setPositiveBackground(background: Drawable): Builder {
+        fun setPositiveBackground(background: Drawable) = apply {
             positiveBackground = background
-            return this
         }
 
-        fun setNegativeBackground(background: Drawable): Builder {
+        fun setNegativeBackground(background: Drawable) = apply {
             negativeBackground = background
-            return this
         }
 
-        fun setNeutralBackground(background: Drawable): Builder {
+        fun setNeutralBackground(background: Drawable) = apply {
             neutralBackground = background
-            return this
         }
 
-        fun setPositiveBackground(@DrawableRes background: Int): Builder {
+        fun setPositiveBackground(@DrawableRes background: Int) = apply {
             positiveBackground = AppCompatResources.getDrawable(context, background)
-            return this
         }
 
-        fun setNegativeBackground(@DrawableRes background: Int): Builder {
+        fun setNegativeBackground(@DrawableRes background: Int) = apply {
             negativeBackground = AppCompatResources.getDrawable(context, background)
-            return this
         }
 
-        fun setNeutralBackground(@DrawableRes background: Int): Builder {
+        fun setNeutralBackground(@DrawableRes background: Int) = apply {
             neutralBackground = AppCompatResources.getDrawable(context, background)
-            return this
         }
 
-        fun setOnDismissListener(listener: DialogInterface.OnDismissListener?): Builder {
-            onDismissListener = listener
-            return this
-        }
-
-        fun setOnCancelListener(listener: DialogInterface.OnCancelListener?): Builder {
-            onCancelListener = listener
-            return this
-        }
-
-        fun setItems(@ArrayRes itemsId: Int, listener: OnItemClickListener? = null): Builder {
+        fun setItems(@ArrayRes itemsId: Int, listener: OnItemClickListener? = null) = apply {
             return setItems(context.resources.getTextArray(itemsId), listener)
         }
 
-        fun setItems(array: Array<out Any>?, listener: OnItemClickListener? = null): Builder {
+        fun setItems(array: Array<out Any>?, listener: OnItemClickListener? = null) = apply {
             return setItems(array?.toList(), listener)
         }
 
-        fun setItems(list: List<Any>?, listener: OnItemClickListener? = null): Builder {
+        fun setItems(list: List<Any>?, listener: OnItemClickListener? = null) = apply {
             listAdapter = Adapter(list)
-            listAdapter!!.showType = Adapter.TYPE_ITEM
+            listAdapter!!.showType = TYPE_ITEM
             listAdapter!!.onItemClickListener = listener
-            return this
         }
 
         /**
@@ -457,7 +412,7 @@ class AlertDialog private constructor(context: Context) : BaseDialog(context) {
          */
         fun setSingleChoiceItems(
             @ArrayRes itemsId: Int, checkedItem: Int, listener: OnItemClickListener? = null
-        ): Builder {
+        ) = apply {
             return setSingleChoiceItems(
                 context.resources.getTextArray(itemsId), checkedItem, listener
             )
@@ -465,20 +420,19 @@ class AlertDialog private constructor(context: Context) : BaseDialog(context) {
 
         fun setSingleChoiceItems(
             array: Array<out Any>?, checkedItem: Int, listener: OnItemClickListener? = null
-        ): Builder {
+        ) = apply {
             return setSingleChoiceItems(array?.toList(), checkedItem, listener)
         }
 
         fun setSingleChoiceItems(
             list: List<Any>?, checkedItem: Int, listener: OnItemClickListener? = null
-        ): Builder {
+        ) = apply {
             listAdapter = Adapter(list)
             if (checkedItem >= 0) {
                 listAdapter!!.checkedItems.add(checkedItem)
             }
-            listAdapter!!.showType = Adapter.TYPE_SINGLE_CHOICE
+            listAdapter!!.showType = TYPE_SINGLE_CHOICE
             listAdapter!!.onItemClickListener = listener
-            return this
         }
 
         /**
@@ -491,7 +445,7 @@ class AlertDialog private constructor(context: Context) : BaseDialog(context) {
         fun setMultiChoiceItems(
             @ArrayRes itemsId: Int, checkedItems: IntArray,
             listener: OnMultiItemClickListener? = null
-        ): Builder {
+        ) = apply {
             return setMultiChoiceItems(
                 context.resources.getTextArray(itemsId), checkedItems, listener
             )
@@ -500,28 +454,25 @@ class AlertDialog private constructor(context: Context) : BaseDialog(context) {
         fun setMultiChoiceItems(
             array: Array<out Any>?, checkedItems: IntArray,
             listener: OnMultiItemClickListener? = null
-        ): Builder {
+        ) = apply {
             return setMultiChoiceItems(array?.toList(), checkedItems.toList(), listener)
         }
 
         fun setMultiChoiceItems(
             list: List<Any>?, checkedItems: List<Int>, listener: OnMultiItemClickListener? = null
-        ): Builder {
+        ) = apply {
             listAdapter = Adapter(list)
             listAdapter!!.checkedItems.addAll(checkedItems)
-            listAdapter!!.showType = Adapter.TYPE_MULTI_CHOICE
+            listAdapter!!.showType = TYPE_MULTI_CHOICE
             listAdapter!!.onMultiItemClickListener = listener
-            return this
         }
 
-        fun setListTextColor(@ColorInt textColor: Int): Builder {
+        fun setListTextColor(@ColorInt textColor: Int) = apply {
             listTextColor = ColorStateList.valueOf(textColor)
-            return this
         }
 
-        fun setListTextSize(textSize: Float): Builder {
+        fun setListTextSize(textSize: Float) = apply {
             listTextSize = textSize
-            return this
         }
 
         /**
@@ -530,148 +481,40 @@ class AlertDialog private constructor(context: Context) : BaseDialog(context) {
          * @param layoutRes Int
          * @return Builder
          */
-        fun setListItemLayout(@LayoutRes layoutRes: Int): Builder {
+        fun setListItemLayout(@LayoutRes layoutRes: Int) = apply {
             listItemRes = layoutRes
-            return this
         }
 
-        fun setListDividerHeight(height: Float): Builder {
+        fun setListDividerHeight(height: Float) = apply {
             listDividerHeight = height
-            return this
         }
 
-        fun setListDividerColor(@ColorInt color: Int): Builder {
+        fun setListDividerColor(@ColorInt color: Int) = apply {
             listDividerColor = color
-            return this
         }
 
-        fun setListDividerVisible(visible: Boolean): Builder {
+        fun setListDividerVisible(visible: Boolean) = apply {
             listDividerVisible = visible
-            return this
         }
 
-        /**
-         * 设置[cancelable]为false时，如果[canceledOnTouchOutside]为true会导致其失效，所以当[cancelable]
-         * 为false时，手动设置[canceledOnTouchOutside]为false
-         * @param cancelable Boolean
-         * @return Builder
-         */
-        fun setCancelable(cancelable: Boolean): Builder {
-            this.cancelable = cancelable
-            if (!this.cancelable) {
-                canceledOnTouchOutside = false
-            }
-            return this
-        }
-
-        fun setCanceledOnTouchOutside(canceled: Boolean): Builder {
-            canceledOnTouchOutside = canceled
-            return this
-        }
-
-        fun setView(view: View): Builder {
-            setView(
-                view, FrameLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-                )
-            )
-            return this
-        }
-
-        fun setView(view: View, layoutParams: FrameLayout.LayoutParams): Builder {
+        fun setView(
+            view: View,
+            layoutParams: FrameLayout.LayoutParams = FrameLayout.LayoutParams(-1, -1)
+        ) = apply {
             customView = view
             viewLayoutParams = layoutParams
-            return this
         }
 
-        fun setView(@LayoutRes layoutRes: Int): Builder {
+        fun setView(
+            @LayoutRes layoutRes: Int,
+            layoutParams: FrameLayout.LayoutParams = FrameLayout.LayoutParams(-1, -1)
+        ) = apply {
             viewLayoutRes = layoutRes
-            viewLayoutParams = FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-            )
-            return this
-        }
-
-        fun setWindowGravity(gravity: Int): Builder {
-            windowGravity = gravity
-            return this
-        }
-
-        /**
-         * 设置dialog在X方向上的偏移量，根据[windowGravity]包含[Gravity.START]/[Gravity.END]
-         * 来决定具体是哪个方向上的偏移
-         * @param offset 负值无效
-         * @return Builder
-         */
-        fun setXOffset(offset: Int): Builder {
-            xOffset = offset
-            return this
-        }
-
-        /**
-         * 设置dialog在Y方向上的偏移量，根据[windowGravity]包含[Gravity.TOP]/[Gravity.BOTTOM]
-         * 来决定具体是哪个方向上的偏移
-         * @param offset 负值无效
-         * @return Builder
-         */
-        fun setYOffset(offset: Int): Builder {
-            yOffset = offset
-            return this
-        }
-
-        fun setWindowAmount(amount: Float): Builder {
-            windowAmount = amount
-            return this
-        }
-
-        fun setWindowWidth(width: Int): Builder {
-            windowWidth = width
-            return this
-        }
-
-        fun setWindowHeight(height: Int): Builder {
-            windowHeight = height
-            return this
-        }
-
-        fun setWindowColor(@ColorInt color: Int): Builder {
-            windowColor = color
-            return this
-        }
-
-        fun setWindowRadius(radius: Float): Builder {
-            windowRadius = radius
-            return this
-        }
-
-        fun setWindowDrawable(drawable: Drawable): Builder {
-            windowDrawable = drawable
-            return this
-        }
-
-        fun withAnimation(aniStyle: Int): Builder {
-            windowAnimation = aniStyle
-            return this
+            viewLayoutParams = layoutParams
         }
 
         fun create(): AlertDialog {
-            val alertDialog = AlertDialog(context)
-            setDialogInternal(alertDialog)
-            alertDialog.dialogFragment.isCancelable = cancelable
-            alertDialog.dialogFragment.setCanceledOnTouchOutside(canceledOnTouchOutside)
-                .setOnDismissListener(onDismissListener)
-                .setOnCancelListener(onCancelListener)
-                .setXOffset(xOffset)
-                .setYOffset(yOffset)
-                .setAnimate(windowAnimation)
-                .setAmount(windowAmount)
-                .setGravity(windowGravity)
-                .setWindowColor(windowColor)
-                .setRadius(windowRadius)
-                .setBackground(windowDrawable)
-                .setWidth(windowWidth)
-                .setHeight(windowHeight)
-            return alertDialog
+            return AlertDialog(context).apply { setDialogInternal(this) }
         }
 
         fun show(tag: String = "default"): AlertDialog {
@@ -681,19 +524,19 @@ class AlertDialog private constructor(context: Context) : BaseDialog(context) {
         }
 
         private fun setDialogInternal(alertDialog: AlertDialog) {
-            with(alertDialog.titleView) {
+            alertDialog.titleView.apply {
                 setTextColor(titleTextColor)
                 setTextSize(TypedValue.COMPLEX_UNIT_PX, titleTextSize)
                 text = titleText
                 gravity = titleGravity
                 isVisible = !titleText.isNullOrEmpty()
             }
-            with(alertDialog.messageView) {
+            alertDialog.messageView.apply {
                 setTextColor(messageTextColor)
                 setTextSize(TypedValue.COMPLEX_UNIT_PX, messageTextSize)
                 text = messageText
             }
-            with(alertDialog.positiveButton) {
+            alertDialog.positiveButton.apply {
                 text = positiveText ?: ""
                 setTextColor(positiveTextColor)
                 background = positiveBackground
@@ -702,7 +545,7 @@ class AlertDialog private constructor(context: Context) : BaseDialog(context) {
                     positiveClickListener?.onClick(alertDialog) ?: alertDialog.dismiss()
                 }
             }
-            with(alertDialog.negativeButton) {
+            alertDialog.negativeButton.apply {
                 text = negativeText ?: ""
                 setTextColor(negativeTextColor)
                 background = negativeBackground
@@ -711,7 +554,7 @@ class AlertDialog private constructor(context: Context) : BaseDialog(context) {
                     negativeClickListener?.onClick(alertDialog) ?: alertDialog.dismiss()
                 }
             }
-            with(alertDialog.neutralButton) {
+            alertDialog.neutralButton.apply {
                 text = neutralText ?: ""
                 setTextColor(neutralTextColor)
                 background = neutralBackground
@@ -720,18 +563,18 @@ class AlertDialog private constructor(context: Context) : BaseDialog(context) {
                     neutralClickListener?.onClick(alertDialog) ?: alertDialog.dismiss()
                 }
             }
-            with(alertDialog.binding) {
+            alertDialog.apply {
                 //没有标题，隐藏标题的头部Space
-                titleSpace.isVisible = !tvTitle.isVisible
+                titleSpace.isVisible = !titleView.isVisible
                 //没有内容，隐藏ScrollView
                 scrollView.isVisible = !messageText.isNullOrEmpty()
                 //没有自定义View，隐藏自定义View的容器
-                val hasCustomView = customView != null && viewLayoutRes != 0
+                val hasCustomView = customView != null || viewLayoutRes != 0
                 viewContainer.isVisible =
                     !scrollView.isVisible && (hasCustomView || listAdapter != null)
                 //没有按钮，隐藏按钮的Layout，如果有按钮，为ScrollView设置一个最小高度
-                val hasBtn = btnPositive.isVisible || btnNegative.isVisible || btnNeutral.isVisible
-                containerBtn.isVisible = hasBtn
+                btnContainer.isVisible =
+                    positiveButton.isVisible || negativeButton.isVisible || neutralButton.isVisible
                 scrollView.minimumHeight = dp2px(46f).toInt()
 
                 //如果有ScrollView，设置indicators
@@ -752,7 +595,7 @@ class AlertDialog private constructor(context: Context) : BaseDialog(context) {
                         alertDialog.viewContainer.addView(customView, viewLayoutParams)
                     }
                     listAdapter != null -> {
-                        val recyclerView = RecyclerView(context)
+                        val recyclerView = RecyclerView(this@Builder.context)
                         recyclerView.layoutManager = LinearLayoutManager(context)
                         if (listDividerVisible) {
                             recyclerView.addItemDecoration(
@@ -772,27 +615,33 @@ class AlertDialog private constructor(context: Context) : BaseDialog(context) {
                         recyclerView.setPaddingTop(viewContainer.paddingTop)
                         recyclerView.setPaddingBottom(viewContainer.paddingBottom)
                         viewContainer.setPadding(0)
-                        setScrollIndicators(recyclerView, this)
+                        setScrollIndicators(recyclerView, alertDialog)
                     }
                 }
             }
         }
 
-        private fun setScrollIndicators(contentView: View, binding: McDialogAlertBinding) {
+        private fun setScrollIndicators(contentView: View, dialog: AlertDialog) {
             if (contentView.isVisible) {
-                binding.btnDivider.isVisible = true
-                val btnVisible = binding.containerBtn.isVisible
+                dialog.btnDivider.isVisible = true
+                val btnVisible = dialog.btnContainer.isVisible
                 contentView.post {
-                    binding.btnDivider.isVisible = contentView.canScrollVertically(1) && btnVisible
+                    dialog.btnDivider.isVisible = contentView.canScrollVertically(1) && btnVisible
                 }
                 contentView.setOnScrollChangeListener { v, _, _, _, _ ->
                     val canScrollDown = v.canScrollVertically(-1)
                     val canScrollUp = v.canScrollVertically(1)
-                    binding.titleDivider.isVisible = canScrollDown && !titleText.isNullOrEmpty()
-                    binding.btnDivider.isVisible = canScrollUp && btnVisible
+                    dialog.titleDivider.isVisible = canScrollDown && !titleText.isNullOrEmpty()
+                    dialog.btnDivider.isVisible = canScrollUp && btnVisible
                 }
             }
         }
+    }
+
+    companion object {
+        const val TYPE_ITEM = 0
+        const val TYPE_SINGLE_CHOICE = 1
+        const val TYPE_MULTI_CHOICE = 2
     }
 
     private class Adapter(private val list: List<Any>?) : RecyclerView.Adapter<ViewHolder>() {
@@ -804,12 +653,6 @@ class AlertDialog private constructor(context: Context) : BaseDialog(context) {
         var onItemClickListener: OnItemClickListener? = null
         var onMultiItemClickListener: OnMultiItemClickListener? = null
         var onItemSelectedListener: OnItemSelectedListener? = null
-
-        companion object {
-            const val TYPE_ITEM = 0
-            const val TYPE_SINGLE_CHOICE = 1
-            const val TYPE_MULTI_CHOICE = 2
-        }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             return ViewHolder(parent.inflater(layoutRes))

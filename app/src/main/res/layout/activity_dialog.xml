@@ -9,14 +9,55 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:padding="20dp">
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:onClick="baseDialogClick"
-            android:text="BaseDialog"
-            android:textColor="@color/black"
+            android:onClick="alertDialogClick1"
+            android:text="AlertDialog1"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onClick="alertDialogClick2"
+            android:text="AlertDialog2"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onClick="alertDialogClick3"
+            android:text="AlertDialog3"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onClick="alertDialogClick4"
+            android:text="AlertDialog4"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onClick="alertDialogClick5"
+            android:text="AlertDialog5"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onClick="alertDialogClick6"
+            android:text="AlertDialog6"
+            android:textColor="@color/white"
             android:textSize="16sp" />
 
     </LinearLayout>

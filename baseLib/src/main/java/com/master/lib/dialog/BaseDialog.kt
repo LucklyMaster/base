@@ -24,9 +24,7 @@ import com.masterchan.lib.R
  * @date 2021-12-14 14:30
  */
 open class BaseDialog @JvmOverloads constructor(
-    context: Context,
-    var contentView: View? = null,
-    var layoutRes: Int = 0
+    context: Context, var contentView: View? = null
 ) : DialogFragment() {
 
     protected val mActivity: FragmentActivity
@@ -48,6 +46,10 @@ open class BaseDialog @JvmOverloads constructor(
     protected var dismissListener: DialogInterface.OnDismissListener? = null
     protected var cancelListener: DialogInterface.OnCancelListener? = null
 
+    constructor(context: Context, layoutRes: Int) : this(
+        context, LayoutInflater.from(context).inflate(layoutRes, null)
+    )
+
     init {
         val activityContext = context.activity
         require(activityContext is FragmentActivity) { "the Context must be a FragmentActivity" }
@@ -60,11 +62,7 @@ open class BaseDialog @JvmOverloads constructor(
         savedInstanceState: Bundle?
     ): View? {
         initDialog()
-        return if (contentView != null) {
-            contentView
-        } else {
-            LayoutInflater.from(context).inflate(layoutRes, container)
-        }
+        return contentView
     }
 
     protected open fun initDialog() {
