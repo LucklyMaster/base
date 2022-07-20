@@ -31,31 +31,17 @@ import com.masterchan.lib.R
 open class AlertDialog private constructor(context: Context) :
     BaseDialog(context, R.layout.mc_dialog_alert) {
 
-    val titleView: TextView
-    val messageView: TextView
-    val positiveButton: Button
-    val negativeButton: Button
-    val neutralButton: Button
-    val viewContainer: FrameLayout
-    private val titleSpace: Space
-    private val scrollView: ScrollView
-    private val btnContainer: LinearLayout
-    private val btnDivider: View
-    private val titleDivider: View
-
-    init {
-        titleView = contentView!!.findViewById(R.id.tv_title)
-        messageView = contentView!!.findViewById(R.id.tv_message)
-        positiveButton = contentView!!.findViewById(R.id.btn_positive)
-        negativeButton = contentView!!.findViewById(R.id.btn_negative)
-        neutralButton = contentView!!.findViewById(R.id.btn_neutral)
-        viewContainer = contentView!!.findViewById(R.id.view_container)
-        titleSpace = contentView!!.findViewById(R.id.titleSpace)
-        scrollView = contentView!!.findViewById(R.id.scrollView)
-        btnContainer = contentView!!.findViewById(R.id.container_btn)
-        btnDivider = contentView!!.findViewById(R.id.btnDivider)
-        titleDivider = contentView!!.findViewById(R.id.titleDivider)
-    }
+    val titleView: TextView = contentView!!.findViewById(R.id.tv_title)
+    val messageView: TextView = contentView!!.findViewById(R.id.tv_message)
+    val positiveButton: Button = contentView!!.findViewById(R.id.btn_positive)
+    val negativeButton: Button = contentView!!.findViewById(R.id.btn_negative)
+    val neutralButton: Button = contentView!!.findViewById(R.id.btn_neutral)
+    val viewContainer: FrameLayout = contentView!!.findViewById(R.id.view_container)
+    private val titleSpace: Space = contentView!!.findViewById(R.id.titleSpace)
+    private val scrollView: ScrollView = contentView!!.findViewById(R.id.scrollView)
+    private val btnContainer: LinearLayout = contentView!!.findViewById(R.id.container_btn)
+    private val btnDivider: View = contentView!!.findViewById(R.id.btnDivider)
+    private val titleDivider: View = contentView!!.findViewById(R.id.titleDivider)
 
     /**
      * dialog的button点击事件，包括[positiveButton]、[negativeButton]、[neutralButton]

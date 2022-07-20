@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.*
 import android.view.WindowManager.LayoutParams.FLAG_BLUR_BEHIND
 import androidx.annotation.ColorInt
+import androidx.annotation.StyleRes
 import androidx.core.view.setPadding
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
@@ -29,6 +30,7 @@ open class BaseDialog @JvmOverloads constructor(
 
     protected val mActivity: FragmentActivity
 
+    protected var dialogTheme = 0
     protected var windowDrawable: Drawable? = null
     protected var windowColor = Color.WHITE
     protected var windowRadius = 6f
@@ -39,6 +41,7 @@ open class BaseDialog @JvmOverloads constructor(
     protected var windowAnimate: Int? = null
     protected var windowElevation = dp2px(10f)
     protected var windowBehindBlurRadius = 0
+    protected var contentBlurRadius = 0
     protected var xOffset = 0
     protected var yOffset = 0
     protected var cancellable = true
@@ -78,6 +81,9 @@ open class BaseDialog @JvmOverloads constructor(
             decorView.setPadding(0)
             setBackgroundDrawable(backgroundDrawable)
             setElevation(windowElevation)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && contentBlurRadius > 0) {
+                setBackgroundBlurRadius(contentBlurRadius)
+            }
             setWindowAttrs(this)
             //设置进出场动画
             windowAnimate?.let {
@@ -113,10 +119,11 @@ open class BaseDialog @JvmOverloads constructor(
         attributes.y = yOffset
         attributes.dimAmount = windowAmount
         attributes.gravity = windowGravity
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        //设置背景高斯模糊
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && windowBehindBlurRadius > 0) {
+            attributes.flags = FLAG_BLUR_BEHIND
             attributes.blurBehindRadius = windowBehindBlurRadius
         }
-        attributes.flags = FLAG_BLUR_BEHIND
         window.attributes = attributes
     }
 
@@ -128,6 +135,14 @@ open class BaseDialog @JvmOverloads constructor(
     override fun onCancel(dialog: android.content.DialogInterface) {
         super.onCancel(dialog)
         cancelListener?.onCancel(requireDialog())
+    }
+
+    override fun getTheme(): Int {
+        return dialogTheme
+    }
+
+    fun setTheme(@StyleRes dialogTheme: Int) = apply {
+        this.dialogTheme = dialogTheme
     }
 
     fun setCanceledOnTouchOutside(canceled: Boolean) = apply {
@@ -148,6 +163,10 @@ open class BaseDialog @JvmOverloads constructor(
 
     fun setWindowColor(@ColorInt color: Int) = apply {
         windowColor = color
+    }
+
+    fun setWindowColor(color: String) = apply {
+        windowColor = Color.parseColor(color)
     }
 
     fun setRadius(radius: Float) = apply {
@@ -192,6 +211,18 @@ open class BaseDialog @JvmOverloads constructor(
 
     fun setWindowBehindBlur(radius: Int) = apply {
         windowBehindBlurRadius = radius
+    }
+
+    /**
+     * 高斯模糊生效需要设置[android.R.attr.windowIsTranslucent]、[android.R.attr.windowIsFloating]
+     * see [Window.setBackgroundBlurRadius]
+     * @param radius Int
+     * @param theme Int
+     * @return BaseDialog
+     */
+    fun setContentBlur(radius: Int, @StyleRes theme: Int = R.style.TranslucentDialog) = apply {
+        contentBlurRadius = radius
+        dialogTheme = theme
     }
 
     fun setElevation(elevation: Float) = apply {

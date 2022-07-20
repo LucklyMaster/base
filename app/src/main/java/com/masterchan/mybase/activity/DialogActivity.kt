@@ -18,6 +18,9 @@ class DialogActivity : MyBaseActivity<ActivityDialogBinding>() {
             .setTitle("Title")
             .setPositiveText("确认")
             .create()
+            .setWindowColor("#50FFFFFF")
+            .setAmount(0F)
+            .setContentBlur(dp2pxi(60))
             .setOnDismissListener { MToast.show("dismiss") }
             .show()
     }
@@ -48,6 +51,34 @@ class DialogActivity : MyBaseActivity<ActivityDialogBinding>() {
             .setPositiveText("确认")
             .create()
             .setHeight(dp2pxi(300))
+            .setOnDismissListener { MToast.show("dismiss") }
+            .show()
+    }
+
+    fun alertDialogClick5(view: View) {
+        val list = (0..10).map { it.toString() }
+        AlertDialog.Builder(this)
+            .setTitle("Title")
+            .setPositiveText("确认")
+            .setSingleChoiceItems(list, 0) { _, _, position ->
+                MToast.show(position.toString())
+            }
+            .create()
+            .setOnDismissListener { MToast.show("dismiss") }
+            .show()
+    }
+
+    fun alertDialogClick6(view: View) {
+        val list = (0..10).map { it.toString() }
+        AlertDialog.Builder(this)
+            .setTitle("Title")
+            .setPositiveText("确认")
+            .setMultiChoiceItems(list, listOf(0))
+            .setOnItemSelectedListener { _, _, checkedItems ->
+                MToast.show(checkedItems.toString())
+            }
+            .create()
+            .setWindowBehindBlur(dp2pxi(60))
             .setOnDismissListener { MToast.show("dismiss") }
             .show()
     }
