@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.ibotta.gradle.aop'
 }
 
 android {
@@ -33,9 +34,12 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    aopWeave {
+    }
 }
 
 dependencies {
+    implementation project(path: ':baseLib')
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.4.0'
@@ -45,5 +49,5 @@ dependencies {
     implementation 'io.github.lucksiege:pictureselector:v3.10.2'
     implementation 'com.github.bumptech.glide:glide:4.13.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
-    implementation project(path: ':baseLib')
+    implementation "org.aspectj:aspectjrt:1.9.6"
 }
