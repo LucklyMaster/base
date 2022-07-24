@@ -14,7 +14,8 @@ class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         printAppInfo()
         setOnClickListeners(
-            this, binding.keyboard, binding.imageUtils, binding.scoped, binding.dialog
+            this, binding.keyboard, binding.imageUtils, binding.scoped, binding.dialog,
+            binding.permissions
         )
     }
 
@@ -42,6 +43,7 @@ class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener
             binding.imageUtils -> ShapeViewActivity::class.java
             binding.scoped -> ScopedStorageActivity::class.java
             binding.dialog -> DialogActivity::class.java
+            binding.permissions -> PermissionsActivity::class.java
             else -> MainActivity::class.java
         }
         startActivity(clazz)

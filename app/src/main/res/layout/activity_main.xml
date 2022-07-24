@@ -42,5 +42,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Dialog" />
+
+        <Button
+            android:id="@+id/permissions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Permissions" />
     </LinearLayout>
 </ScrollView>
