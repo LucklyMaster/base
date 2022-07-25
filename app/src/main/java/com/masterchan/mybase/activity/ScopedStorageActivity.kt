@@ -25,11 +25,11 @@ import java.io.File
  */
 class ScopedStorageActivity : MyBaseActivity<ActivityScopedStorageBinding>() {
 
-    private val relativePath = "${Environment.DIRECTORY_DOCUMENTS}/MyBase4"
-    private val relativePath2 = "${Environment.DIRECTORY_DOCUMENTS}/MyBase5"
-    private val relativePath3 = "${Environment.DIRECTORY_DOCUMENTS}/MyBase6"
-    private val relativePath4 = "${Environment.DIRECTORY_DCIM}/MyBase7"
-    private val relativePath5 = "${Environment.DIRECTORY_ALARMS}/MyBase7"
+    private val relativePath = "${Environment.DIRECTORY_DOCUMENTS}/MyBase8"
+    private val relativePath2 = "${Environment.DIRECTORY_DOCUMENTS}/MyBase9"
+    private val relativePath3 = "${Environment.DIRECTORY_DOCUMENTS}/MyBase10"
+    private val relativePath4 = "${Environment.DIRECTORY_DCIM}/MyBase11"
+    private val relativePath5 = "${Environment.DIRECTORY_ALARMS}/MyBase11"
 
     private val file1 = "${relativePath}/a.txt"
     private val file2 = "${relativePath}/b.txt"
@@ -136,15 +136,24 @@ class ScopedStorageActivity : MyBaseActivity<ActivityScopedStorageBinding>() {
                 MediaAccess.delete(it)
             }
         }
-        val result2 = MediaAccess.delete(Environment.DIRECTORY_DOWNLOADS)
-        val result3 = MediaAccess.delete(Environment.DIRECTORY_DCIM)
-        MToast.showLong("删除文件:$result,$result2,$result3")
+        val result1 = MediaAccess.delete(relativePath)
+        val result2 = MediaAccess.delete(relativePath2)
+        val result3 = MediaAccess.delete(relativePath3)
+        val result4 = MediaAccess.delete(relativePath4)
+        val result5 = MediaAccess.delete(relativePath5)
+        MToast.showLong("删除文件:$result1,$result2,$result3,$result4,$result5")
     }
 
     fun getAllFiles(view: View) {
-        MediaAccess.listFiles(Environment.DIRECTORY_DOCUMENTS)?.forEach { MLog.d(it) }
-        MediaAccess.listFiles(Environment.DIRECTORY_DOWNLOADS)?.forEach { MLog.d(it) }
-        MediaAccess.listFiles(Environment.DIRECTORY_DCIM)?.forEach { MLog.d(it) }
+        MediaAccess.listFiles(Environment.DIRECTORY_DOCUMENTS)?.forEach {
+            MLog.d(it)
+        }
+        MediaAccess.listFiles(Environment.DIRECTORY_DOWNLOADS)?.forEach {
+            MLog.d(it)
+        }
+        MediaAccess.listFiles(Environment.DIRECTORY_DCIM)?.forEach {
+            MLog.d(it)
+        }
     }
 
     fun rename(view: View) {
