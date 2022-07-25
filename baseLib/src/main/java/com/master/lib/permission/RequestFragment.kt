@@ -1,10 +1,15 @@
 package com.master.lib.permission
 
+import android.Manifest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.master.lib.ext.isScopedStorage
+import com.master.lib.utils.AndroidVersion
+import com.master.lib.utils.XmlUtils
+import com.masterchan.lib.BuildConfig
 
 /**
  * RequestFragment
@@ -19,7 +24,7 @@ class RequestFragment : Fragment() {
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) {
-        dispatchCallback(it)
+        dispatchCallback(it.toMutableMap())
         detachActivity(requireActivity())
     }
 
@@ -53,35 +58,100 @@ class RequestFragment : Fragment() {
     private fun request(permissions: MutableList<String>) {
         this.permissions = permissions
         lifecycleScope.launchWhenResumed {
-            if (viewModel.permissions.isEmpty()) {
-                viewModel.permissions.addAll(this@RequestFragment.permissions!!)
-            }
             if (viewModel.callback == null) {
                 viewModel.callback = callback
             }
-            requestPermissionLauncher.launch(viewModel.permissions.toTypedArray())
+            val list = Utils.transformPermissions(permissions)
+            if (BuildConfig.DEBUG) {
+                checkPermissions(list)
+            }
+            if (viewModel.permissions.isEmpty()) {
+                viewModel.permissions.addAll(this@RequestFragment.permissions!!)
+            }
+            val list = optimizeStoragePermission(viewModel.permissions)
+            if (list.isEmpty()) {
+                dispatchCallback(viewModel.permissions.associateWith { true }.toMutableMap())
+            } else {
+                requestPermissionLauncher.launch(list.toTypedArray())
+            }
         }
     }
 
-    private fun dispatchCallback(result: Map<String, Boolean>) {
-        val allMap = mutableMapOf<String, Int>()
+    private fun optimizePermissions(permissions: MutableList<String>) {
+        //Android12之前扫描蓝牙需要精确定位权限
+        if (!AndroidVersion.isAndroid12() &&
+            permissions.contains(Manifest.permission.BLUETOOTH_SCAN) &&
+            !permissions.contains(Manifest.permission.ACCESS_FINE_LOCATION)
+        ) {
+            permissions.remove(Manifest.permission.BLUETOOTH_SCAN)
+            permissions.add(Manifest.permission.BLUETOOTH)
+            permissions.add(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+        //Android11存储权限
+        if (permissions.contains(Manifest.permission.MANAGE_EXTERNAL_STORAGE)) {
+            if (!AndroidVersion.isAndroid11()) {
+                permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+                permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            }
+        }
+        //Android10活动步数权限
+        if (!AndroidVersion.isAndroid10() &&
+            permissions.contains(Manifest.permission.ACTIVITY_RECOGNITION) &&
+            !permissions.contains(Manifest.permission.BODY_SENSORS)
+        ) {
+            permissions.add(Manifest.permission.BODY_SENSORS)
+        }
+        //Android8手机号码权限
+        if (permissions.contains(Manifest.permission.READ_PHONE_NUMBERS)) {
+            if (!AndroidVersion.isAndroid8()) {
+                permissions.remove(Manifest.permission.READ_PHONE_NUMBERS)
+                permissions.add(Manifest.permission.READ_PHONE_STATE)
+            }
+        }
+    }
+
+    private fun optimizeStoragePermission(permissions: MutableList<String>): MutableList<String> {
+        val list = permissions.toMutableList()
+        if (isScopedStorage) {
+            list.remove(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            list.remove(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+        return list
+    }
+
+    private fun checkPermissions(requestPermissions: MutableList<String>) {
+        val manifestPermissions = XmlUtils.getManifestPermissions(requireContext()).map { it.key }
+        requestPermissions.forEach {
+            check(manifestPermissions.contains(it)) {
+                "the request permissions[$it] must be contains int the AndroidManifest.xml"
+            }
+        }
+    }
+
+    private fun dispatchCallback(result: MutableMap<String, Boolean>) {
         val grantedList = mutableListOf<String>()
         val deniedList = mutableListOf<String>()
+        val neverAskList = mutableListOf<String>()
+        if (isScopedStorage) {
+            if (viewModel.permissions.contains(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                result[Manifest.permission.WRITE_EXTERNAL_STORAGE] = true
+            }
+            if (viewModel.permissions.contains(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                result[Manifest.permission.READ_EXTERNAL_STORAGE] = true
+            }
+        }
         result.forEach {
             if (it.value) {
                 grantedList.add(it.key)
-                allMap[it.key] = State.GRANTED
             } else {
                 deniedList.add(it.key)
                 if (!shouldShowRequestPermissionRationale(it.key)) {
-                    allMap[it.key] = State.NEVER
-                } else {
-                    allMap[it.key] = State.DENIED
+                    neverAskList.add(it.key)
                 }
             }
         }
         viewModel.onRequestPermissionsResultCallback(
-            Response(allMap, viewModel.permissions, grantedList, deniedList)
+            Response(viewModel.permissions, grantedList, deniedList, neverAskList)
         )
     }
 }

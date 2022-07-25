@@ -7,6 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:padding="20dp">
 
         <Button
@@ -14,6 +15,30 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:text="存储权限"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btn_audio"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="录音权限"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btn_phone"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="电话权限"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btn_bluetooth"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="蓝牙权限"
             android:textColor="@color/white"
             android:textSize="16sp" />
     </LinearLayout>

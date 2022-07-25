@@ -121,6 +121,14 @@ val isLandscape: Boolean
     }
 
 /**
+ * 包名
+ */
+val packageName: String
+    get() {
+        return application.packageName
+    }
+
+/**
  * 版本号
  */
 val versionCode: Long

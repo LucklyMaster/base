@@ -6,10 +6,10 @@ package com.master.lib.permission
  * @date: 2022-07-24 16:51
  */
 data class Response(
-    val permissionsDetail: Map<String, Int>,
     val requestPermissions: List<String>,
     val grantedPermissions: List<String>,
     val deniedPermissions: List<String>,
+    val neverAskPermissions: List<String>
 ) {
     val isGranted: Boolean
         get() {
@@ -32,6 +32,6 @@ data class Response(
 
     val hasNever: Boolean
         get() {
-            return permissionsDetail.firstNotNullOfOrNull { it.value == State.NEVER } != null
+            return neverAskPermissions.isNotEmpty()
         }
 }
