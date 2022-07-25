@@ -11,6 +11,7 @@ import com.master.lib.utils.AndroidVersion
 import com.master.lib.utils.XmlUtils
 import com.masterchan.lib.BuildConfig
 
+
 /**
  * RequestFragment
  * @author: MasterChan
@@ -61,7 +62,7 @@ class RequestFragment : Fragment() {
             if (viewModel.callback == null) {
                 viewModel.callback = callback
             }
-            val list = Utils.transformPermissions(permissions)
+            val list = Utils.convertPermissions2CurVersion(permissions)
             if (BuildConfig.DEBUG) {
                 checkPermissions(list)
             }

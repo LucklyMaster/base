@@ -1,9 +1,7 @@
 package com.master.lib.permission
 
 import android.Manifest
-import com.master.lib.ext.application
 import com.master.lib.utils.AndroidVersion
-import com.master.lib.utils.XmlUtils
 
 /**
  * 权限处理相关的工具类
@@ -12,8 +10,13 @@ import com.master.lib.utils.XmlUtils
  */
 internal object Utils {
 
-    fun transformPermissions(permissions: MutableList<String>): MutableList<String> {
-        val manifestPermissions = XmlUtils.getManifestPermissions(application)
+    /**
+     * 将需要申请的权限转换为运行的Android版本的权限
+     * @param permissions MutableList<String>
+     * @return MutableList<String>
+     */
+    fun convertPermissions2CurVersion(permissions: MutableList<String>): MutableList<String> {
+        //权限去重
         val list = permissions.toMutableSet()
         //Android12新增3个蓝牙权限
         if (!AndroidVersion.isAndroid12()) {
