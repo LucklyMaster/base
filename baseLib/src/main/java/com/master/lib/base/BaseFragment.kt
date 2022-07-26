@@ -10,6 +10,7 @@ import androidx.annotation.LayoutRes
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
+import com.master.lib.widget.ActivityResultHelper
 
 /**
  * BaseFragment
@@ -25,6 +26,13 @@ open class BaseFragment(@LayoutRes layout: Int) : Fragment(layout) {
      * window控制器
      */
     protected var windowController: WindowInsetsControllerCompat? = null
+
+    protected val activityResultHelper = ActivityResultHelper()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activityResultHelper.register(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

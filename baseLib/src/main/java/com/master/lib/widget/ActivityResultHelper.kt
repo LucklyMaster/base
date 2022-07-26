@@ -8,34 +8,59 @@ import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
+import androidx.annotation.MainThread
+import androidx.fragment.app.Fragment
 import kotlinx.parcelize.Parcelize
 
 /**
- * startForActivityResult帮助类
+ * startForActivityResult帮助类，在调用[launch]之前需要先调用[register]方法注册
  * @author: MasterChan
  * @date: 2022-06-26 17:12
  */
-open class ActivityResultHelper(private val activity: ComponentActivity) {
+open class ActivityResultHelper {
 
-    private lateinit var activityResult: HashMap<String, ActivityResult.() -> Unit>
+    private var activity: Activity? = null
+    private var fragment: Fragment? = null
+    private val activityResult = mutableMapOf<String, ActivityResult.() -> Unit>()
     private var activityResultLauncher: ActivityResultLauncher<Intent>? = null
 
-    fun registerForActivityResult() {
-        activityResult = hashMapOf()
-        activityResultLauncher =
-            activity.activityResultRegistry.register(
-                System.currentTimeMillis().toString(), ActivityForContract()
-            ) {
-                val key = it.input.getStringExtra("flag")
-                activityResult[key]?.invoke(ActivityResult(it.resultCode, it.output))
-                activityResult.remove(key)
-            }
+    fun register(activity: ComponentActivity) {
+        this.activity = activity
+        activityResultLauncher = activity.activityResultRegistry.register(
+            System.currentTimeMillis().toString(), ActivityForContract()
+        ) {
+            val key = it.input.getStringExtra("flag")
+            activityResult[key]?.invoke(ActivityResult(it.resultCode, it.output))
+            activityResult.remove(key)
+        }
+    }
+
+    fun register(fragment: Fragment) {
+        this.fragment = fragment
+        activityResultLauncher = fragment.registerForActivityResult(ActivityForContract()) {
+            val key = it.input.getStringExtra("flag")
+            activityResult[key]?.invoke(ActivityResult(it.resultCode, it.output))
+            activityResult.remove(key)
+        }
     }
 
     fun launch(clazz: Class<out Activity>, result: ActivityResult.() -> Unit) {
+        if (activity != null) {
+            launch(Intent(activity, clazz), result)
+        } else {
+            launch(Intent(fragment!!.requireContext(), clazz), result)
+        }
+    }
+
+    fun launch(intent: Intent, result: ActivityResult.() -> Unit) {
         val key = System.currentTimeMillis().toString()
         activityResult[key] = result
-        activityResultLauncher?.launch(Intent(activity, clazz).apply { putExtra("flag", key) })
+        activityResultLauncher?.launch(intent.apply { putExtra("flag", key) })
+    }
+
+    @MainThread
+    fun unregister() {
+        activityResultLauncher?.unregister()
     }
 
     class ActivityForContract : ActivityResultContract<Intent, ActivityForResult>() {

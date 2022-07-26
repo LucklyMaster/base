@@ -33,18 +33,14 @@ open class BaseActivity : AppCompatActivity() {
      */
     protected var windowController: WindowInsetsControllerCompat? = null
 
-    private var activityResultHelper: ActivityResultHelper? = null
+    protected val activityResultHelper = ActivityResultHelper()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         context = this
         activity = this
         windowController = ViewCompat.getWindowInsetsController(window.decorView)
-    }
-
-    fun registerForActivityResult() {
-        activityResultHelper = ActivityResultHelper(this)
-        activityResultHelper!!.registerForActivityResult()
+        activityResultHelper.register(this)
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
@@ -83,11 +79,11 @@ open class BaseActivity : AppCompatActivity() {
         clazz: Class<out Activity>,
         result: ActivityResult.() -> Unit
     ) {
-        if (activityResultHelper == null) {
-            throw IllegalArgumentException(
-                "please call registerActivityForResult when onCreate first"
-            )
-        }
-        activityResultHelper!!.launch(clazz, result)
+        activityResultHelper.launch(clazz, result)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        activityResultHelper.unregister()
     }
 }
