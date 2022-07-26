@@ -4,14 +4,18 @@ import android.Manifest
 import android.os.Bundle
 import android.view.View
 import com.master.lib.ext.logD
-import com.master.lib.ext.println
+import com.master.lib.ext.toast
 import com.master.lib.permission.MPermissions
 import com.masterchan.mybase.databinding.ActivityPermissionsBinding
 
 class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.OnClickListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        setOnViewClickListeners(this) { arrayOf(btnStorge, btnAudio, btnPhone, btnBluetooth) }
+        setOnViewClickListeners(this) {
+            arrayOf(
+                btnStorge, btnAudio, btnBluetooth, btnAllFile, btnDetail
+            )
+        }
     }
 
     override fun onClick(v: View?) {
@@ -21,28 +25,41 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
                     .permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     .request {
                         it.logD()
+                        toast(if (it.allGranted) "success" else "failed")
+                    }
+            }
+            binding.btnAllFile -> {
+                MPermissions.with(this)
+                    .permissions(Manifest.permission.MANAGE_EXTERNAL_STORAGE)
+                    .request {
+                        it.logD()
+                        toast(if (it.allGranted) "success" else "failed")
                     }
             }
             binding.btnAudio -> {
                 //经测试，在Android模拟器上，权限申请Dialog未设置setCancelable(false)，导致shouldShowRequestPermissionRationale()
                 //返回false，通过shouldShowRequestPermissionRationale()判断的“不再询问”将会错误的返回
                 //true，其他框架同样存在
-                MPermissions.with(this).permissions(Manifest.permission.RECORD_AUDIO).request {
-                    it.logD()
-                }
-            }
-            binding.btnPhone -> {
                 MPermissions.with(this)
+                    .permissions(Manifest.permission.RECORD_AUDIO)
                     .permissions(Manifest.permission.READ_PHONE_NUMBERS)
                     .request {
                         it.logD()
+                        toast(if (it.allGranted) "success" else "failed")
                     }
             }
             binding.btnBluetooth -> {
-                // MPermissions.with(this).permissions(Manifest.permission.BLUETOOTH_CONNECT).request {
-                //     it.logD()
-                // }
-                checkSelfPermission(Manifest.permission.BLUETOOTH).println()
+                MPermissions.with(this)
+                    .permissions(Manifest.permission.BLUETOOTH_CONNECT)
+                    .permissions(Manifest.permission.BLUETOOTH_SCAN)
+                    .permissions(Manifest.permission.BLUETOOTH_ADVERTISE)
+                    .request {
+                        it.logD()
+                        toast(if (it.allGranted) "success" else "failed")
+                    }
+            }
+            binding.btnDetail -> {
+                startActivity(MPermissions.with(this).getAppDetailIntent())
             }
         }
     }

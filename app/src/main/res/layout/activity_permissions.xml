@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".activity.PermissionsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,18 +21,18 @@
             android:textSize="16sp" />
 
         <Button
-            android:id="@+id/btn_audio"
+            android:id="@+id/btn_allFile"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:text="录音权限"
+            android:text="文件管理权限"
             android:textColor="@color/white"
             android:textSize="16sp" />
 
         <Button
-            android:id="@+id/btn_phone"
+            android:id="@+id/btn_audio"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:text="电话权限"
+            android:text="录音和电话权限"
             android:textColor="@color/white"
             android:textSize="16sp" />
 
@@ -39,6 +41,14 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:text="蓝牙权限"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btn_detail"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="应用详情"
             android:textColor="@color/white"
             android:textSize="16sp" />
     </LinearLayout>

@@ -30,7 +30,7 @@ data class Response(
             return requestPermissions.size == deniedPermissions.size
         }
 
-    val hasNever: Boolean
+    val hasNeverAsk: Boolean
         get() {
             return neverAskPermissions.isNotEmpty()
         }

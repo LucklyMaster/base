@@ -1,6 +1,7 @@
 package com.master.lib.permission
 
 import android.content.Context
+import android.content.Intent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 
@@ -45,5 +46,21 @@ class MPermissions private constructor(private val activity: FragmentActivity) {
 
     fun request(callback: Callback? = null) {
         RequestFragment.request(activity, permissions, callback)
+    }
+
+    fun isGranted(permission: String): Boolean {
+        return Utils.isGranted(activity, permission)
+    }
+
+    fun isAllGranted(permissions: List<String>): Boolean {
+        return Utils.isAllGranted(activity, permissions)
+    }
+
+    fun isNeverAsk(permission: String): Boolean {
+        return Utils.isNeverAsk(activity, permission)
+    }
+
+    fun getAppDetailIntent(permission: String = ""): Intent {
+        return Utils.getAppDetailIntent(activity, permission)
     }
 }
