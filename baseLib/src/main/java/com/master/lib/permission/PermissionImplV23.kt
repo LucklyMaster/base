@@ -9,6 +9,21 @@ import com.master.lib.utils.AndroidVersion
 open class PermissionImplV23 : AbsPermission() {
 
     override fun isGranted(context: Context, permission: String): Boolean {
+        //特殊权限
+        if (SpecialPermissions.list.contains(permission)) {
+            //悬浮窗权限
+            if (SpecialPermissions.SYSTEM_ALERT_WINDOW == permission) {
+                return Settings.canDrawOverlays(context)
+            }
+            // 系统设置权限
+            if (SpecialPermissions.WRITE_SETTINGS == permission) {
+                return if (AndroidVersion.isAndroid6()) {
+                    Settings.System.canWrite(context)
+                } else {
+                    true
+                }
+            }
+        }
         //Android12蓝牙权限
         if (!AndroidVersion.isAndroid12()) {
             if (Manifest.permission.BLUETOOTH_SCAN == permission) {
@@ -61,8 +76,8 @@ open class PermissionImplV23 : AbsPermission() {
     override fun getAppDetailIntent(context: Context, permission: String): Intent {
         val intent = super.getAppDetailIntent(context, permission)
         intent.action = when (permission) {
-            Manifest.permission.SYSTEM_ALERT_WINDOW -> Settings.ACTION_MANAGE_OVERLAY_PERMISSION
-            Manifest.permission.WRITE_SETTINGS -> Settings.ACTION_MANAGE_WRITE_SETTINGS
+            SpecialPermissions.SYSTEM_ALERT_WINDOW -> Settings.ACTION_MANAGE_OVERLAY_PERMISSION
+            SpecialPermissions.WRITE_SETTINGS -> Settings.ACTION_MANAGE_WRITE_SETTINGS
             else -> intent.action
         }
         return intent

@@ -1,6 +1,8 @@
 package com.master.lib.permission
 
 import android.Manifest
+import android.os.Bundle
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -8,7 +10,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.master.lib.ext.isScopedStorage
 import com.master.lib.utils.XmlUtils
+import com.master.lib.widget.ActivityResultHelper
 import com.masterchan.lib.BuildConfig
+import kotlinx.coroutines.delay
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 
 /**
@@ -23,9 +29,9 @@ class RequestFragment : Fragment() {
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) {
-        dispatchCallback(it.toMutableMap())
-        detachActivity(requireActivity())
+        onPermissionsResultCallback(it)
     }
+    private val activityResultHelper = ActivityResultHelper()
 
     companion object {
         fun request(
@@ -40,6 +46,11 @@ class RequestFragment : Fragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activityResultHelper.register(this)
+    }
+
     private fun attachActivity(activity: FragmentActivity) {
         activity.supportFragmentManager.beginTransaction()
             .add(this, toString())
@@ -48,6 +59,7 @@ class RequestFragment : Fragment() {
 
     private fun detachActivity(activity: FragmentActivity) {
         activity.supportFragmentManager.beginTransaction().remove(this).commitAllowingStateLoss()
+        activityResultHelper.unregister()
     }
 
     private fun setCallback(callback: Callback?) {
@@ -78,11 +90,14 @@ class RequestFragment : Fragment() {
                 val specialPermissions = optimizedPermissions.intersect(
                     SpecialPermissions.list.toSet()
                 )
-                if (specialPermissions.isEmpty()) {
-                    requestPermissionLauncher.launch(optimizedPermissions.toTypedArray())
-                } else {
+                //包含特殊权限，申请特殊权限
+                if (specialPermissions.isNotEmpty()) {
                     requestSpecialPermissions(specialPermissions.toList())
+                    //延迟一段时间获取特殊权限结果，防止授权了，却回调失败
+                    // TODO: 重写delay时间
+                    delay(300)
                 }
+                requestPermissionLauncher.launch(optimizedPermissions.toTypedArray())
             }
         }
     }
@@ -109,9 +124,33 @@ class RequestFragment : Fragment() {
         }
     }
 
+    private fun onPermissionsResultCallback(mutableMap: MutableMap<String, Boolean>) {
+        dispatchCallback(mutableMap)
+        detachActivity(requireActivity())
+    }
+
     private suspend fun requestSpecialPermissions(permissions: List<String>) {
-        permissions.forEach {
+        permissions.forEach { permission ->
+            suspendCoroutine<Unit> {
+                try {
+                    activityResultHelper.launch(
+                        Utils.getAppDetailIntent(requireContext(), permission)
+                    ) {
+                        it.resume(onSpecialPermissionsResultCallback(this))
+                    }
+                } catch (e: Exception) {
+                    activityResultHelper.launch(
+                        Utils.getAppDetailIntent(requireContext(), "")
+                    ) {
+                        it.resume(onSpecialPermissionsResultCallback(this))
+                    }
+                }
+            }
         }
+    }
+
+    private fun onSpecialPermissionsResultCallback(activityResult: ActivityResult) {
+
     }
 
     private fun dispatchCallback(result: Map<String, Boolean>) {

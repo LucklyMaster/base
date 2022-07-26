@@ -13,7 +13,7 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         setOnViewClickListeners(this) {
             arrayOf(
-                btnStorge, btnAudio, btnBluetooth, btnAllFile, btnDetail
+                btnStorge, btnAudio, btnBluetooth, btnAllFile, btnAlertWindow, btnDetail
             )
         }
     }
@@ -53,6 +53,15 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
                     .permissions(Manifest.permission.BLUETOOTH_CONNECT)
                     .permissions(Manifest.permission.BLUETOOTH_SCAN)
                     .permissions(Manifest.permission.BLUETOOTH_ADVERTISE)
+                    .request {
+                        it.logD()
+                        toast(if (it.allGranted) "success" else "failed")
+                    }
+            }
+            binding.btnAlertWindow -> {
+                MPermissions.with(this)
+                    .permissions(Manifest.permission.SYSTEM_ALERT_WINDOW)
+                    .permissions(Manifest.permission.WRITE_SETTINGS)
                     .request {
                         it.logD()
                         toast(if (it.allGranted) "success" else "failed")

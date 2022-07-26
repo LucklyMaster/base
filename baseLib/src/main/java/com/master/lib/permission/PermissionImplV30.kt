@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Environment
+import android.provider.Settings
 import androidx.annotation.RequiresApi
 import com.master.lib.ext.isScopedStorage
 
@@ -33,9 +34,10 @@ open class PermissionImplV30 : PermissionImplV29() {
     }
 
     override fun getAppDetailIntent(context: Context, permission: String): Intent {
-        if (Manifest.permission.MANAGE_EXTERNAL_STORAGE == permission) {
-
+        val intent = super.getAppDetailIntent(context, permission)
+        if (SpecialPermissions.MANAGE_EXTERNAL_STORAGE == permission) {
+            intent.action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
         }
-        return super.getAppDetailIntent(context, permission)
+        return intent
     }
 }
