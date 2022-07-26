@@ -74,7 +74,15 @@ class RequestFragment : Fragment() {
             ) {
                 dispatchCallback(requestPermissions.associateWith { true }.toMutableMap())
             } else {
-                requestPermissionLauncher.launch(optimizedPermissions.toTypedArray())
+                //拆分出特殊权限
+                val specialPermissions = optimizedPermissions.intersect(
+                    SpecialPermissions.list.toSet()
+                )
+                if (specialPermissions.isEmpty()) {
+                    requestPermissionLauncher.launch(optimizedPermissions.toTypedArray())
+                } else {
+                    requestSpecialPermissions(specialPermissions.toList())
+                }
             }
         }
     }
@@ -98,6 +106,11 @@ class RequestFragment : Fragment() {
             check(manifestPermissions.contains(it)) {
                 "the request permissions[$it] must be contains int the AndroidManifest.xml"
             }
+        }
+    }
+
+    private suspend fun requestSpecialPermissions(permissions: List<String>) {
+        permissions.forEach {
         }
     }
 

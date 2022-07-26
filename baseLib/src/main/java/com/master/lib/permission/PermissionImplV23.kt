@@ -2,6 +2,8 @@ package com.master.lib.permission
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
+import android.provider.Settings
 import com.master.lib.utils.AndroidVersion
 
 open class PermissionImplV23 : AbsPermission() {
@@ -54,5 +56,15 @@ open class PermissionImplV23 : AbsPermission() {
             }
         }
         return super.isNeverAsk(context, permission)
+    }
+
+    override fun getAppDetailIntent(context: Context, permission: String): Intent {
+        val intent = super.getAppDetailIntent(context, permission)
+        intent.action = when (permission) {
+            Manifest.permission.SYSTEM_ALERT_WINDOW -> Settings.ACTION_MANAGE_OVERLAY_PERMISSION
+            Manifest.permission.WRITE_SETTINGS -> Settings.ACTION_MANAGE_WRITE_SETTINGS
+            else -> intent.action
+        }
+        return intent
     }
 }
