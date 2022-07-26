@@ -40,28 +40,28 @@ object MToast {
         show(application.getString(text, format))
     }
 
-    private fun show(text: CharSequence, duration: Int) {
+    fun show(text: CharSequence, duration: Int, stackTraceElement: StackTraceElement? = null) {
         if (text == lastText) {
             if (System.currentTimeMillis() - lastMills > 2000) {
-                safeShow(text, duration)
+                safeShow(text, duration, stackTraceElement)
             }
         } else {
-            safeShow(text, duration)
+            safeShow(text, duration, stackTraceElement)
         }
     }
 
-    private fun safeShow(text: CharSequence, duration: Int) {
+    private fun safeShow(text: CharSequence, duration: Int, stackTraceElement: StackTraceElement?) {
         if (isMainThread()) {
-            doShow(text, duration)
+            doShow(text, duration, stackTraceElement)
         } else {
             if (mainHandler == null || mainHandler!!.get() == null) {
                 mainHandler = WeakReference(Handler(Looper.getMainLooper()))
             }
-            mainHandler!!.get()!!.post { doShow(text, duration) }
+            mainHandler!!.get()!!.post { doShow(text, duration, stackTraceElement) }
         }
     }
 
-    private fun doShow(text: CharSequence, duration: Int) {
+    private fun doShow(text: CharSequence, duration: Int, stackTraceElement: StackTraceElement?) {
         toast?.get()?.cancel()
         toast = WeakReference(Toast.makeText(application, "", duration))
         toast!!.get()!!.apply { setText(text) }.show()
@@ -69,7 +69,7 @@ object MToast {
         lastMills = System.currentTimeMillis()
         MLog.print(
             Priority.DEBUG, MLog.tag, text,
-            StackTraceUtils.getTargetStackTraceElement(javaClass.name)
+            stackTraceElement ?: StackTraceUtils.getTargetStackTraceElement(javaClass.name)
         )
     }
 }
