@@ -6,7 +6,7 @@ import android.content.Intent
 import android.provider.Settings
 import com.master.lib.utils.AndroidVersion
 
-open class PermissionImplV23 : AbsPermission() {
+open class PermissionImplV23 : IPermission {
 
     override fun isGranted(context: Context, permission: String): Boolean {
         //特殊权限

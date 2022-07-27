@@ -1,6 +1,5 @@
 package com.master.lib.permission
 
-import android.Manifest
 import android.os.Bundle
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -8,7 +7,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.master.lib.ext.isScopedStorage
+import com.master.lib.utils.AndroidVersion
+import com.master.lib.utils.DeviceUtils
 import com.master.lib.utils.XmlUtils
 import com.master.lib.widget.ActivityResultHelper
 import com.masterchan.lib.BuildConfig
@@ -80,35 +80,23 @@ class RequestFragment : Fragment() {
                 viewModel.permissions.addAll(requestPermissions)
             }
             //适配了分区存储，去掉存储权限不申请，直接返回true
-            val optimizedPermissions = optimizeScopedStoragePermission(requestPermissions)
-            if (optimizedPermissions.isEmpty() ||
-                Utils.isAllGranted(requireContext(), optimizedPermissions)
-            ) {
+            // val optimizedPermissions = optimizeScopedStoragePermission(requestPermissions)
+            if (Utils.isAllGranted(requireContext(), requestPermissions)) {
                 dispatchCallback(requestPermissions.associateWith { true }.toMutableMap())
             } else {
                 //拆分出特殊权限
-                val specialPermissions = optimizedPermissions.intersect(
+                val specialPermissions = requestPermissions.intersect(
                     SpecialPermissions.list.toSet()
                 )
                 //包含特殊权限，申请特殊权限
                 if (specialPermissions.isNotEmpty()) {
                     requestSpecialPermissions(specialPermissions.toList())
                     //延迟一段时间获取特殊权限结果，防止授权了，却回调失败
-                    // TODO: 重写delay时间
-                    delay(300)
+                    delay(getSpecialPermissionResultDelay())
                 }
-                requestPermissionLauncher.launch(optimizedPermissions.toTypedArray())
+                requestPermissionLauncher.launch(requestPermissions.toTypedArray())
             }
         }
-    }
-
-    private fun optimizeScopedStoragePermission(permissions: List<String>): MutableList<String> {
-        val list = permissions.toMutableList()
-        if (isScopedStorage) {
-            list.remove(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            list.remove(Manifest.permission.READ_EXTERNAL_STORAGE)
-        }
-        return list
     }
 
     /**
@@ -127,6 +115,14 @@ class RequestFragment : Fragment() {
     private fun onPermissionsResultCallback(mutableMap: MutableMap<String, Boolean>) {
         dispatchCallback(mutableMap)
         detachActivity(requireActivity())
+    }
+
+    private fun getSpecialPermissionResultDelay(): Long {
+        val product = DeviceUtils.getProduct().lowercase()
+        return when {
+            product.contains("huawei") -> if (AndroidVersion.isAndroid8()) 300 else 500
+            else -> if (AndroidVersion.isAndroid11()) 200 else 300
+        }
     }
 
     private suspend fun requestSpecialPermissions(permissions: List<String>) {
