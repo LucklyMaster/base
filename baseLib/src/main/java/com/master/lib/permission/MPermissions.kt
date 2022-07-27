@@ -16,8 +16,9 @@ class MPermissions private constructor(private val activity: FragmentActivity) {
      * 需要申请的权限
      */
     private val permissions: MutableList<String> by lazy { mutableListOf() }
+    private val interceptorMap = mutableMapOf<String, SpecialPermissionInterceptor>()
 
-    companion object {
+    companion object Static {
         fun with(context: Context): MPermissions {
             require(context is FragmentActivity) { "the context must be a FragmentActivity" }
             return MPermissions(context)
@@ -44,8 +45,15 @@ class MPermissions private constructor(private val activity: FragmentActivity) {
         }
     }
 
+    fun addSpecialPermissionInterceptor(
+        permission: String,
+        interceptor: SpecialPermissionInterceptor
+    ) = apply {
+        interceptorMap[permission] = interceptor
+    }
+
     fun request(callback: Callback? = null) {
-        RequestFragment.request(activity, permissions, callback)
+        RequestFragment.request(activity, permissions, callback, interceptorMap)
     }
 
     fun isGranted(permission: String): Boolean {

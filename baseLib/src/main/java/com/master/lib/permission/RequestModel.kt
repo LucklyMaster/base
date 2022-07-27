@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 class RequestModel : ViewModel() {
 
     var callback: Callback? = null
+    val interceptorMap = mutableMapOf<String, SpecialPermissionInterceptor>()
     val permissions by lazy { mutableListOf<String>() }
 
     fun onRequestPermissionsResultCallback(result: Response) {

@@ -25,6 +25,7 @@ import kotlin.coroutines.suspendCoroutine
 class RequestFragment : Fragment() {
 
     private var callback: Callback? = null
+    private var interceptorMap = mutableMapOf<String, SpecialPermissionInterceptor>()
     private val viewModel by lazy { ViewModelProvider(this).get(RequestModel::class.java) }
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -37,12 +38,14 @@ class RequestFragment : Fragment() {
         fun request(
             activity: FragmentActivity,
             permissions: MutableList<String>,
-            callback: Callback?
+            callback: Callback?,
+            interceptorMap: Map<String, SpecialPermissionInterceptor>?
         ) {
             val fragment = RequestFragment()
             fragment.attachActivity(activity)
             fragment.setCallback(callback)
             fragment.request(permissions)
+            fragment.addSpecialPermissionIntercept(interceptorMap)
         }
     }
 
@@ -66,10 +69,17 @@ class RequestFragment : Fragment() {
         this.callback = callback
     }
 
+    private fun addSpecialPermissionIntercept(interceptorMap: Map<String, SpecialPermissionInterceptor>?) {
+        interceptorMap?.let { this.interceptorMap.putAll(it) }
+    }
+
     private fun request(permissions: MutableList<String>) {
         lifecycleScope.launchWhenResumed {
             if (viewModel.callback == null) {
                 viewModel.callback = callback
+            }
+            if (viewModel.interceptorMap.isEmpty()) {
+                viewModel.interceptorMap.putAll(interceptorMap)
             }
             val permissionsMap = Utils.convertPermissions2CurVersion(permissions)
             if (BuildConfig.DEBUG) {
@@ -130,6 +140,9 @@ class RequestFragment : Fragment() {
             if (Utils.isGranted(requireContext(), permission)) {
                 return@forEach
             }
+            if (!specialPermissionIntercept(permission)) {
+                return@forEach
+            }
             suspendCoroutine<Unit> {
                 try {
                     activityResultHelper.launch(
@@ -145,6 +158,17 @@ class RequestFragment : Fragment() {
                     }
                 }
             }
+        }
+    }
+
+    private suspend fun specialPermissionIntercept(permission: String) = suspendCoroutine<Boolean> {
+        val interceptor = viewModel.interceptorMap[permission]
+        if (interceptor != null) {
+            interceptor.onIntercept { result ->
+                it.resume(result)
+            }
+        } else {
+            it.resume(true)
         }
     }
 

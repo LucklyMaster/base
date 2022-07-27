@@ -4,6 +4,7 @@ import android.Manifest
 import android.os.Bundle
 import android.view.View
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.master.lib.dialog.AlertDialog
 import com.master.lib.ext.logD
 import com.master.lib.ext.toast
 import com.master.lib.permission.MPermissions
@@ -42,6 +43,40 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
                 MPermissions.with(this)
                     .permissions(Manifest.permission.MANAGE_EXTERNAL_STORAGE)
                     .permissions(Manifest.permission.SYSTEM_ALERT_WINDOW)
+                    .addSpecialPermissionInterceptor(Manifest.permission.MANAGE_EXTERNAL_STORAGE) {
+                        AlertDialog.Builder(context)
+                            .setMessage("程序运行需要管理文件权限")
+                            .setPositiveText("确定")
+                            .setNegativeText("取消")
+                            .setOnPositiveClickListener { dialog ->
+                                dialog.dismiss()
+                                it.onResult(true)
+                            }
+                            .setOnNegativeClickListener { dialog ->
+                                dialog.dismiss()
+                                it.onResult(false)
+                            }
+                            .create()
+                            .setCancellable(false)
+                            .show()
+                    }
+                    .addSpecialPermissionInterceptor(Manifest.permission.SYSTEM_ALERT_WINDOW) {
+                        AlertDialog.Builder(context)
+                            .setMessage("程序运行需要悬浮窗权限")
+                            .setPositiveText("确定")
+                            .setNegativeText("取消")
+                            .setOnPositiveClickListener { dialog ->
+                                dialog.dismiss()
+                                it.onResult(true)
+                            }
+                            .setOnNegativeClickListener { dialog ->
+                                dialog.dismiss()
+                                it.onResult(false)
+                            }
+                            .create()
+                            .setCancellable(false)
+                            .show()
+                    }
                     .request {
                         it.logD()
                         toast(if (it.allGranted) "success" else "failed")
