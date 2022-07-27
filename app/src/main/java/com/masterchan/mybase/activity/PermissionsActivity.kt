@@ -8,6 +8,7 @@ import com.master.lib.dialog.AlertDialog
 import com.master.lib.ext.logD
 import com.master.lib.ext.toast
 import com.master.lib.permission.MPermissions
+import com.masterchan.mybase.aspect.PermissionNeed
 import com.masterchan.mybase.databinding.ActivityPermissionsBinding
 
 class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.OnClickListener {
@@ -16,7 +17,8 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
         installSplashScreen()
         setOnViewClickListeners(this) {
             arrayOf(
-                btnStorge, btnPackage, btnAudio, btnBluetooth, btnAllFile, btnAlertWindow, btnDetail
+                btnStorge, btnPackage, btnAudio, btnBluetooth, btnAllFile, btnAlertWindow,
+                btnAnnotation, btnDetail
             )
         }
     }
@@ -113,10 +115,20 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
                         toast(if (it.allGranted) "success" else "failed")
                     }
             }
+            binding.btnAnnotation -> {
+                applyPermission()
+            }
             binding.btnDetail -> {
                 startActivity(MPermissions.with(this).getAppDetailIntent())
             }
         }
+    }
+
+    @PermissionNeed(
+        Manifest.permission.READ_PHONE_NUMBERS, Manifest.permission.SYSTEM_ALERT_WINDOW
+    )
+    fun applyPermission() {
+        toast("申请权限成功")
     }
 
 }
