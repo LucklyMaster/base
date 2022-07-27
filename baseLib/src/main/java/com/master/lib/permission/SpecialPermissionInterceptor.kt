@@ -8,7 +8,11 @@ package com.master.lib.permission
 fun interface SpecialPermissionInterceptor {
 
     fun interface OnResultCallback {
-        fun onResult(boolean: Boolean)
+        /**
+         * 具体的拦截结果回调
+         * @param isContinue 为true表示可以继续执行权限申请，false相反
+         */
+        fun onResult(isContinue: Boolean)
     }
 
     fun onIntercept(onResult: OnResultCallback)

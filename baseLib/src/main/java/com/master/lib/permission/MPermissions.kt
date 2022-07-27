@@ -52,7 +52,7 @@ class MPermissions private constructor(private val activity: FragmentActivity) {
         interceptorMap[permission] = interceptor
     }
 
-    fun request(callback: Callback? = null) {
+    fun request(callback: PermissionsResultCallback? = null) {
         RequestFragment.request(activity, permissions, callback, interceptorMap)
     }
 

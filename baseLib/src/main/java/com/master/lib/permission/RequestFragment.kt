@@ -24,21 +24,36 @@ import kotlin.coroutines.suspendCoroutine
  */
 class RequestFragment : Fragment() {
 
-    private var callback: Callback? = null
+    /**
+     * 权限申请结果回调
+     */
+    private var resultCallback: PermissionsResultCallback? = null
+
+    /**
+     * 特殊权限拦截器
+     */
     private var interceptorMap = mutableMapOf<String, SpecialPermissionInterceptor>()
     private val viewModel by lazy { ViewModelProvider(this).get(RequestModel::class.java) }
+
+    /**
+     * 注册危险权限申请
+     */
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) {
-        onPermissionsResultCallback(it)
+        onPermissionsResultCallback()
     }
+
+    /**
+     * 注册特殊权限申请
+     */
     private val activityResultHelper = ActivityResultHelper()
 
     companion object {
         fun request(
             activity: FragmentActivity,
             permissions: MutableList<String>,
-            callback: Callback?,
+            callback: PermissionsResultCallback?,
             interceptorMap: Map<String, SpecialPermissionInterceptor>?
         ) {
             val fragment = RequestFragment()
@@ -65,8 +80,8 @@ class RequestFragment : Fragment() {
         activityResultHelper.unregister()
     }
 
-    private fun setCallback(callback: Callback?) {
-        this.callback = callback
+    private fun setCallback(callback: PermissionsResultCallback?) {
+        this.resultCallback = callback
     }
 
     private fun addSpecialPermissionIntercept(interceptorMap: Map<String, SpecialPermissionInterceptor>?) {
@@ -76,7 +91,7 @@ class RequestFragment : Fragment() {
     private fun request(permissions: MutableList<String>) {
         lifecycleScope.launchWhenResumed {
             if (viewModel.callback == null) {
-                viewModel.callback = callback
+                viewModel.callback = resultCallback
             }
             if (viewModel.interceptorMap.isEmpty()) {
                 viewModel.interceptorMap.putAll(interceptorMap)
@@ -89,10 +104,9 @@ class RequestFragment : Fragment() {
             if (viewModel.permissions.isEmpty()) {
                 viewModel.permissions.addAll(requestPermissions)
             }
-            //适配了分区存储，去掉存储权限不申请，直接返回true
-            // val optimizedPermissions = optimizeScopedStoragePermission(requestPermissions)
+            //如果权限已经全部申请，直接回调结果
             if (Utils.isAllGranted(requireContext(), requestPermissions)) {
-                dispatchCallback(requestPermissions.associateWith { true }.toMutableMap())
+                dispatchCallback()
             } else {
                 //拆分出特殊权限
                 val specialPermissions = requestPermissions.intersect(
@@ -122,8 +136,8 @@ class RequestFragment : Fragment() {
         }
     }
 
-    private fun onPermissionsResultCallback(mutableMap: MutableMap<String, Boolean>) {
-        dispatchCallback(mutableMap)
+    private fun onPermissionsResultCallback() {
+        dispatchCallback()
         detachActivity(requireActivity())
     }
 
@@ -176,11 +190,11 @@ class RequestFragment : Fragment() {
 
     }
 
-    private fun dispatchCallback(result: Map<String, Boolean>) {
+    private fun dispatchCallback() {
         val grantedList = mutableListOf<String>()
         val deniedList = mutableListOf<String>()
         val neverAskList = mutableListOf<String>()
-        result.keys.forEach {
+        viewModel.permissions.forEach {
             val isGranted = Utils.isGranted(requireContext(), it)
             if (isGranted) {
                 grantedList.add(it)
