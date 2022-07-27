@@ -1,5 +1,5 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'com.ibotta.gradle.aop'
 }
@@ -8,11 +8,9 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.masterchan.mybase"
         minSdk 23
         targetSdk 32
-        versionCode 1
-        versionName "1.0"
+        consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
@@ -20,36 +18,22 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-        debug {
-            jniDebuggable true
-        }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = '11'
     }
-    buildFeatures {
-        viewBinding = true
-    }
-//    aopWeave {
-//        filter = "com/masterchan/mybase"
-//    }
 }
 
 dependencies {
     implementation project(path: ':baseLib')
-    implementation project(path: ':aop')
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.6.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
-    implementation 'androidx.core:core-splashscreen:1.0.0-beta02'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
-    implementation 'io.github.lucksiege:pictureselector:v3.10.2'
-    implementation 'com.github.bumptech.glide:glide:4.13.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
     implementation "org.aspectj:aspectjrt:1.9.7"
 }

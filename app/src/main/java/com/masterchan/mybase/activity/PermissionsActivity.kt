@@ -4,11 +4,11 @@ import android.Manifest
 import android.os.Bundle
 import android.view.View
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.master.aop.RequestPermission
 import com.master.lib.dialog.AlertDialog
 import com.master.lib.ext.logD
 import com.master.lib.ext.toast
 import com.master.lib.permission.MPermissions
-import com.masterchan.mybase.aspect.PermissionNeed
 import com.masterchan.mybase.databinding.ActivityPermissionsBinding
 
 class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.OnClickListener {
@@ -124,10 +124,8 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
         }
     }
 
-    @PermissionNeed(
-        Manifest.permission.READ_PHONE_NUMBERS, Manifest.permission.SYSTEM_ALERT_WINDOW
-    )
-    fun applyPermission() {
+    @RequestPermission(Manifest.permission.READ_PHONE_NUMBERS)
+    private fun applyPermission() {
         toast("申请权限成功")
     }
 

@@ -1,4 +1,4 @@
-package com.masterchan.mybase.aspect;
+package com.master.aop;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface PermissionNeed {
-    String[] value();
+public @interface RequestPermission {
+    String value();
 }
