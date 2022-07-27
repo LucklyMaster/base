@@ -3,6 +3,7 @@ package com.masterchan.mybase.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.master.lib.ext.*
 import com.master.lib.log.MLog
 import com.master.lib.utils.DeviceUtils
@@ -10,6 +11,11 @@ import com.masterchan.mybase.databinding.ActivityMainBinding
 
 
 class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         printAppInfo()

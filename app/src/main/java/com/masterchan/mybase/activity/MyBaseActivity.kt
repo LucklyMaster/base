@@ -14,7 +14,6 @@ import com.master.lib.ext.Log
 abstract class MyBaseActivity<T : ViewBinding> : BaseVBActivity<T>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
         super.onCreate(savedInstanceState)
         Log.d("onCreate: ${javaClass.simpleName}")
         onActivityCreated(savedInstanceState)

@@ -21,10 +21,18 @@
             android:textSize="16sp" />
 
         <Button
+            android:id="@+id/btn_package"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="应用安装权限"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <Button
             android:id="@+id/btn_allFile"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:text="文件管理权限"
+            android:text="文件管理和悬浮窗权限"
             android:textColor="@color/white"
             android:textSize="16sp" />
 

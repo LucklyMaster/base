@@ -3,6 +3,7 @@ package com.masterchan.mybase.activity
 import android.Manifest
 import android.os.Bundle
 import android.view.View
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.master.lib.ext.logD
 import com.master.lib.ext.toast
 import com.master.lib.permission.MPermissions
@@ -11,9 +12,10 @@ import com.masterchan.mybase.databinding.ActivityPermissionsBinding
 class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.OnClickListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
+        installSplashScreen()
         setOnViewClickListeners(this) {
             arrayOf(
-                btnStorge, btnAudio, btnBluetooth, btnAllFile, btnAlertWindow, btnDetail
+                btnStorge, btnPackage, btnAudio, btnBluetooth, btnAllFile, btnAlertWindow, btnDetail
             )
         }
     }
@@ -28,9 +30,18 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
                         toast(if (it.allGranted) "success" else "failed")
                     }
             }
+            binding.btnPackage -> {
+                MPermissions.with(this)
+                    .permissions(Manifest.permission.REQUEST_INSTALL_PACKAGES)
+                    .request {
+                        it.logD()
+                        toast(if (it.allGranted) "success" else "failed")
+                    }
+            }
             binding.btnAllFile -> {
                 MPermissions.with(this)
                     .permissions(Manifest.permission.MANAGE_EXTERNAL_STORAGE)
+                    .permissions(Manifest.permission.SYSTEM_ALERT_WINDOW)
                     .request {
                         it.logD()
                         toast(if (it.allGranted) "success" else "failed")

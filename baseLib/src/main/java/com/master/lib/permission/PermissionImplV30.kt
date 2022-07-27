@@ -3,13 +3,13 @@ package com.master.lib.permission
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Environment
 import android.provider.Settings
 import androidx.annotation.RequiresApi
 import com.master.lib.ext.isScopedStorage
+import com.master.lib.utils.AndroidVersion
 
-@RequiresApi(Build.VERSION_CODES.R)
+@RequiresApi(AndroidVersion.ANDROID_11)
 open class PermissionImplV30 : PermissionImplV29() {
 
     override fun isGranted(context: Context, permission: String): Boolean {

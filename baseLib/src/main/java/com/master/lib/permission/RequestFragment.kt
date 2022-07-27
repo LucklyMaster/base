@@ -131,6 +131,9 @@ class RequestFragment : Fragment() {
 
     private suspend fun requestSpecialPermissions(permissions: List<String>) {
         permissions.forEach { permission ->
+            if (Utils.isGranted(requireContext(), permission)) {
+                return@forEach
+            }
             suspendCoroutine<Unit> {
                 try {
                     activityResultHelper.launch(

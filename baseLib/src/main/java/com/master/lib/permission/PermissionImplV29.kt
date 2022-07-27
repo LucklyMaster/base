@@ -1,4 +1,7 @@
 package com.master.lib.permission
 
-open class PermissionImplV29 : PermissionImplV26() {
-}
+import androidx.annotation.RequiresApi
+import com.master.lib.utils.AndroidVersion
+
+@RequiresApi(AndroidVersion.ANDROID_10)
+open class PermissionImplV29 : PermissionImplV26()

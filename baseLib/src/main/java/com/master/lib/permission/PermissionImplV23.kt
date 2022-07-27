@@ -47,6 +47,11 @@ open class PermissionImplV23 : AbsPermission() {
     }
 
     override fun isNeverAsk(context: Context, permission: String): Boolean {
+        //特殊权限直接返回false
+        if (SpecialPermissions.list.contains(permission)) {
+            return false
+        }
+        //判断危险权限
         if (!AndroidVersion.isAndroid12()) {
             if (Manifest.permission.BLUETOOTH_SCAN == permission) {
                 return super.isNeverAsk(context, Manifest.permission.ACCESS_FINE_LOCATION)
