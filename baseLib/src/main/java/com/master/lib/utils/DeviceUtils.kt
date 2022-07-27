@@ -2,6 +2,7 @@ package com.master.lib.utils
 
 import android.annotation.SuppressLint
 import android.content.Context.TELEPHONY_SERVICE
+import android.os.Build
 import android.provider.Settings
 import android.telephony.TelephonyManager
 import com.master.lib.ext.application
@@ -33,6 +34,9 @@ object DeviceUtils {
         return null
     }
 
+    fun getProduct(): String {
+        return Build.MANUFACTURER
+    }
 
     fun isRooted(): Boolean {
         val su = "su"
