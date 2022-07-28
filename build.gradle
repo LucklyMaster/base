@@ -2,7 +2,6 @@
 buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:7.2.1"
-        classpath "com.ibotta:plugin:1.4.0"
     }
 }
 
