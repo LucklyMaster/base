@@ -1,0 +1,34 @@
+plugins {
+    id 'kotlin'
+    id 'maven-publish'
+}
+
+repositories {
+    google()
+    mavenCentral()
+}
+
+dependencies {
+    implementation gradleApi()
+    implementation localGroovy()
+    implementation 'org.ow2.asm:asm:9.1'
+    implementation 'com.android.tools.build:gradle:7.2.1'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.master.plugins'
+            artifactId = 'aop'
+            version = '1.0.0'
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            url = "../plugins"
+//            url = layout.buildDirectory.dir('repo')
+        }
+    }
+}
