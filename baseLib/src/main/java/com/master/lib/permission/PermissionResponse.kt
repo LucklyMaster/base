@@ -5,7 +5,7 @@ package com.master.lib.permission
  * @author: MasterChan
  * @date: 2022-07-24 16:51
  */
-data class Response(
+data class PermissionResponse(
     /**
      * 请求的全部权限
      */

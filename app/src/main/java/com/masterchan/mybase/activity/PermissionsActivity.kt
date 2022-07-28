@@ -4,11 +4,14 @@ import android.Manifest
 import android.os.Bundle
 import android.view.View
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.master.aop.OnPermissionDenied
 import com.master.aop.RequestPermission
 import com.master.lib.dialog.AlertDialog
 import com.master.lib.ext.logD
+import com.master.lib.ext.println
 import com.master.lib.ext.toast
 import com.master.lib.permission.MPermissions
+import com.master.lib.permission.PermissionResponse
 import com.masterchan.mybase.databinding.ActivityPermissionsBinding
 
 class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.OnClickListener {
@@ -124,9 +127,14 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
         }
     }
 
-    @RequestPermission(Manifest.permission.READ_PHONE_NUMBERS)
+    @RequestPermission([Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO], true)
     private fun applyPermission() {
         toast("申请权限成功")
     }
 
+    @OnPermissionDenied([Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO])
+    private fun onDenied(response: PermissionResponse) {
+        response.println()
+        toast("申请权限失败")
+    }
 }

@@ -6,5 +6,5 @@ package com.master.lib.permission
  * @date: 2022-07-24 16:50
  */
 fun interface PermissionsResultCallback {
-    fun callback(response: Response)
+    fun callback(response: PermissionResponse)
 }

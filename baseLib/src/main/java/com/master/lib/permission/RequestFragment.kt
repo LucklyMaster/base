@@ -58,9 +58,9 @@ class RequestFragment : Fragment() {
         ) {
             val fragment = RequestFragment()
             fragment.attachActivity(activity)
-            fragment.setCallback(callback)
+            fragment.setResultCallback(callback)
             fragment.request(permissions)
-            fragment.addSpecialPermissionIntercept(interceptorMap)
+            fragment.addSpecialPermissionInterceptor(interceptorMap)
         }
     }
 
@@ -80,18 +80,18 @@ class RequestFragment : Fragment() {
         activityResultHelper.unregister()
     }
 
-    private fun setCallback(callback: PermissionsResultCallback?) {
+    private fun setResultCallback(callback: PermissionsResultCallback?) {
         this.resultCallback = callback
     }
 
-    private fun addSpecialPermissionIntercept(interceptorMap: Map<String, SpecialPermissionInterceptor>?) {
+    private fun addSpecialPermissionInterceptor(interceptorMap: Map<String, SpecialPermissionInterceptor>?) {
         interceptorMap?.let { this.interceptorMap.putAll(it) }
     }
 
     private fun request(permissions: MutableList<String>) {
         lifecycleScope.launchWhenResumed {
-            if (viewModel.callback == null) {
-                viewModel.callback = resultCallback
+            if (viewModel.permissionsResultCallback == null) {
+                viewModel.permissionsResultCallback = resultCallback
             }
             if (viewModel.interceptorMap.isEmpty()) {
                 viewModel.interceptorMap.putAll(interceptorMap)
@@ -157,7 +157,7 @@ class RequestFragment : Fragment() {
             if (!specialPermissionIntercept(permission)) {
                 return@forEach
             }
-            suspendCoroutine<Unit> {
+            suspendCoroutine {
                 try {
                     activityResultHelper.launch(
                         Utils.getAppDetailIntent(requireContext(), permission)
@@ -205,8 +205,8 @@ class RequestFragment : Fragment() {
                 neverAskList.add(it)
             }
         }
-        viewModel.onRequestPermissionsResultCallback(
-            Response(viewModel.permissions, grantedList, deniedList, neverAskList)
+        viewModel.permissionsResultCallback?.callback(
+            PermissionResponse(viewModel.permissions, grantedList, deniedList, neverAskList)
         )
     }
 }
