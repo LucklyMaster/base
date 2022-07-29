@@ -6,13 +6,16 @@ plugins {
 repositories {
     google()
     mavenCentral()
+//    maven { url("../repo") }
 }
 
 dependencies {
     implementation gradleApi()
     implementation localGroovy()
     implementation 'org.ow2.asm:asm:9.1'
+    implementation 'org.ow2.asm:asm-commons:9.1'
     implementation 'com.android.tools.build:gradle:7.2.1'
+//    implementation 'com.master.aop:test:1.0.1'
 }
 
 publishing {
@@ -21,7 +24,6 @@ publishing {
             groupId = 'com.master.plugins'
             artifactId = 'aop'
             version = '1.0.0'
-            from components.java
         }
     }
 

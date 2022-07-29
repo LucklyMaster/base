@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id 'com.master.plugin.aop'
+//    id 'maven-publish'
 }
 
 android {
@@ -36,3 +36,20 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.6.0'
 }
+
+//publishing {
+//    publications {
+//        maven(MavenPublication) {
+//            groupId = 'com.master.aop'
+//            artifactId = 'test'
+//            version = '1.0.1'
+//            artifact("$buildDir/outputs/aar/aop-release.aar")
+//        }
+//    }
+//
+//    repositories {
+//        maven {
+//            url = "../repo"
+//        }
+//    }
+//}

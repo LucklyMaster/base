@@ -2,7 +2,7 @@
 buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:7.2.1"
-        classpath "com.master.plugins:aop:1.0.0"
+//        classpath "com.master.plugins:aop:1.0.0"
     }
 }
 

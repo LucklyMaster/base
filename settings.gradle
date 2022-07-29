@@ -4,6 +4,7 @@ pluginManagement {
         google()
         mavenCentral()
         maven { url("plugins") }
+        maven { url("repo") }
     }
 }
 dependencyResolutionManagement {
