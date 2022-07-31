@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.master.plugin.aop'
 }
 
 android {
@@ -33,9 +34,9 @@ android {
     buildFeatures {
         viewBinding = true
     }
-//    aopWeave {
-//        filter = "com/masterchan/mybase"
-//    }
+    aopWeave {
+        include = ["com.masterchan.mybase"]
+    }
 }
 
 dependencies {

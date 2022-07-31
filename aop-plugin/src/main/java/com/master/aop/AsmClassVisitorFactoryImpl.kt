@@ -15,6 +15,8 @@ abstract class AsmClassVisitorFactoryImpl : AsmClassVisitorFactory<AopPluginPara
     }
 
     override fun isInstrumentable(classData: ClassData): Boolean {
+        val extension = parameters.get().extension
+        println("输入的参数 = $extension")
         return false
     }
 }

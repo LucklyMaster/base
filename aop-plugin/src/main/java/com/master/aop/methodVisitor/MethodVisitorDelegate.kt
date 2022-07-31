@@ -13,6 +13,7 @@ class MethodVisitorDelegate(
 ) : AdviceAdapter(Opcodes.ASM9, methodVisitor, access, name, descriptor) {
 
     override fun visitAnnotation(descriptor: String?, visible: Boolean): AnnotationVisitor {
+        println("Annotation = $descriptor")
         return super.visitAnnotation(descriptor, visible)
     }
 

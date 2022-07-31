@@ -15,7 +15,7 @@ open class ClassVisitorImpl(classVisitor: ClassVisitor?) :
         signature: String?,
         exceptions: Array<out String>?
     ): MethodVisitor {
-
+        // return super.visitMethod(access, name, descriptor, signature, exceptions)
         val visitor = super.visitMethod(access, name, descriptor, signature, exceptions)
         return MethodVisitorDelegate(visitor, access, name, descriptor)
     }

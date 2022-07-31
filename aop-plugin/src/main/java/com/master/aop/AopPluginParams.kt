@@ -1,7 +1,10 @@
 package com.master.aop
 
 import com.android.build.api.instrumentation.InstrumentationParameters
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Input
 
-open class AopPluginParams : InstrumentationParameters {
-    var extension: AopExtension? = null
+interface AopPluginParams : InstrumentationParameters {
+    @get:Input
+    val extension: Property<AopExtension>
 }
