@@ -35,7 +35,8 @@ android {
         viewBinding = true
     }
     aopWeave {
-        include = ["com.masterchan.mybase"]
+        enable = true
+//        exclude = ["com/master/mybase/**"]
     }
 }
 

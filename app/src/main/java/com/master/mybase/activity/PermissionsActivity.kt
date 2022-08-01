@@ -4,6 +4,7 @@ import android.Manifest
 import android.os.Bundle
 import android.view.View
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.master.aop.Aspect
 import com.master.aop.OnPermissionDenied
 import com.master.aop.RequestPermission
 import com.master.dialog.AlertDialog
@@ -14,6 +15,7 @@ import com.master.permission.MPermissions
 import com.master.permission.PermissionResponse
 import com.master.mybase.databinding.ActivityPermissionsBinding
 
+@Aspect
 class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.OnClickListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

@@ -1,6 +1,6 @@
 package com.master.aop
 
 open class AopExtension {
-    var include: Array<String> = emptyArray()
+    var enable = true
     var exclude: Array<String> = emptyArray()
 }

@@ -14,16 +14,23 @@ class AopPlugin : Plugin<Project> {
         println("-------------------------------------")
         project.extensions.create("aopWeave", AopExtension::class.java)
         val components = project.extensions.getByType(AndroidComponentsExtension::class.java)
-        components.onVariants {
-            // it.instrumentation.excludes
-            // it.getExtension(AopExtension::class.java)
-            it.instrumentation.transformClassesWith(
-                AsmClassVisitorFactoryImpl::class.java, InstrumentationScope.PROJECT
-            ) { params ->
-                // params.extension.set(project.extensions.getByType(AopExtension::class.java))
-                params.extension.set(it.getExtension(AopExtension::class.java))
+        components.onVariants { variant ->
+            val extension = project.extensions.getByType(AopExtension::class.java)
+            println("------------AOP插件${if (extension.enable) "已启用" else "未启用"}------------")
+
+            if (!extension.enable) {
+                return@onVariants
             }
-            it.instrumentation.setAsmFramesComputationMode(
+
+            //过滤不需要扫描的类
+            extension.exclude.forEach {
+                variant.instrumentation.excludes.add(it)
+            }
+
+            variant.instrumentation.transformClassesWith(
+                AsmClassVisitorFactoryImpl::class.java, InstrumentationScope.PROJECT
+            ) {}
+            variant.instrumentation.setAsmFramesComputationMode(
                 FramesComputationMode.COMPUTE_FRAMES_FOR_INSTRUMENTED_METHODS
             )
         }

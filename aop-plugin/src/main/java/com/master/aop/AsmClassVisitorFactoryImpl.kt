@@ -3,20 +3,20 @@ package com.master.aop
 import com.android.build.api.instrumentation.AsmClassVisitorFactory
 import com.android.build.api.instrumentation.ClassContext
 import com.android.build.api.instrumentation.ClassData
+import com.android.build.api.instrumentation.InstrumentationParameters
 import org.objectweb.asm.ClassVisitor
 
-abstract class AsmClassVisitorFactoryImpl : AsmClassVisitorFactory<AopPluginParams> {
+abstract class AsmClassVisitorFactoryImpl : AsmClassVisitorFactory<InstrumentationParameters.None> {
 
     override fun createClassVisitor(
         classContext: ClassContext,
         nextClassVisitor: ClassVisitor
     ): ClassVisitor {
-        return ClassVisitorImpl(nextClassVisitor)
+        return ClassVisitorImpl(classContext, nextClassVisitor)
     }
 
     override fun isInstrumentable(classData: ClassData): Boolean {
-        val extension = parameters.get().extension
-        println("输入的参数 = $extension")
-        return false
+        println("类注解:${classData.classAnnotations}")
+        return classData.classAnnotations.contains(Annotation.Aspect)
     }
 }
