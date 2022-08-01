@@ -16,7 +16,6 @@ abstract class AsmClassVisitorFactoryImpl : AsmClassVisitorFactory<Instrumentati
     }
 
     override fun isInstrumentable(classData: ClassData): Boolean {
-        println("类注解:${classData.classAnnotations}")
         return classData.classAnnotations.contains(Annotation.Aspect)
     }
 }

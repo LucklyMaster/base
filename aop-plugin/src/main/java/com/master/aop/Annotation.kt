@@ -7,4 +7,7 @@ package com.master.aop
  */
 object Annotation {
     const val Aspect = "com.master.aop.Aspect"
+    const val PrintCost = "Lcom/master/aop/PrintCost;"
+    const val RequestPermission = "Lcom/master/aop/RequestPermission;"
+    val values = arrayOf(PrintCost, RequestPermission)
 }

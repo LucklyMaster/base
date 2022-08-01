@@ -6,14 +6,15 @@ import android.view.View
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.master.aop.Aspect
 import com.master.aop.OnPermissionDenied
+import com.master.aop.PrintCost
 import com.master.aop.RequestPermission
 import com.master.dialog.AlertDialog
 import com.master.ext.logD
 import com.master.ext.println
 import com.master.ext.toast
+import com.master.mybase.databinding.ActivityPermissionsBinding
 import com.master.permission.MPermissions
 import com.master.permission.PermissionResponse
-import com.master.mybase.databinding.ActivityPermissionsBinding
 
 @Aspect
 class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.OnClickListener {
@@ -129,6 +130,7 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
         }
     }
 
+    @PrintCost
     @RequestPermission([Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO], true)
     private fun applyPermission() {
         toast("申请权限成功")

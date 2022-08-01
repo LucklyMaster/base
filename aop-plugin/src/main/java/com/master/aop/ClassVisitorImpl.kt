@@ -16,9 +16,7 @@ open class ClassVisitorImpl(private val classContext: ClassContext, classVisitor
         signature: String?,
         exceptions: Array<out String>?
     ): MethodVisitor {
-        println("方法：${classContext.currentClassData.className}:$name")
-        // return super.visitMethod(access, name, descriptor, signature, exceptions)
         val visitor = super.visitMethod(access, name, descriptor, signature, exceptions)
-        return MethodVisitorDelegate(classContext, visitor, access, name, descriptor)
+        return MethodVisitorDelegate(visitor, access, name, descriptor)
     }
 }
