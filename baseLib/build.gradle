@@ -2,6 +2,7 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'kotlin-parcelize'
+    id 'maven-publish'
 }
 
 android {
@@ -50,4 +51,21 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.6.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.master.lib'
+            artifactId = 'baseLib'
+            version = '1.0.0'
+            artifact("$buildDir/outputs/aar/baseLib-release.aar")
+        }
+    }
+
+    repositories {
+        maven {
+            url = "../repo"
+        }
+    }
 }
