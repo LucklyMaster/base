@@ -4,10 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.master.ext.*
-import com.master.log.MLog
+import com.master.lib.ext.*
+import com.master.lib.log.MLog
 import com.master.mybase.databinding.ActivityMainBinding
-import com.master.utils.DeviceUtils
+import com.master.lib.utils.DeviceUtils
 
 
 class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener {

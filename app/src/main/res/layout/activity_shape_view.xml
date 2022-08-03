@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context=".activity.ShapeViewActivity">
 
-    <com.master.view.TitleBar
+    <com.master.lib.view.TitleBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:mc_leftText="ShapeView" />
@@ -23,7 +23,7 @@
             android:orientation="vertical"
             android:padding="20dp">
 
-            <com.master.view.ShapeTextView
+            <com.master.lib.view.ShapeTextView
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:gravity="center"
@@ -48,7 +48,7 @@
                 android:scaleType="centerInside"
                 android:src="@mipmap/img" />
 
-            <com.master.view.ShapeImageView
+            <com.master.lib.view.ShapeImageView
                 android:id="@+id/shapeImageView"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
                 app:mc_strokeColor="#0f0"
                 app:mc_strokeWidth="2dp" />
 
-            <com.master.view.ShapeFrameLayout
+            <com.master.lib.view.ShapeFrameLayout
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginTop="10dp"
@@ -78,9 +78,9 @@
                     android:layout_gravity="center"
                     android:text="测试测试"
                     android:textColor="@color/white" />
-            </com.master.view.ShapeFrameLayout>
+            </com.master.lib.view.ShapeFrameLayout>
 
-            <com.master.view.CellView
+            <com.master.lib.view.CellView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -103,7 +103,7 @@
                 app:mc_textSize="18sp"
                 app:mc_textWidth="100dp" />
 
-            <com.master.view.EditCellView
+            <com.master.lib.view.EditCellView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -124,7 +124,7 @@
                 app:mc_textSize="18sp"
                 app:mc_textWidth="100dp" />
 
-            <com.master.view.TitleBar
+            <com.master.lib.view.TitleBar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:mc_dividerColor="#F11645"
@@ -147,7 +147,7 @@
                 app:mc_rightMarginEnd="30dp"
                 app:mc_rightText="@string/app_name" />
 
-            <com.master.view.ItemView
+            <com.master.lib.view.ItemView
                 android:id="@+id/title_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -163,7 +163,7 @@
                 app:mc_middleIconWidth="40dp"
                 app:mc_middleText="@string/app_name" />
 
-            <com.master.view.ShapeItemView
+            <com.master.lib.view.ShapeItemView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"

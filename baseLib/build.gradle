@@ -59,7 +59,7 @@ publishing {
             groupId = 'com.master.lib'
             artifactId = 'baseLib'
             version = '1.0.0'
-            artifact("$buildDir/outputs/aar/baseLib-release.aar")
+//            artifact("$buildDir/outputs/aar/baseLib-release.aar")
         }
     }
 }

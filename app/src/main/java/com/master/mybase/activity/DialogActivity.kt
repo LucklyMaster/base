@@ -2,9 +2,9 @@ package com.master.mybase.activity
 
 import android.os.Bundle
 import android.view.View
-import com.master.MToast
-import com.master.dialog.AlertDialog
-import com.master.ext.dp2pxi
+import com.master.lib.MToast
+import com.master.lib.dialog.AlertDialog
+import com.master.lib.ext.dp2pxi
 import com.master.mybase.R
 import com.master.mybase.databinding.ActivityDialogBinding
 

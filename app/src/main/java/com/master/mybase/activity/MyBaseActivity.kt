@@ -2,8 +2,8 @@ package com.master.mybase.activity
 
 import android.os.Bundle
 import androidx.viewbinding.ViewBinding
-import com.master.base.BaseVBActivity
-import com.master.ext.Log
+import com.master.lib.base.BaseVBActivity
+import com.master.lib.ext.Log
 
 /**
  * @author: MasterChan

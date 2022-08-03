@@ -8,13 +8,13 @@ import com.master.aop.Aspect
 import com.master.aop.OnPermissionDenied
 import com.master.aop.PrintCost
 import com.master.aop.RequestPermission
-import com.master.dialog.AlertDialog
-import com.master.ext.logD
-import com.master.ext.println
-import com.master.ext.toast
+import com.master.lib.dialog.AlertDialog
+import com.master.lib.ext.logD
+import com.master.lib.ext.println
+import com.master.lib.ext.toast
 import com.master.mybase.databinding.ActivityPermissionsBinding
-import com.master.permission.MPermissions
-import com.master.permission.PermissionResponse
+import com.master.lib.permission.MPermissions
+import com.master.lib.permission.PermissionResponse
 
 @Aspect
 class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.OnClickListener {
