@@ -53,13 +53,16 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
 }
 
-publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId = 'com.master.lib'
-            artifactId = 'baseLib'
-            version = '1.0.0'
+afterEvaluate {
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                from components.release
+                groupId = 'com.master.lib'
+                artifactId = 'baseLib'
+                version = '1.0.0'
 //            artifact("$buildDir/outputs/aar/baseLib-release.aar")
+            }
         }
     }
 }
