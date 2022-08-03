@@ -4,6 +4,20 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file('F:\\SignInfo\\MasterChan.jks')
+            keyAlias 'MasterChan'
+            storePassword '123456'
+            keyPassword '123456'
+        }
+        release {
+            storeFile file('F:\\SignInfo\\MasterChan.jks')
+            storePassword '123456'
+            keyPassword '123456'
+            keyAlias 'MasterChan'
+        }
+    }
     compileSdk 32
 
     defaultConfig {
@@ -16,11 +30,13 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
         debug {
             jniDebuggable true
+            signingConfig signingConfigs.debug
         }
     }
     compileOptions {
