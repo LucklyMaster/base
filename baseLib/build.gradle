@@ -62,10 +62,4 @@ publishing {
             artifact("$buildDir/outputs/aar/baseLib-release.aar")
         }
     }
-
-    repositories {
-        maven {
-            url = "../repo"
-        }
-    }
 }
