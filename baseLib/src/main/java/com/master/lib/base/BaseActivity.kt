@@ -22,18 +22,9 @@ open class BaseActivity : AppCompatActivity() {
 
     protected lateinit var context: Context
     protected lateinit var activity: Activity
-
-    /**
-     * 点击EditText外，自动收起键盘
-     */
     protected open var isAutoFoldKeyboard = false
-
-    /**
-     * window控制器
-     */
-    protected var windowController: WindowInsetsControllerCompat? = null
-
-    protected val activityResultHelper = ActivityResultHelper()
+    protected open var windowController: WindowInsetsControllerCompat? = null
+    protected open val activityResultHelper = ActivityResultHelper()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
