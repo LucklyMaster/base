@@ -28,26 +28,25 @@ open class BaseDialog @JvmOverloads constructor(
     context: Context, var contentView: View? = null
 ) : DialogFragment() {
 
-    protected val mActivity: FragmentActivity
-
-    protected var dialogTheme = 0
-    protected var windowDrawable: Drawable? = null
-    protected var windowColor = Color.WHITE
-    protected var windowRadius = 6f
-    protected var windowAmount = 0.6f
-    protected var windowWidth = ViewGroup.LayoutParams.WRAP_CONTENT
-    protected var windowHeight = ViewGroup.LayoutParams.WRAP_CONTENT
-    protected var windowGravity = Gravity.CENTER
-    protected var windowAnimate: Int? = null
-    protected var windowElevation = dp2px(10f)
-    protected var windowBehindBlurRadius = 0
-    protected var contentBlurRadius = 0
-    protected var xOffset = 0
-    protected var yOffset = 0
-    protected var cancellable = true
-    protected var canceledOnTouchOutside = true
-    protected var dismissListener: DialogInterface.OnDismissListener? = null
-    protected var cancelListener: DialogInterface.OnCancelListener? = null
+    protected open val mActivity: FragmentActivity
+    protected open var dialogTheme = 0
+    protected open var windowDrawable: Drawable? = null
+    protected open var windowColor = Color.WHITE
+    protected open var windowRadius = 6f
+    protected open var windowAmount = 0.6f
+    protected open var windowWidth = ViewGroup.LayoutParams.WRAP_CONTENT
+    protected open var windowHeight = ViewGroup.LayoutParams.WRAP_CONTENT
+    protected open var windowGravity = Gravity.CENTER
+    protected open var windowAnimate: Int? = null
+    protected open var windowElevation = dp2px(10f)
+    protected open var windowBehindBlurRadius = 0
+    protected open var contentBlurRadius = 0
+    protected open var xOffset = 0
+    protected open var yOffset = 0
+    protected open var cancellable = true
+    protected open var canceledOnTouchOutside = true
+    protected open var dismissListener: DialogInterface.OnDismissListener? = null
+    protected open var cancelListener: DialogInterface.OnCancelListener? = null
 
     constructor(context: Context, layoutRes: Int) : this(
         context, LayoutInflater.from(context).inflate(layoutRes, null)

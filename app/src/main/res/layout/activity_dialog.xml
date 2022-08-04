@@ -60,6 +60,14 @@
             android:textColor="@color/white"
             android:textSize="16sp" />
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onClick="alertDialogClick7"
+            android:text="AlertDialog7"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
     </LinearLayout>
 
 </ScrollView>

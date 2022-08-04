@@ -2,7 +2,6 @@ package com.master.lib
 
 import android.os.Build
 import android.os.Process
-import androidx.viewbinding.BuildConfig
 import com.master.lib.ext.application
 import com.master.lib.ext.create
 import com.master.lib.ext.versionCode

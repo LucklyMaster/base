@@ -328,19 +328,4 @@
     </declare-styleable>
 
     <attr name="mc_AlertDialogDefaultStyle" format="reference" />
-
-    <declare-styleable name="LoadingDialog">
-        <attr name="mc_text" />
-        <attr name="mc_textSize" />
-        <attr name="mc_textColor" />
-        <attr name="mc_progressColor" format="color|reference" />
-        <attr name="mc_progressDrawable" format="reference" />
-        <attr name="mc_windowColor" />
-        <attr name="mc_windowRadius" />
-        <attr name="mc_windowDrawable" />
-        <attr name="mc_windowAmount" />
-        <attr name="mc_windowWidth" />
-        <attr name="mc_windowHeight" />
-    </declare-styleable>
-    <attr name="mc_LoadingDialogDefaultStyle" format="reference" />
 </resources>

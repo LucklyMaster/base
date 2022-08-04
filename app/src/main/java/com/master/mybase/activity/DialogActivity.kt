@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import com.master.lib.MToast
 import com.master.lib.dialog.AlertDialog
+import com.master.lib.dialog.LoadingDialog
 import com.master.lib.ext.dp2pxi
 import com.master.mybase.R
 import com.master.mybase.databinding.ActivityDialogBinding
@@ -81,5 +82,9 @@ class DialogActivity : MyBaseActivity<ActivityDialogBinding>() {
             .setWindowBehindBlur(dp2pxi(60))
             .setOnDismissListener { MToast.show("dismiss") }
             .show()
+    }
+
+    fun alertDialogClick7(view: View) {
+        LoadingDialog(this).setText("正在加载...").show()
     }
 }
