@@ -4,7 +4,7 @@ import android.content.Context
 import android.text.InputType
 import android.util.AttributeSet
 import android.widget.EditText
-import com.master.R
+import com.master.lib.R
 import com.master.lib.ext.ifHas
 import com.master.lib.ext.isEditable
 import com.master.lib.ext.setDigits

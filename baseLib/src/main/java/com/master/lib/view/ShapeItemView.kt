@@ -3,7 +3,7 @@ package com.master.lib.view
 import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
-import com.master.R
+import com.master.lib.R
 import com.master.lib.ext.ifHas
 import com.master.lib.ext.isEditable
 

@@ -13,7 +13,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.GravityInt
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import com.master.R
+import com.master.lib.R
 import com.master.lib.ext.dp2pxi
 import com.master.lib.ext.getColor
 import com.master.lib.ext.setPaddingBottom

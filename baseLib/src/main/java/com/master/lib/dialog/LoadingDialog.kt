@@ -10,8 +10,8 @@ import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.FragmentActivity
-import com.master.R
-import com.master.databinding.McDialogLoadingBinding
+import com.master.lib.R
+import com.master.lib.databinding.McDialogLoadingBinding
 import com.master.lib.ext.activity
 import com.master.lib.ext.dp2px
 import com.master.lib.ext.isMainThread

@@ -19,7 +19,7 @@ import com.master.lib.dialog.AlertDialog.Companion.TYPE_MULTI_CHOICE
 import com.master.lib.dialog.AlertDialog.Companion.TYPE_SINGLE_CHOICE
 import com.master.lib.widget.RecyclerViewDivider
 import com.master.lib.widget.ViewHolder
-import com.master.R
+import com.master.lib.R
 import com.master.lib.ext.*
 
 /**

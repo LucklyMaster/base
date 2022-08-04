@@ -14,7 +14,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import com.master.R
+import com.master.lib.R
 import com.master.lib.ext.gone
 import com.master.lib.ext.ifHas
 import com.master.lib.ext.visible

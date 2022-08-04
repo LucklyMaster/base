@@ -12,7 +12,7 @@ import android.util.AttributeSet
 import androidx.annotation.ColorInt
 import androidx.annotation.IntRange
 import androidx.appcompat.widget.AppCompatImageView
-import com.master.R
+import com.master.lib.R
 import kotlin.math.min
 
 /**

@@ -17,7 +17,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.StyleableRes
 import androidx.core.content.ContextCompat
 import com.google.android.material.color.MaterialColors
-import com.master.R
+import com.master.lib.R
 import com.master.lib.ext.equals
 import com.master.lib.ext.getColor
 import com.master.lib.ext.isNotEmpty

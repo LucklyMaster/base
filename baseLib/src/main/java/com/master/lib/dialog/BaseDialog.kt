@@ -16,7 +16,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import com.master.R
+import com.master.lib.R
 import com.master.lib.ext.*
 
 /**

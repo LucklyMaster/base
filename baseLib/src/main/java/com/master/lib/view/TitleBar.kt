@@ -3,7 +3,7 @@ package com.master.lib.view
 import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintSet
-import com.master.R
+import com.master.lib.R
 import com.master.lib.ext.activity
 
 /**

@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.master.BuildConfig
+import com.master.lib.BuildConfig
 import com.master.lib.utils.AndroidVersion
 import com.master.lib.utils.DeviceUtils
 import com.master.lib.utils.XmlUtils

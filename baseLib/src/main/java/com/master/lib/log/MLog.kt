@@ -1,6 +1,6 @@
 package com.master.lib.log
 
-import com.master.BuildConfig
+import com.master.lib.BuildConfig
 import com.master.lib.ext.Log
 import org.json.JSONArray
 import org.json.JSONObject
