@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResult
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.core.view.ViewCompat
@@ -49,5 +50,12 @@ open class BaseFragment(@LayoutRes layout: Int) : Fragment(layout) {
 
     protected open fun getContentView(): View? {
         return null
+    }
+
+    protected open fun startActivityForResult(
+        clazz: Class<out Activity>,
+        result: ActivityResult.() -> Unit
+    ) {
+        activityResultHelper.launch(clazz, result)
     }
 }
