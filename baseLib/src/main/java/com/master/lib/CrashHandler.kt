@@ -65,7 +65,7 @@ class CrashHandler private constructor() : Thread.UncaughtExceptionHandler {
         Thread.setDefaultUncaughtExceptionHandler(this)
         GlobalScope.launch(Dispatchers.IO) {
             File(saveDir).listFiles { file -> file.isFile }?.forEach {
-                if (DateUtils.dayDiff(Date(it.lastModified()), Date()) >= 0) {
+                if (DateUtils.dayDiff(Date(it.lastModified()), Date()) > saveDays) {
                     it.delete()
                 }
             }
