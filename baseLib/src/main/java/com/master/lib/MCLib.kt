@@ -30,7 +30,7 @@ class MCLib {
      * @param method
      * @return MCLib
      */
-    fun setLog(method: MLog.() -> Unit) = apply {
+    inline fun setLog(method: MLog.() -> Unit) = apply {
         method.invoke(MLog)
     }
 
@@ -39,7 +39,7 @@ class MCLib {
      * @param method [@kotlin.ExtensionFunctionType] Function1<CrashHandler, Unit>
      * @return MCLib
      */
-    fun setCrashHandler(method: CrashHandler.() -> Unit) = apply {
+    inline fun setCrashHandler(method: CrashHandler.() -> Unit) = apply {
         method.invoke(CrashHandler.instance)
     }
 
