@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import android.util.DisplayMetrics
+import android.view.WindowManager
 
 fun dp2px(dp: Float): Float = dp * displayDensity + 0.5f
 fun dp2px(dp: Int): Float = dp * displayDensity + 0.5f
@@ -55,11 +56,12 @@ val screenHeight: Int
  */
 val screenRealHeight: Int
     get() {
+        val manager = application.getSystemService(WindowManager::class.java)
         return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
-            topActivity?.windowManager?.currentWindowMetrics?.bounds?.height() ?: 0
+            manager?.currentWindowMetrics?.bounds?.height() ?: 0
         } else {
             val metrics = DisplayMetrics()
-            topActivity?.windowManager?.defaultDisplay?.getRealMetrics(metrics)
+            manager?.defaultDisplay?.getRealMetrics(metrics)
             metrics.heightPixels
         }
     }
