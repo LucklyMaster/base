@@ -1,5 +1,5 @@
 plugins {
-    id "org.gradle.kotlin.kotlin-dsl"
+    id 'kotlin'
     id 'maven-publish'
 }
 
@@ -13,10 +13,6 @@ dependencies {
     implementation gradleApi()
     implementation localGroovy()
     implementation 'com.android.tools.build:gradle:7.2.1'
-    implementation "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.0"
-    implementation "com.hiya:jacoco-android:0.2"
-    implementation "org.aspectj:aspectjrt:1.9.7"
-    implementation "org.aspectj:aspectjtools:1.9.7"
 }
 
 publishing {
