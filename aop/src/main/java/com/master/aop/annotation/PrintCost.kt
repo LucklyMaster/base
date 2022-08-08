@@ -1,4 +1,4 @@
-package com.master.aop
+package com.master.aop.annotation
 
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)

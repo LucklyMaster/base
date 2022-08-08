@@ -1,4 +1,4 @@
-package com.master.mybase.activity
+package com.master.mybase
 
 import android.app.Application
 import com.master.lib.MCLib

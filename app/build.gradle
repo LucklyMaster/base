@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.master.plugin.aop'
 }
 
 android {
@@ -51,6 +52,9 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    aopWeave {
+        filter = "com/master/mybase"
+    }
 }
 
 dependencies {
@@ -63,6 +67,7 @@ dependencies {
     implementation 'androidx.core:core-splashscreen:1.0.0-beta02'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
     implementation 'io.github.lucksiege:pictureselector:v3.10.2'
+    api "org.aspectj:aspectjrt:1.9.7"
     implementation 'com.github.bumptech.glide:glide:4.13.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
 }

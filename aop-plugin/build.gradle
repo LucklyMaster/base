@@ -1,34 +1,37 @@
 plugins {
-    id 'kotlin'
-//    id 'maven-publish'
+    id "org.gradle.kotlin.kotlin-dsl"
+    id 'maven-publish'
 }
 
 repositories {
     google()
     mavenCentral()
+    gradlePluginPortal()
 }
 
 dependencies {
     implementation gradleApi()
     implementation localGroovy()
-    implementation 'org.ow2.asm:asm:9.1'
-    implementation 'org.ow2.asm:asm-commons:9.1'
     implementation 'com.android.tools.build:gradle:7.2.1'
+    implementation "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.0"
+    implementation "com.hiya:jacoco-android:0.2"
+    implementation "org.aspectj:aspectjrt:1.9.7"
+    implementation "org.aspectj:aspectjtools:1.9.7"
 }
 
-//publishing {
-//    publications {
-//        maven(MavenPublication) {
-//            groupId = 'com.master.plugins'
-//            artifactId = 'aop'
-//            version = '1.0.0'
-//            from components.java
-//        }
-//    }
-//
-//    repositories {
-//        maven {
-//            url = "../plugins"
-//        }
-//    }
-//}
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.master.plugin'
+            artifactId = 'aop'
+            version = '1.0.0'
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            url = "../repo/plugins"
+        }
+    }
+}
