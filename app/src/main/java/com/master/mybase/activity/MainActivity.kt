@@ -6,8 +6,8 @@ import android.view.View
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.master.lib.ext.*
 import com.master.lib.log.MLog
-import com.master.mybase.databinding.ActivityMainBinding
 import com.master.lib.utils.DeviceUtils
+import com.master.mybase.databinding.ActivityMainBinding
 
 
 class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener {
