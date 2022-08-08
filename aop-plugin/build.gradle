@@ -23,7 +23,7 @@ publishing {
     publications {
         maven(MavenPublication) {
             groupId = 'com.master.plugin'
-            artifactId = 'aop'
+            artifactId = 'aop-plugin'
             version = '1.0.0'
             from components.java
         }
