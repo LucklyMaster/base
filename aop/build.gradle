@@ -47,7 +47,7 @@ afterEvaluate {
         publications {
             maven(MavenPublication) {
                 from components.release
-                groupId = 'com.master.lib'
+                groupId = 'com.master.aop'
                 artifactId = 'aop'
                 version = '1.0.0'
 //            artifact("$buildDir/outputs/aar/baseLib-release.aar")
