@@ -66,10 +66,7 @@ open class BaseActivity : AppCompatActivity() {
         windowController?.hide(WindowInsetsCompat.Type.ime())
     }
 
-    protected open fun startActivityForResult(
-        clazz: Class<out Activity>,
-        result: ActivityResult.() -> Unit
-    ) {
+    open fun startActivityForResult(clazz: Class<out Activity>, result: ActivityResult.() -> Unit) {
         activityResultHelper.launch(clazz, result)
     }
 

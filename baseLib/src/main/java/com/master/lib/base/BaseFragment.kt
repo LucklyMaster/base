@@ -21,14 +21,9 @@ import com.master.lib.widget.ActivityResultHelper
 open class BaseFragment(@LayoutRes layout: Int) : Fragment(layout) {
 
     protected lateinit var activity: Activity
-    protected lateinit var rootView: View
-
-    /**
-     * window控制器
-     */
-    protected var windowController: WindowInsetsControllerCompat? = null
-
-    protected val activityResultHelper = ActivityResultHelper()
+    protected open lateinit var rootView: View
+    protected open var windowController: WindowInsetsControllerCompat? = null
+    protected open val activityResultHelper = ActivityResultHelper()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,10 +47,7 @@ open class BaseFragment(@LayoutRes layout: Int) : Fragment(layout) {
         return null
     }
 
-    protected open fun startActivityForResult(
-        clazz: Class<out Activity>,
-        result: ActivityResult.() -> Unit
-    ) {
+    open fun startActivityForResult(clazz: Class<out Activity>, result: ActivityResult.() -> Unit) {
         activityResultHelper.launch(clazz, result)
     }
 }
