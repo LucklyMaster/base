@@ -3,12 +3,10 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
-        maven { url "https://plugins.gradle.org/m2/" }
-        maven { url "repo/plugins" }
     }
 }
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.PREFER_PROJECT)
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
@@ -17,5 +15,3 @@ dependencyResolutionManagement {
 rootProject.name = "MyBase"
 include ':app'
 include ':baseLib'
-include ':aop'
-include ':aop-plugin'

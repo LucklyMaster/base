@@ -4,14 +4,10 @@ import android.Manifest
 import android.os.Bundle
 import android.view.View
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.master.aop.annotation.OnPermissionDenied
-import com.master.aop.annotation.RequestPermission
 import com.master.lib.dialog.AlertDialog
 import com.master.lib.ext.logD
-import com.master.lib.ext.println
 import com.master.lib.ext.toast
 import com.master.lib.permission.MPermissions
-import com.master.lib.permission.PermissionResponse
 import com.master.mybase.databinding.ActivityPermissionsBinding
 
 class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.OnClickListener {
@@ -20,8 +16,7 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
         installSplashScreen()
         setOnViewClickListeners(this) {
             arrayOf(
-                btnStorge, btnPackage, btnAudio, btnBluetooth, btnAllFile, btnAlertWindow,
-                btnAnnotation, btnDetail
+                btnStorge, btnPackage, btnAudio, btnBluetooth, btnAllFile, btnAlertWindow, btnDetail
             )
         }
     }
@@ -118,23 +113,9 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
                         toast(if (it.allGranted) "success" else "failed")
                     }
             }
-            binding.btnAnnotation -> {
-                applyPermission()
-            }
             binding.btnDetail -> {
                 startActivity(MPermissions.with(this).getAppDetailIntent())
             }
         }
-    }
-
-    @RequestPermission([Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO], true)
-    private fun applyPermission() {
-        // toast("申请权限成功")
-    }
-
-    @OnPermissionDenied([Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO])
-    private fun onDenied(response: PermissionResponse) {
-        response.println()
-        toast("申请权限失败")
     }
 }
