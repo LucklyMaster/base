@@ -2,6 +2,7 @@ package com.master.lib.base
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
@@ -68,6 +69,10 @@ open class BaseActivity : AppCompatActivity() {
 
     open fun startActivityForResult(clazz: Class<out Activity>, result: ActivityResult.() -> Unit) {
         activityResultHelper.launch(clazz, result)
+    }
+
+    open fun startActivityForResult(intent: Intent, result: ActivityResult.() -> Unit) {
+        activityResultHelper.launch(intent, result)
     }
 
     override fun onDestroy() {
