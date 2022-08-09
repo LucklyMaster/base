@@ -114,7 +114,7 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
                     }
             }
             binding.btnDetail -> {
-                startActivity(MPermissions.with(this).getAppDetailIntent())
+                startActivity(MPermissions.getAppDetailIntent())
             }
         }
     }

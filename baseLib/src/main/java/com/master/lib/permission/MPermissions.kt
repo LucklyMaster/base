@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import com.master.lib.ext.application
 
 /**
  * MPermissions
@@ -31,6 +32,22 @@ class MPermissions private constructor(private val activity: FragmentActivity) {
         fun with(fragment: Fragment): MPermissions {
             return MPermissions(fragment.requireActivity())
         }
+
+        fun isGranted(permission: String): Boolean {
+            return Utils.isGranted(application, permission)
+        }
+
+        fun isAllGranted(permissions: List<String>): Boolean {
+            return Utils.isAllGranted(application, permissions)
+        }
+
+        fun isNeverAsk(permission: String): Boolean {
+            return Utils.isNeverAsk(application, permission)
+        }
+
+        fun getAppDetailIntent(permission: String = ""): Intent {
+            return Utils.getAppDetailIntent(application, permission)
+        }
     }
 
     fun permissions(vararg permissions: String) = apply {
@@ -54,21 +71,5 @@ class MPermissions private constructor(private val activity: FragmentActivity) {
 
     fun request(callback: PermissionsResultCallback? = null) {
         RequestFragment.request(activity, permissions, callback, interceptorMap)
-    }
-
-    fun isGranted(permission: String): Boolean {
-        return Utils.isGranted(activity, permission)
-    }
-
-    fun isAllGranted(permissions: List<String>): Boolean {
-        return Utils.isAllGranted(activity, permissions)
-    }
-
-    fun isNeverAsk(permission: String): Boolean {
-        return Utils.isNeverAsk(activity, permission)
-    }
-
-    fun getAppDetailIntent(permission: String = ""): Intent {
-        return Utils.getAppDetailIntent(activity, permission)
     }
 }
