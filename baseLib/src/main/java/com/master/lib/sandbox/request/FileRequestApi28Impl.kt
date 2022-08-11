@@ -31,8 +31,9 @@ open class FileRequestApi28Impl : AbsFileRequest() {
         var mimeType = cv.getAsString(MediaStore.MediaColumns.MIME_TYPE)
         //没有mimeType，自动推测添加一个mimeType
         if (mimeType.isNullOrEmpty()) {
-            mimeType = file.mimeType
-            cv.put(MediaStore.MediaColumns.MIME_TYPE, mimeType)
+            mimeType = file.mimeType?.apply {
+                cv.put(MediaStore.MediaColumns.MIME_TYPE, this)
+            }
         }
         //有mimeType，组装为包含mimeType推测文件后缀的文件
         val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
