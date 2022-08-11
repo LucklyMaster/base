@@ -27,7 +27,6 @@ open class FileRequest : AbsFileRequest() {
         args: (ContentValues.() -> Unit)?
     ): Boolean {
         val file = File(obtainPath(filePath))
-        check(file.extension.isEmpty()) { "Only allow folders，the file is ${file.path}" }
 
         val rootPath = "${Environment.getExternalStorageDirectory().absolutePath}/"
         val relativePath = file.absolutePath.replace(rootPath, "")

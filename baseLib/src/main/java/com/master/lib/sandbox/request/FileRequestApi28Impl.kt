@@ -38,7 +38,11 @@ open class FileRequestApi28Impl : AbsFileRequest() {
         val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
         val split = fileName.split(".")
         if (split.size == 1 || split[1] != extension) {
-            file = File("${file.absolutePath}.$extension")
+            file = if (extension.isNullOrEmpty()) {
+                File(file.absolutePath)
+            } else {
+                File("${file.absolutePath}.$extension")
+            }
             cv.put(MediaStore.MediaColumns.DATA, file.absolutePath)
         }
 
