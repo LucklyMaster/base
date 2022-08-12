@@ -16,9 +16,8 @@ import kotlinx.coroutines.delay
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-
 /**
- * RequestFragment
+ * 权限申请的逻辑处理
  * @author: MasterChan
  * @date: 2022-07-24 15:55
  */
@@ -27,12 +26,22 @@ class RequestFragment : Fragment() {
     /**
      * 权限申请结果回调
      */
-    private var resultCallback: PermissionsResultCallback? = null
+    private var resultCallback: OnResultCallback? = null
+
+    /**
+     * 是否将所有权限皆授权判断为授权成功，只针对失败拦截器生效
+     */
+    private var isNeedAllGranted = false
+
+    /**
+     * 失败拦截器
+     */
+    private var onDeniedInterceptor: OnDeniedInterceptor? = null
 
     /**
      * 特殊权限拦截器
      */
-    private var interceptorMap = mutableMapOf<String, SpecialPermissionInterceptor>()
+    private var specialInterceptors = mutableMapOf<String, SpecialPermissionInterceptor>()
     private val viewModel by lazy { ViewModelProvider(this).get(RequestModel::class.java) }
 
     /**
@@ -53,14 +62,18 @@ class RequestFragment : Fragment() {
         fun request(
             activity: FragmentActivity,
             permissions: MutableList<String>,
-            callback: PermissionsResultCallback?,
-            interceptorMap: Map<String, SpecialPermissionInterceptor>?
+            resultCallback: OnResultCallback?,
+            isNeedAllGranted: Boolean,
+            onDeniedInterceptor: OnDeniedInterceptor?,
+            specialInterceptors: Map<String, SpecialPermissionInterceptor>?
         ) {
             val fragment = RequestFragment()
             fragment.attachActivity(activity)
-            fragment.setResultCallback(callback)
+            fragment.resultCallback = resultCallback
+            fragment.isNeedAllGranted = isNeedAllGranted
+            fragment.onDeniedInterceptor = onDeniedInterceptor
+            specialInterceptors?.let { fragment.specialInterceptors.putAll(it) }
             fragment.request(permissions)
-            fragment.addSpecialPermissionInterceptor(interceptorMap)
         }
     }
 
@@ -73,6 +86,12 @@ class RequestFragment : Fragment() {
         activity.supportFragmentManager.beginTransaction()
             .add(this, toString())
             .commitAllowingStateLoss()
+        lifecycleScope.launchWhenCreated {
+            viewModel.permissionsResultCallback = resultCallback
+            viewModel.specialInterceptors.putAll(specialInterceptors)
+            viewModel.isNeedAllGranted = isNeedAllGranted
+            viewModel.onDeniedInterceptor = onDeniedInterceptor
+        }
     }
 
     private fun detachActivity(activity: FragmentActivity) {
@@ -80,22 +99,8 @@ class RequestFragment : Fragment() {
         activityResultHelper.unregister()
     }
 
-    private fun setResultCallback(callback: PermissionsResultCallback?) {
-        this.resultCallback = callback
-    }
-
-    private fun addSpecialPermissionInterceptor(interceptorMap: Map<String, SpecialPermissionInterceptor>?) {
-        interceptorMap?.let { this.interceptorMap.putAll(it) }
-    }
-
     private fun request(permissions: MutableList<String>) {
         lifecycleScope.launchWhenResumed {
-            if (viewModel.permissionsResultCallback == null) {
-                viewModel.permissionsResultCallback = resultCallback
-            }
-            if (viewModel.interceptorMap.isEmpty()) {
-                viewModel.interceptorMap.putAll(interceptorMap)
-            }
             val permissionsMap = Utils.convertPermissions2CurVersion(permissions)
             if (BuildConfig.DEBUG) {
                 checkPermissions(permissionsMap.keys.toList())
@@ -176,7 +181,7 @@ class RequestFragment : Fragment() {
     }
 
     private suspend fun specialPermissionIntercept(permission: String) = suspendCoroutine<Boolean> {
-        val interceptor = viewModel.interceptorMap[permission]
+        val interceptor = viewModel.specialInterceptors[permission]
         if (interceptor != null) {
             interceptor.onIntercept { result ->
                 it.resume(result)
@@ -205,8 +210,31 @@ class RequestFragment : Fragment() {
                 neverAskList.add(it)
             }
         }
-        viewModel.permissionsResultCallback?.callback(
-            PermissionResponse(viewModel.permissions, grantedList, deniedList, neverAskList)
+        //权限申请结果
+        val response = PermissionResponse(
+            viewModel.permissions, grantedList, deniedList, neverAskList
         )
+        if (viewModel.onDeniedInterceptor != null) {
+            //需要全部申请成功
+            if (viewModel.isNeedAllGranted) {
+                if (!response.isAllGranted) {
+                    //未全部申请成功
+                    viewModel.onDeniedInterceptor!!.callback(requireActivity(), response)
+                } else {
+                    //全部申请成功
+                    viewModel.permissionsResultCallback?.callback(response)
+                }
+            } else {
+                if (!response.isGranted) {
+                    //全部申请失败
+                    viewModel.onDeniedInterceptor!!.callback(requireActivity(), response)
+                } else {
+                    //部分申请成功
+                    viewModel.permissionsResultCallback?.callback(response)
+                }
+            }
+        } else {
+            viewModel.permissionsResultCallback?.callback(response)
+        }
     }
 }

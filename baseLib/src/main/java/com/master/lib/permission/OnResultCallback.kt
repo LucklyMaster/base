@@ -5,6 +5,6 @@ package com.master.lib.permission
  * @author: MasterChan
  * @date: 2022-07-24 16:50
  */
-fun interface PermissionsResultCallback {
+fun interface OnResultCallback {
     fun callback(response: PermissionResponse)
 }

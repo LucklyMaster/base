@@ -2,6 +2,8 @@ package com.master.lib
 
 import android.app.Application
 import com.master.lib.log.MLog
+import com.master.lib.permission.MPermissions
+import com.master.lib.permission.OnDeniedInterceptor
 import com.master.lib.sandbox.Delegate
 import com.master.lib.sandbox.request.IFileRequest
 
@@ -51,4 +53,15 @@ class MCLib {
     fun setMediaAccessDelegate(delegate: () -> IFileRequest) = apply {
         Delegate.setRequestDelegate(delegate)
     }
+
+    /**
+     * 设置权限申请失败的拦截器
+     * @param isNeedAllGranted Boolean
+     * @param onDeniedInterceptor OnDeniedInterceptor
+     * @return MCLib
+     */
+    fun setOnPermissionDenied(isNeedAllGranted: Boolean, onDeniedInterceptor: OnDeniedInterceptor) =
+        apply {
+            MPermissions.setOnDeniedInterceptor(isNeedAllGranted, onDeniedInterceptor)
+        }
 }

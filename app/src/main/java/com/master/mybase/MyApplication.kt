@@ -3,6 +3,7 @@ package com.master.mybase
 import android.app.Application
 import com.master.lib.MCLib
 import com.master.lib.log.DiskLogManager
+import com.master.lib.permission.SimpleDeniedInterceptor
 
 /**
  * @author: MasterChan
@@ -23,6 +24,7 @@ class MyApplication : Application() {
             .setCrashHandler {
                 saveCrash(true).init()
             }
+            .setOnPermissionDenied(true, SimpleDeniedInterceptor())
     }
 
 }

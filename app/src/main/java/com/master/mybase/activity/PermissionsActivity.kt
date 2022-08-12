@@ -28,7 +28,7 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
                     .permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     .request {
                         it.logD()
-                        toast(if (it.allGranted) "success" else "failed")
+                        toast(if (it.isAllGranted) "success" else "failed")
                     }
             }
             binding.btnPackage -> {
@@ -36,7 +36,7 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
                     .permissions(Manifest.permission.REQUEST_INSTALL_PACKAGES)
                     .request {
                         it.logD()
-                        toast(if (it.allGranted) "success" else "failed")
+                        toast(if (it.isAllGranted) "success" else "failed")
                     }
             }
             binding.btnAllFile -> {
@@ -79,7 +79,7 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
                     }
                     .request {
                         it.logD()
-                        toast(if (it.allGranted) "success" else "failed")
+                        toast(if (it.isAllGranted) "success" else "failed")
                     }
             }
             binding.btnAudio -> {
@@ -91,7 +91,7 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
                     .permissions(Manifest.permission.READ_PHONE_NUMBERS)
                     .request {
                         it.logD()
-                        toast(if (it.allGranted) "success" else "failed")
+                        toast(if (it.isAllGranted) "success" else "failed")
                     }
             }
             binding.btnBluetooth -> {
@@ -101,20 +101,21 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
                     .permissions(Manifest.permission.BLUETOOTH_ADVERTISE)
                     .request {
                         it.logD()
-                        toast(if (it.allGranted) "success" else "failed")
+                        toast(if (it.isAllGranted) "success" else "failed")
                     }
             }
             binding.btnAlertWindow -> {
                 MPermissions.with(this)
                     .permissions(Manifest.permission.SYSTEM_ALERT_WINDOW)
                     .permissions(Manifest.permission.WRITE_SETTINGS)
+                    .isNeedAllGranted(false)
                     .request {
                         it.logD()
-                        toast(if (it.allGranted) "success" else "failed")
+                        toast(if (it.isAllGranted) "success" else "failed")
                     }
             }
             binding.btnDetail -> {
-                startActivity(MPermissions.getAppDetailIntent())
+                startActivity(MPermissions.getAppDetailIntent(""))
             }
         }
     }

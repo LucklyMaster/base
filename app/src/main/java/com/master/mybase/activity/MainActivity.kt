@@ -9,7 +9,6 @@ import com.master.lib.log.MLog
 import com.master.lib.utils.DeviceUtils
 import com.master.mybase.databinding.ActivityMainBinding
 
-
 class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {

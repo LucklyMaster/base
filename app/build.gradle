@@ -65,6 +65,6 @@ dependencies {
     implementation 'androidx.core:core-splashscreen:1.0.0-beta02'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
     implementation 'io.github.lucksiege:pictureselector:v3.10.2'
-    implementation 'com.github.bumptech.glide:glide:4.13.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
+    implementation 'com.github.bumptech.glide:glide:4.13.2'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
 }

@@ -29,16 +29,16 @@ data class PermissionResponse(
     val isGranted: Boolean
         get() {
             return if (requestPermissions.size == 1) {
-                allGranted
+                isAllGranted
             } else {
-                allGranted || !allDenied
+                isAllGranted || !isAllDenied
             }
         }
 
     /**
      * 全部权限通过返回true
      */
-    val allGranted: Boolean
+    val isAllGranted: Boolean
         get() {
             return requestPermissions.size == grantedPermissions.size
         }
@@ -46,7 +46,7 @@ data class PermissionResponse(
     /**
      * 全部权限不通过返回true
      */
-    val allDenied: Boolean
+    val isAllDenied: Boolean
         get() {
             return requestPermissions.size == deniedPermissions.size
         }
@@ -63,8 +63,8 @@ data class PermissionResponse(
         return """
             ${javaClass.simpleName}(
                 isGranted: $isGranted
-                allGranted: $allGranted
-                allDenied: $allDenied
+                allGranted: $isAllGranted
+                allDenied: $isAllDenied
                 hasNeverAsk: $hasNeverAsk
                 requestPermissions: ${
             requestPermissions.toString().replace("android.permission.", "")
