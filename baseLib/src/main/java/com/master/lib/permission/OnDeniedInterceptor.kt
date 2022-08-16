@@ -7,7 +7,7 @@ import android.content.Context
  * @author: MasterChan
  * @date: 2022-08-12 14:43
  */
-interface OnDeniedInterceptor {
+fun interface OnDeniedInterceptor {
 
     fun callback(context: Context, response: PermissionResponse)
 

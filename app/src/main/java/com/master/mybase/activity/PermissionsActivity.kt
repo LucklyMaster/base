@@ -16,7 +16,8 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
         installSplashScreen()
         setOnViewClickListeners(this) {
             arrayOf(
-                btnStorge, btnPackage, btnAudio, btnBluetooth, btnAllFile, btnAlertWindow, btnDetail
+                btnStorge, btnPackage, btnAudio, btnBluetooth, btnAllFile, btnAlertWindow,
+                btnDetail, btnCamera
             )
         }
     }
@@ -77,6 +78,17 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
                             .setCancellable(false)
                             .show()
                     }
+                    .request {
+                        it.logD()
+                        toast(if (it.isAllGranted) "success" else "failed")
+                    }
+            }
+            binding.btnCamera -> {
+                MPermissions.with(this)
+                    .permissions(Manifest.permission.RECORD_AUDIO)
+                    .permissions(Manifest.permission.CAMERA)
+                    .isNeedAllGranted(true)
+                    .setOnDeniedInterceptor { _, _ -> toast("你拒绝了权限") }
                     .request {
                         it.logD()
                         toast(if (it.isAllGranted) "success" else "failed")

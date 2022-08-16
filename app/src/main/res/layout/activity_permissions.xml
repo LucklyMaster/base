@@ -37,6 +37,14 @@
             android:textSize="16sp" />
 
         <Button
+            android:id="@+id/btn_camera"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="录音和相机权限"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <Button
             android:id="@+id/btn_audio"
             android:layout_width="match_parent"
             android:layout_height="50dp"

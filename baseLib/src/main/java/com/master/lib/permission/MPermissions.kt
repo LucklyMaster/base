@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.master.lib.ext.application
+import com.master.lib.ext.println
 
 /**
  * MPermissions
@@ -105,6 +106,7 @@ class MPermissions private constructor(private val activity: FragmentActivity) {
      * @return MPermissions
      */
     fun isNeedAllGranted(isNeedAllGranted: Boolean) = apply {
+        isNeedAllGranted.println()
         this.isNeedAllGranted = isNeedAllGranted
     }
 
@@ -132,6 +134,7 @@ class MPermissions private constructor(private val activity: FragmentActivity) {
     }
 
     fun request(callback: OnResultCallback) {
+        isNeedAllGranted.println()
         RequestFragment.request(
             activity, permissions, callback, isNeedAllGranted, onDeniedInterceptor,
             specialInterceptors
