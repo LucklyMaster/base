@@ -48,5 +48,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Permissions" />
+
+        <Button
+            android:id="@+id/span"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Span" />
     </LinearLayout>
 </ScrollView>

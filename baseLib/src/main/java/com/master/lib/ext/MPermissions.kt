@@ -55,6 +55,10 @@ fun Fragment.requestPermissions(
 
 fun Fragment.requestPermissions(
     vararg permissions: String,
+
+
+
+
     grantedCallback: OnResultCallback
 ) {
     requireActivity().requestPermissions(arrayOf(*permissions), true, null, grantedCallback)

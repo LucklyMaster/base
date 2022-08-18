@@ -14,8 +14,8 @@ import androidx.core.view.isVisible
 val View.activity: Activity?
     get() = context.activity
 
-fun View.setOnMultiClickListener(listener: View.OnClickListener) {
-    setOnMultiClickListener {
+fun View.setOnOnceClickListener(listener: View.OnClickListener) {
+    setOnOnceClickListener {
         listener.onClick(it)
     }
 }
@@ -26,7 +26,7 @@ fun View.setOnMultiClickListener(listener: View.OnClickListener) {
  * @param delay Int
  * @param listener Function1<[@kotlin.ParameterName] View, Unit>
  */
-fun View.setOnMultiClickListener(delay: Int = 500, listener: (View: View) -> Unit) {
+fun View.setOnOnceClickListener(delay: Int = 500, listener: (View: View) -> Unit) {
     setOnClickListener {
         val tagKey = Int.MAX_VALUE - 1001
         val tag = it.getTag(tagKey)

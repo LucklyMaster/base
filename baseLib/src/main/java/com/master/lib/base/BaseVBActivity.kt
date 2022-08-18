@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.viewbinding.ViewBinding
-import com.master.lib.ext.setOnMultiClickListener
+import com.master.lib.ext.setOnOnceClickListener
 import java.lang.reflect.ParameterizedType
 
 /**
@@ -37,10 +37,10 @@ open class BaseVBActivity<T : ViewBinding> : BaseActivity() {
         views.invoke(binding).forEach { it.setOnClickListener(clickListener) }
     }
 
-    fun setOnViewMultiClickListeners(
+    fun setOnViewOnceClickListeners(
         clickListener: View.OnClickListener,
         views: T.() -> Array<View>
     ) {
-        views.invoke(binding).forEach { it.setOnMultiClickListener(clickListener) }
+        views.invoke(binding).forEach { it.setOnOnceClickListener(clickListener) }
     }
 }

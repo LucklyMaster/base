@@ -20,7 +20,7 @@ class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener
         printAppInfo()
         setOnClickListeners(
             this, binding.keyboard, binding.imageUtils, binding.scoped, binding.dialog,
-            binding.permissions
+            binding.permissions, binding.span
         )
     }
 
@@ -49,6 +49,7 @@ class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener
             binding.scoped -> ScopedStorageActivity::class.java
             binding.dialog -> DialogActivity::class.java
             binding.permissions -> PermissionsActivity::class.java
+            binding.span -> SpanActivity::class.java
             else -> MainActivity::class.java
         }
         startActivity(clazz)

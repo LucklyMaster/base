@@ -17,23 +17,15 @@ fun dp2pxi(dp: Float): Int = (dp * displayDensity + 0.5f).toInt()
 fun dp2pxi(dp: Int): Int = (dp * displayDensity + 0.5f).toInt()
 fun px2dpi(px: Float): Int = (px / displayDensity + 0.5f).toInt()
 fun px2dpi(px: Int): Int = (px / displayDensity + 0.5f).toInt()
-fun Context.dp2px(dp: Float): Float = (dp * resources.displayMetrics.density + 0.5f)
-fun Context.dp2px(dp: Int): Float = (dp * resources.displayMetrics.density + 0.5f)
-fun Context.px2dp(px: Float): Float = (px / resources.displayMetrics.density + 0.5f)
-fun Context.px2dp(px: Int): Float = (px / resources.displayMetrics.density + 0.5f)
-fun Context.dp2pxi(dp: Float): Int = (dp * resources.displayMetrics.density + 0.5f).toInt()
-fun Context.dp2pxi(dp: Int): Int = (dp * resources.displayMetrics.density + 0.5f).toInt()
-fun Context.px2dpi(px: Float): Int = (px / resources.displayMetrics.density + 0.5f).toInt()
-fun Context.px2dpi(px: Int): Int = (px / resources.displayMetrics.density + 0.5f).toInt()
 
-fun sp2px(sp: Float): Int = (sp * scaledDensity + 0.5f).toInt()
-fun sp2px(sp: Int): Int = (sp * scaledDensity + 0.5f).toInt()
-fun px2sp(px: Float) = (px / scaledDensity + 0.5f).toInt()
-fun px2sp(px: Int) = (px / scaledDensity + 0.5f).toInt()
-fun Context.sp2px(sp: Float): Int = (sp * scaledDensity + 0.5f).toInt()
-fun Context.sp2px(sp: Int): Int = (sp * scaledDensity + 0.5f).toInt()
-fun Context.px2sp(px: Float) = (px / scaledDensity + 0.5f).toInt()
-fun Context.px2sp(px: Int) = (px / scaledDensity + 0.5f).toInt()
+fun sp2px(sp: Float): Float = sp * scaledDensity + 0.5f
+fun sp2px(sp: Int): Float = sp * scaledDensity + 0.5f
+fun px2sp(px: Float) = px / scaledDensity + 0.5f
+fun px2sp(px: Int) = px / scaledDensity + 0.5f
+fun sp2pxi(sp: Float): Int = (sp * scaledDensity + 0.5f).toInt()
+fun sp2pxi(sp: Int): Int = (sp * scaledDensity + 0.5f).toInt()
+fun px2spi(px: Float) = (px / scaledDensity + 0.5f).toInt()
+fun px2spi(px: Int) = (px / scaledDensity + 0.5f).toInt()
 
 /**
  * 屏幕宽度
