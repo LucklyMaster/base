@@ -137,7 +137,8 @@ fun CharSequence.toImageSpan(
     imageHeight: Int = -1
 ): CharSequence {
     return toImageSpan(
-        range, getDrawable(imageRes)!!, verticalAlignment, leftMargin, rightMargin, imageWidth
+        range, getDrawable(imageRes)!!, verticalAlignment, leftMargin, rightMargin, imageWidth,
+        imageHeight
     )
 }
 
@@ -207,7 +208,7 @@ fun TextView.appendStyleSpan(text: String, style: Int) = apply {
     append(text.toStyleSpan(style = style, range = IntRange(0, text.length)))
 }
 
-fun TextView.appendCustomTypeFaceSpan(text: String, typeface: Typeface) = apply {
+fun TextView.appendTypeFaceSpan(text: String, typeface: Typeface) = apply {
     append(text.toTypeFaceSpan(IntRange(0, text.length), typeface))
 }
 
