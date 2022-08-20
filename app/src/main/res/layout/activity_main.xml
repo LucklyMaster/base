@@ -54,5 +54,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Span" />
+
+        <Button
+            android:id="@+id/countdown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="倒计时" />
     </LinearLayout>
 </ScrollView>

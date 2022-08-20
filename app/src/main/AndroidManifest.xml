@@ -36,24 +36,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyBase"
         tools:targetApi="31">
-
         <activity
-            android:name="com.master.mybase.activity.PermissionsActivity"
+            android:name=".activity.CountdownActivity"
             android:exported="false" />
         <activity
-            android:name="com.master.mybase.activity.DialogActivity"
+            android:name=".activity.PermissionsActivity"
             android:exported="false" />
         <activity
-            android:name="com.master.mybase.activity.ScopedStorageActivity"
+            android:name=".activity.DialogActivity"
             android:exported="false" />
         <activity
-            android:name="com.master.mybase.activity.ShapeViewActivity"
+            android:name=".activity.ScopedStorageActivity"
             android:exported="false" />
         <activity
-            android:name="com.master.mybase.activity.AutoFoldKeyboardActivity"
+            android:name=".activity.ShapeViewActivity"
             android:exported="false" />
         <activity
-            android:name="com.master.mybase.activity.MainActivity"
+            android:name=".activity.AutoFoldKeyboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.MainActivity"
             android:exported="true"
             android:theme="@style/SplashTheme">
             <intent-filter>

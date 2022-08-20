@@ -20,7 +20,7 @@ class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener
         printAppInfo()
         setOnClickListeners(
             this, binding.keyboard, binding.imageUtils, binding.scoped, binding.dialog,
-            binding.permissions, binding.span
+            binding.permissions, binding.span, binding.countdown
         )
     }
 
@@ -50,6 +50,7 @@ class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener
             binding.dialog -> DialogActivity::class.java
             binding.permissions -> PermissionsActivity::class.java
             binding.span -> SpanActivity::class.java
+            binding.countdown -> CountdownActivity::class.java
             else -> MainActivity::class.java
         }
         startActivity(clazz)
