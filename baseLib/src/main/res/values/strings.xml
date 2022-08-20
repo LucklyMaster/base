@@ -3,4 +3,6 @@
     <string name="mc_sure">确定</string>
     <string name="mc_cancel">取消</string>
     <string name="mc_loading">正在加载</string>
+    <string name="tip_refused_permission_when_never_ask">拒绝权限后将无法使用该功能，请在设置中开启！</string>
+    <string name="tip_refused_permission_when_denied">拒绝权限后将无法使用该功能！</string>
 </resources>

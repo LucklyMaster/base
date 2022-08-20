@@ -37,7 +37,7 @@ open class SimpleDeniedInterceptor : OnDeniedInterceptor {
     protected open suspend fun onNeverAsk(activity: BaseActivity, permission: String) =
         suspendCoroutine {
             AlertDialog.Builder(activity)
-                .setMessage("拒绝权限后将无法使用该功能，请在设置中开启")
+                .setMessage(activity.getString(R.string.tip_refused_permission_when_never_ask))
                 .setNegativeText(R.string.mc_cancel)
                 .setPositiveText(R.string.mc_sure)
                 .setOnNegativeClickListener { dialog ->
@@ -58,6 +58,6 @@ open class SimpleDeniedInterceptor : OnDeniedInterceptor {
         }
 
     protected open suspend fun onDenied(context: Context, response: PermissionResponse) {
-        toast("拒绝权限后将无法使用该功能")
+        toast(context.getString(R.string.tip_refused_permission_when_denied))
     }
 }
