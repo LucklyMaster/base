@@ -38,14 +38,20 @@ open class CellView @JvmOverloads constructor(
     var iconGravity = Gravity.TOP
         private set
 
-    val icon: Drawable?
+    var icon: Drawable?
         get() {
             return iconView.drawable
         }
+        set(value) {
+            iconView.setImageDrawable(value)
+        }
 
-    val text: CharSequence
+    var text: CharSequence
         get() {
             return labelView.text.toString()
+        }
+        set(value) {
+            labelView.text = value
         }
 
     init {
