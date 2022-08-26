@@ -218,7 +218,7 @@ open class ItemView @JvmOverloads constructor(
         setPaddingBottom()
 
         excludePaddingHeight = a.getDimensionPixelOffset(
-            R.styleable.ItemView_mc_excludePaddingHeight, dp2pxi(50f)
+            R.styleable.ItemView_mc_excludePaddingHeight, context.dp2pxi(50f)
         )
         a.recycle()
     }

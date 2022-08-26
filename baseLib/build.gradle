@@ -60,7 +60,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.master.lib'
                 artifactId = 'baseLib'
-                version = '1.0.2'
+                version = '1.0.3'
 //            artifact("$buildDir/outputs/aar/baseLib-release.aar")
             }
         }
