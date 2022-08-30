@@ -2,7 +2,7 @@ package com.master.lib.ext
 
 import android.widget.Toast
 import androidx.annotation.StringRes
-import com.master.lib.MToast
+import com.master.lib.widget.MToast
 import com.master.lib.utils.StackTraceUtils
 
 fun toast(text: CharSequence) {

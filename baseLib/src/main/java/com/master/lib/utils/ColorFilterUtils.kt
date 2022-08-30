@@ -15,6 +15,7 @@ object ColorFilterUtils {
      * @param darkAlpha 透明度
      * @return ColorMatrixColorFilter
      */
+    @JvmStatic
     fun getDarkColorFilter(darkAlpha: Float): ColorMatrixColorFilter {
         return ColorMatrixColorFilter(
             ColorMatrix(

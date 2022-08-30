@@ -39,6 +39,7 @@ object NetUtils {
      * 是否连接到可用的网络，如果连接的网络无法访问互联网也会返回false
      * @return Boolean
      */
+    @JvmStatic
     @RequiresPermission(permission.ACCESS_NETWORK_STATE)
     fun isConnected(): Boolean {
         val manager = application.getSystemService<ConnectivityManager>() ?: return false
@@ -50,6 +51,7 @@ object NetUtils {
      * 获取网络连接类型
      * @return [NetType]
      */
+    @JvmStatic
     @RequiresPermission(allOf = [permission.ACCESS_NETWORK_STATE, permission.READ_PHONE_STATE])
     fun getConnectType(): Int {
         val manager =
@@ -63,6 +65,7 @@ object NetUtils {
         }
     }
 
+    @JvmStatic
     @RequiresPermission(permission.READ_PHONE_STATE)
     private fun getMobileType(context: Context): Int {
         val manager = context.getSystemService<TelephonyManager>() ?: return NET_UNKNOWN
@@ -97,6 +100,7 @@ object NetUtils {
      * 是否是移动网络连接
      * @return Boolean
      */
+    @JvmStatic
     @RequiresPermission(permission.ACCESS_NETWORK_STATE)
     fun isMobileConnected(): Boolean {
         val manager = application.getSystemService<ConnectivityManager>() ?: return false
@@ -104,12 +108,14 @@ object NetUtils {
         return networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) == true
     }
 
+    @JvmStatic
     @RequiresPermission(permission.ACCESS_WIFI_STATE)
     fun isWifiEnabled(): Boolean {
         val manager = application.getSystemService<WifiManager>() ?: return false
         return manager.isWifiEnabled
     }
 
+    @JvmStatic
     @RequiresPermission(permission.ACCESS_NETWORK_STATE)
     fun isWifiConnected(): Boolean {
         val manager = application.getSystemService<ConnectivityManager>() ?: return false
@@ -120,6 +126,7 @@ object NetUtils {
         return false
     }
 
+    @JvmStatic
     @RequiresPermission(permission.ACCESS_WIFI_STATE)
     fun getWifiAddress(): String {
         val wifiManager = application.getSystemService<WifiManager>()
@@ -133,6 +140,7 @@ object NetUtils {
             .plus(ipInt shr 24 and 0xFF)
     }
 
+    @JvmStatic
     @RequiresPermission(permission.INTERNET)
     fun getIpAddress(useIpv6: Boolean = false): String {
         val nis = NetworkInterface.getNetworkInterfaces()

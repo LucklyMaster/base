@@ -6,6 +6,8 @@ import com.master.lib.permission.MPermissions
 import com.master.lib.permission.OnDeniedInterceptor
 import com.master.lib.sandbox.Delegate
 import com.master.lib.sandbox.request.IFileRequest
+import com.master.lib.widget.ActivityStack
+import com.master.lib.widget.CrashHandler
 
 /**
  * 初始化入口
@@ -15,8 +17,10 @@ import com.master.lib.sandbox.request.IFileRequest
 class MCLib {
 
     companion object {
+        @JvmStatic
         lateinit var application: Application
 
+        @JvmStatic
         fun init(app: Application): MCLib {
             application = app
             return MCLib()

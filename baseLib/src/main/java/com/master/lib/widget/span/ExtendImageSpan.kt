@@ -13,7 +13,7 @@ import com.master.lib.ext.getDrawable
  * @author: MasterChan
  * @date: 2022-8-18 16:18
  */
-class ExtendImageSpan @JvmOverloads constructor(
+open class ExtendImageSpan @JvmOverloads constructor(
     drawable: Drawable,
     verticalAlignment: Int = 2,
     private val leftMargin: Int = 0,

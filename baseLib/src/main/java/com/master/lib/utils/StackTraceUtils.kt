@@ -10,6 +10,7 @@ internal object StackTraceUtils {
      * 获取当前的调用堆栈
      * @return StackTraceElement?
      */
+    @JvmStatic
     fun getTargetStackTraceElement(className: String): StackTraceElement? {
         var traceElement: StackTraceElement? = null
         var shouldTrace = false

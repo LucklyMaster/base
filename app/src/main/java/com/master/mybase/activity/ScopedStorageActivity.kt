@@ -9,7 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.core.net.toUri
-import com.master.lib.MToast
+import com.master.lib.widget.MToast
 import com.master.lib.ext.toFileResponse
 import com.master.lib.log.MLog
 import com.master.lib.sandbox.MediaAccess

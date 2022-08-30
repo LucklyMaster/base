@@ -8,6 +8,11 @@ import android.view.Gravity
 import android.view.MotionEvent
 import android.widget.EditText
 import android.widget.TextView
+import androidx.annotation.StringRes
+
+fun TextView.setText(@StringRes res: Int, vararg format: Any) {
+    text = resources.getString(res, format)
+}
 
 fun TextView.setDrawable(drawable: Drawable?, gravity: Int) {
     drawable?.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)

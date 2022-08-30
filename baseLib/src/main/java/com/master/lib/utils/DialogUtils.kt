@@ -4,12 +4,12 @@ import androidx.fragment.app.FragmentActivity
 import com.master.lib.dialog.BaseDialog
 
 /**
- * DialogUtils
+ * 管理由[BaseDialog]显示的dialog
  * @author: MasterChan
  * @date: 2022-07-17 23:34
  */
 object DialogUtils {
-
+    @JvmStatic
     fun dismissAll(activity: FragmentActivity) {
         activity.supportFragmentManager.fragments.forEach {
             if (it is BaseDialog) {
@@ -18,6 +18,7 @@ object DialogUtils {
         }
     }
 
+    @JvmStatic
     fun dismiss(activity: FragmentActivity, tag: String?) {
         activity.supportFragmentManager.fragments.forEach {
             if (it is BaseDialog && it.tag.equals(tag)) {

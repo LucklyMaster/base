@@ -38,6 +38,7 @@ class MPermissions private constructor(private val activity: FragmentActivity) {
         private var isNeedAllGranted = false
         private var onDeniedInterceptor: OnDeniedInterceptor? = null
 
+        @JvmStatic
         fun with(context: Context): MPermissions {
             require(context is FragmentActivity) { "the context must be a FragmentActivity" }
             return MPermissions(context).apply {
@@ -46,11 +47,17 @@ class MPermissions private constructor(private val activity: FragmentActivity) {
             }
         }
 
+        @JvmStatic
         fun with(activity: FragmentActivity): MPermissions {
             return MPermissions(activity).apply {
                 isNeedAllGranted(Static.isNeedAllGranted)
                 setOnDeniedInterceptor(Static.onDeniedInterceptor)
             }
+        }
+
+        @JvmStatic
+        fun with(fragment: Fragment): MPermissions {
+            return MPermissions(fragment.requireActivity())
         }
 
         /**
@@ -59,6 +66,7 @@ class MPermissions private constructor(private val activity: FragmentActivity) {
          * @param interceptor OnDeniedInterceptor
          * @return MPermissions
          */
+        @JvmStatic
         fun setOnDeniedInterceptor(
             isNeedAllGranted: Boolean,
             interceptor: OnDeniedInterceptor?
@@ -67,22 +75,22 @@ class MPermissions private constructor(private val activity: FragmentActivity) {
             this.onDeniedInterceptor = interceptor
         }
 
-        fun with(fragment: Fragment): MPermissions {
-            return MPermissions(fragment.requireActivity())
-        }
-
+        @JvmStatic
         fun isGranted(permission: String): Boolean {
             return Utils.isGranted(application, permission)
         }
 
+        @JvmStatic
         fun isAllGranted(permissions: List<String>): Boolean {
             return Utils.isAllGranted(application, permissions)
         }
 
+        @JvmStatic
         fun isNeverAsk(permission: String): Boolean {
             return Utils.isNeverAsk(application, permission)
         }
 
+        @JvmStatic
         fun getAppDetailIntent(permission: String): Intent {
             return Utils.getAppDetailIntent(application, permission)
         }

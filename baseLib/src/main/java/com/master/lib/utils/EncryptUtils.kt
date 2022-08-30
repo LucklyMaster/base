@@ -16,51 +16,62 @@ import javax.crypto.spec.SecretKeySpec
  * @date: 2022-6-23 21:05
  */
 object EncryptUtils {
-
+    @JvmStatic
     fun base64(data: String, flags: Int = Base64.NO_WRAP): String {
         return Base64.encodeToString(data.toByteArray(), flags)
     }
 
+    @JvmStatic
     fun base64(data: ByteArray, flags: Int = Base64.NO_WRAP): ByteArray {
         return Base64.encode(data, flags)
     }
 
+    @JvmStatic
     fun md5(data: String): String {
         return md5(data.toByteArray()).toHexString()
     }
 
+    @JvmStatic
     fun md5(data: ByteArray): ByteArray {
         return digestEncryption(data, "MD5")
     }
 
+    @JvmStatic
     fun sha1(data: String): String {
         return sha1(data.toByteArray()).toHexString()
     }
 
+    @JvmStatic
     fun sha1(data: ByteArray): ByteArray {
         return digestEncryption(data, "SHA-1")
     }
 
+    @JvmStatic
     fun sha224(data: String): String {
         return sha224(data.toByteArray()).toHexString()
     }
 
+    @JvmStatic
     fun sha224(data: ByteArray): ByteArray {
         return digestEncryption(data, "SHA-224")
     }
 
+    @JvmStatic
     fun sha256(data: String): String {
         return sha256(data.toByteArray()).toHexString()
     }
 
+    @JvmStatic
     fun sha256(data: ByteArray): ByteArray {
         return digestEncryption(data, "SHA-256")
     }
 
+    @JvmStatic
     fun sha512(data: String): String {
         return sha512(data.toByteArray()).toHexString()
     }
 
+    @JvmStatic
     fun sha512(data: ByteArray): ByteArray {
         return digestEncryption(data, "SHA-512")
     }
@@ -71,12 +82,14 @@ object EncryptUtils {
      * @param algorithm 加密算法：MD5,SHA-1,SHA-224,SHA-256,SHA-384,SHA-512等
      * @return 16进制字符串
      */
+    @JvmStatic
     fun digestEncryption(data: ByteArray, algorithm: String): ByteArray {
         val messageDigest = MessageDigest.getInstance(algorithm)
         messageDigest.update(data)
         return messageDigest.digest()
     }
 
+    @JvmStatic
     fun aes(data: String, key: String, transformation: String = "AES/ECB/NoPadding"): ByteArray {
         return aes(data.toByteArray(), key.toByteArray(), transformation)
     }
@@ -88,6 +101,7 @@ object EncryptUtils {
      * @param transformation: String
      * @return ByteArray
      */
+    @JvmStatic
     fun aes(
         data: ByteArray,
         key: ByteArray,
@@ -96,6 +110,7 @@ object EncryptUtils {
         return cipherEncryption(data, key, "AES", transformation)
     }
 
+    @JvmStatic
     fun des(data: String, key: String, transformation: String = "DES/ECB/NoPadding"): ByteArray {
         return des(data.toByteArray(), key.toByteArray(), transformation)
     }
@@ -107,6 +122,7 @@ object EncryptUtils {
      * @param transformation: String
      * @return ByteArray
      */
+    @JvmStatic
     fun des(
         data: ByteArray,
         key: ByteArray,
@@ -123,6 +139,7 @@ object EncryptUtils {
      * @param transformation String
      * @return ByteArray
      */
+    @JvmStatic
     @SuppressLint("GetInstance")
     fun cipherEncryption(
         data: ByteArray,
@@ -147,6 +164,7 @@ object EncryptUtils {
      * @return KeyPair
      * @throws InvalidParameterException
      */
+    @JvmStatic
     @Throws(InvalidParameterException::class)
     fun getRsaKeyPair(keySize: Int = 1024): KeyPair {
         return KeyPairGenerator.getInstance("RSA").apply { initialize(keySize) }.generateKeyPair()
@@ -158,6 +176,7 @@ object EncryptUtils {
      * @return PrivateKey
      * @throws InvalidKeySpecException
      */
+    @JvmStatic
     @Throws(InvalidKeySpecException::class)
     fun getRsaPrivateKey(key: ByteArray): PrivateKey {
         return KeyFactory.getInstance("RSA").generatePrivate(PKCS8EncodedKeySpec(key))
@@ -169,6 +188,7 @@ object EncryptUtils {
      * @return PublicKey
      * @throws InvalidKeySpecException
      */
+    @JvmStatic
     @Throws(InvalidKeySpecException::class)
     fun getRsaPublicKey(key: ByteArray): PublicKey {
         return KeyFactory.getInstance("RSA").generatePublic(X509EncodedKeySpec(key))
@@ -180,6 +200,7 @@ object EncryptUtils {
      * @param publicKey PublicKey
      * @return ByteArray
      */
+    @JvmStatic
     fun rsa(data: ByteArray, publicKey: PublicKey): ByteArray {
         return try {
             val cipher = Cipher.getInstance("RSA")

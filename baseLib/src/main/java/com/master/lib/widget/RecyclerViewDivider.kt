@@ -19,12 +19,12 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
  * @author MasterChan
  * @date 2021-12-24 13:41
  */
-class RecyclerViewDivider : ItemDecoration {
+open class RecyclerViewDivider : ItemDecoration {
 
-    private var mPaint: Paint? = null
-    private var mDrawable: Drawable? = null
-    private var mDividerHeight = 2
-    private var mOrientation = 0
+    protected var mPaint: Paint? = null
+    protected var mDrawable: Drawable? = null
+    protected var mDividerHeight = 2
+    protected var mOrientation = 0
 
     companion object Orientation {
         const val HORIZONTAL = 0
@@ -122,7 +122,7 @@ class RecyclerViewDivider : ItemDecoration {
      * @param canvas Canvas
      * @param parent RecyclerView
      */
-    private fun drawHorizontal(canvas: Canvas, parent: RecyclerView) {
+    protected open fun drawHorizontal(canvas: Canvas, parent: RecyclerView) {
         val childSize = parent.childCount
         for (i in 0 until childSize) {
             val child = parent.getChildAt(i)
@@ -144,7 +144,7 @@ class RecyclerViewDivider : ItemDecoration {
      * @param canvas Canvas
      * @param parent RecyclerView
      */
-    private fun drawVertical(canvas: Canvas, parent: RecyclerView) {
+    protected open fun drawVertical(canvas: Canvas, parent: RecyclerView) {
         val childSize = parent.childCount
         for (i in 0 until childSize) {
             val child = parent.getChildAt(i)
@@ -167,7 +167,7 @@ class RecyclerViewDivider : ItemDecoration {
      * @param parent RecyclerView
      * @return Int
      */
-    private fun getSpanCount(parent: RecyclerView): Int {
+    protected open fun getSpanCount(parent: RecyclerView): Int {
         return when (val layoutManager = parent.layoutManager) {
             is GridLayoutManager -> layoutManager.spanCount
             is StaggeredGridLayoutManager -> layoutManager.spanCount
@@ -184,7 +184,7 @@ class RecyclerViewDivider : ItemDecoration {
      * @param count ItemView的数量
      * @return Boolean
      */
-    private fun isLastColumn(
+    protected open fun isLastColumn(
         parent: RecyclerView, itemPosition: Int, spanCount: Int, count: Int
     ): Boolean {
         var childCount = count
@@ -228,7 +228,7 @@ class RecyclerViewDivider : ItemDecoration {
      * @param count ItemView的数量
      * @return Boolean
      */
-    private fun isLastRow(
+    protected open fun isLastRow(
         parent: RecyclerView, itemPosition: Int, spanCount: Int, count: Int
     ): Boolean {
         var childCount = count

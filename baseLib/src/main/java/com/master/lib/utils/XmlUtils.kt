@@ -17,6 +17,7 @@ import java.lang.reflect.InvocationTargetException
  */
 object XmlUtils {
 
+    @JvmStatic
     fun getManifestPermissions(context: Context): Map<String, Int> {
         val permissions = mutableMapOf<String, Int>()
         val parser = parseAndroidManifest(context)
@@ -59,6 +60,7 @@ object XmlUtils {
         return permissions
     }
 
+    @JvmStatic
     fun parseAndroidManifest(context: Context): XmlResourceParser? {
         val cookie = findApkPathCookie(context) ?: return null
         val result = runCatching {

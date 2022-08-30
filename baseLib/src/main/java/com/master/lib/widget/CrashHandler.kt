@@ -1,7 +1,8 @@
-package com.master.lib
+package com.master.lib.widget
 
 import android.os.Build
 import android.os.Process
+import com.master.lib.BuildConfig
 import com.master.lib.ext.application
 import com.master.lib.ext.create
 import com.master.lib.ext.versionCode
@@ -34,6 +35,7 @@ class CrashHandler private constructor() : Thread.UncaughtExceptionHandler {
     private var defaultHandler: Thread.UncaughtExceptionHandler? = null
 
     companion object {
+        @JvmStatic
         val instance: CrashHandler by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { CrashHandler() }
     }
 

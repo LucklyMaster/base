@@ -1,4 +1,4 @@
-package com.master.lib
+package com.master.lib.widget
 
 import android.app.Activity
 import android.app.Application

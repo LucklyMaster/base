@@ -14,11 +14,12 @@ import javax.crypto.spec.SecretKeySpec
  * @date: 2022-06-24 00:15
  */
 object DecryptUtils {
-
+    @JvmStatic
     fun base64(data: ByteArray, flags: Int = Base64.NO_WRAP): ByteArray {
         return Base64.decode(data, flags)
     }
 
+    @JvmStatic
     fun base64(data: String, flags: Int = Base64.NO_WRAP): ByteArray {
         return base64(data.toByteArray(), flags)
     }
@@ -29,10 +30,12 @@ object DecryptUtils {
      * @param key 密钥，长度为16的倍数
      * @return ByteArray
      */
+    @JvmStatic
     fun aes(data: ByteArray, key: ByteArray): ByteArray {
         return cipherDecrypt(data, key, "AES", "AES/ECB/NoPadding")
     }
 
+    @JvmStatic
     fun aes(data: String, key: String): ByteArray {
         return aes(data.toByteArray(), key.toByteArray())
     }
@@ -43,10 +46,12 @@ object DecryptUtils {
      * @param key 密钥，长度为8
      * @return ByteArray
      */
+    @JvmStatic
     fun des(data: ByteArray, key: ByteArray): ByteArray {
         return cipherDecrypt(data, key, "DES", "DES/ECB/NoPadding")
     }
 
+    @JvmStatic
     fun des(data: String, key: String): ByteArray {
         return des(data.toByteArray(), key.toByteArray())
     }
@@ -59,6 +64,7 @@ object DecryptUtils {
      * @param transformation String
      * @return ByteArray
      */
+    @JvmStatic
     @SuppressLint("GetInstance")
     fun cipherDecrypt(
         data: ByteArray,
@@ -83,6 +89,7 @@ object DecryptUtils {
      * @param privateKey PrivateKey
      * @return ByteArray
      */
+    @JvmStatic
     fun rsa(data: ByteArray, privateKey: PrivateKey): ByteArray {
         return try {
             val cipher = Cipher.getInstance("RSA")

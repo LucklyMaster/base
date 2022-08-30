@@ -4,7 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.os.Build
 import android.os.Environment
-import com.master.lib.ActivityStack
+import com.master.lib.widget.ActivityStack
 import com.master.lib.MCLib
 import com.master.lib.log.MLog
 

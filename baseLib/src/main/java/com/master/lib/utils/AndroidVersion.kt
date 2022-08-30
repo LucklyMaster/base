@@ -22,36 +22,43 @@ object AndroidVersion {
     const val ANDROID_7 = Build.VERSION_CODES.N
     const val ANDROID_6 = Build.VERSION_CODES.M
 
+    @JvmStatic
     @ChecksSdkIntAtLeast(api = ANDROID_12)
     fun isAndroid12(): Boolean {
         return Build.VERSION.SDK_INT >= ANDROID_12
     }
 
+    @JvmStatic
     @ChecksSdkIntAtLeast(api = ANDROID_11)
     fun isAndroid11(): Boolean {
         return Build.VERSION.SDK_INT >= ANDROID_11
     }
 
+    @JvmStatic
     @ChecksSdkIntAtLeast(api = ANDROID_10)
     fun isAndroid10(): Boolean {
         return Build.VERSION.SDK_INT >= ANDROID_10
     }
 
+    @JvmStatic
     @ChecksSdkIntAtLeast(api = ANDROID_9)
     fun isAndroid9(): Boolean {
         return Build.VERSION.SDK_INT >= ANDROID_9
     }
 
+    @JvmStatic
     @ChecksSdkIntAtLeast(api = ANDROID_8)
     fun isAndroid8(): Boolean {
         return Build.VERSION.SDK_INT >= ANDROID_8
     }
 
+    @JvmStatic
     @ChecksSdkIntAtLeast(api = ANDROID_7)
     fun isAndroid7(): Boolean {
         return Build.VERSION.SDK_INT >= ANDROID_7
     }
 
+    @JvmStatic
     @ChecksSdkIntAtLeast(api = ANDROID_6)
     fun isAndroid6(): Boolean {
         return Build.VERSION.SDK_INT >= ANDROID_6

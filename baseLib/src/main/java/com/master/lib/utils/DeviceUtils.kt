@@ -16,6 +16,7 @@ import java.lang.reflect.Method
  */
 object DeviceUtils {
 
+    @JvmStatic
     @SuppressLint("HardwareIds")
     fun getAndroidId(): String {
         return Settings.Secure.getString(
@@ -23,6 +24,7 @@ object DeviceUtils {
         ) ?: ""
     }
 
+    @JvmStatic
     fun getImei(): String? {
         try {
             val tm = application.getSystemService(TELEPHONY_SERVICE) as TelephonyManager
@@ -34,10 +36,12 @@ object DeviceUtils {
         return null
     }
 
+    @JvmStatic
     fun getProduct(): String {
         return Build.MANUFACTURER
     }
 
+    @JvmStatic
     fun isRooted(): Boolean {
         val su = "su"
         val locations = arrayOf(

@@ -2,8 +2,6 @@ package com.master.lib.widget.span
 
 import android.text.TextPaint
 import android.text.style.MetricAffectingSpan
-import com.master.lib.ext.dp2px
-import com.master.lib.ext.dp2pxi
 import com.master.lib.ext.sp2px
 
 /**
@@ -11,7 +9,7 @@ import com.master.lib.ext.sp2px
  * @author: MasterChan
  * @date: 2022-8-18 17:15
  */
-class ExactlySizePan(private val size: Float) : MetricAffectingSpan() {
+open class ExactlySizePan(private val size: Float) : MetricAffectingSpan() {
 
     override fun updateDrawState(textPaint: TextPaint) {
         textPaint.textSize = sp2px(size)

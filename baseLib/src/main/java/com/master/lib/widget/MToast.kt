@@ -1,4 +1,4 @@
-package com.master.lib
+package com.master.lib.widget
 
 import android.os.Handler
 import android.os.Looper
@@ -24,22 +24,27 @@ object MToast {
     private var lastMills = 0L
     private var lastText: CharSequence = ""
 
+    @JvmStatic
     fun show(text: CharSequence) {
         show(text, Toast.LENGTH_SHORT)
     }
 
+    @JvmStatic
     fun show(@StringRes text: Int, vararg format: Any) {
         show(application.getString(text, format))
     }
 
+    @JvmStatic
     fun showLong(text: CharSequence) {
         show(text, Toast.LENGTH_LONG)
     }
 
+    @JvmStatic
     fun showLong(@StringRes text: Int, vararg format: Any) {
         show(application.getString(text, format))
     }
 
+    @JvmStatic
     fun show(text: CharSequence, duration: Int, stackTraceElement: StackTraceElement? = null) {
         if (text == lastText) {
             if (System.currentTimeMillis() - lastMills > 2000) {

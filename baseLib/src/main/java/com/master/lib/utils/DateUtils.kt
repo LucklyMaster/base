@@ -11,10 +11,12 @@ import java.util.*
 object DateUtils {
     private const val YMD_HMS = "yyyy-MM-dd HH:mm:ss"
 
+    @JvmStatic
     fun Date.toString(format: String = YMD_HMS): String {
         return SimpleDateFormat(format, Locale.getDefault()).format(this)
     }
 
+    @JvmStatic
     fun String.toDate(format: String = YMD_HMS): Date? {
         return try {
             SimpleDateFormat(format, Locale.getDefault()).parse(this)
@@ -24,6 +26,7 @@ object DateUtils {
         }
     }
 
+    @JvmStatic
     fun Long.toDate(): Date {
         return Date(this)
     }

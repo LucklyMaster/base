@@ -38,6 +38,25 @@ fun View.setOnOnceClickListener(delay: Int = 500, listener: (View: View) -> Unit
     }
 }
 
+fun View.setWidth(width: Int) {
+    val lp = layoutParams
+    lp.width = width
+    layoutParams = lp
+}
+
+fun View.setHeight(height: Int) {
+    val lp = layoutParams
+    lp.height = height
+    layoutParams = lp
+}
+
+fun View.setSize(width: Int, height: Int) {
+    val lp = layoutParams
+    lp.width = width
+    lp.height = height
+    layoutParams = lp
+}
+
 fun View.setPaddingLeft(paddingLeft: Int) {
     setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom)
 }

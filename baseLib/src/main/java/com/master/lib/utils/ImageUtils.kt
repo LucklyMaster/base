@@ -27,6 +27,7 @@ object ImageUtils {
      * @param path 图片路径
      * @return 0,90,180,270
      */
+    @JvmStatic
     fun getImageDegree(path: String?): Int {
         try {
             val exifInterface = ExifInterface(path!!)
@@ -45,6 +46,7 @@ object ImageUtils {
         return 0
     }
 
+    @JvmStatic
     fun getBitmap(
         path: String,
         inPreferredConfig: Bitmap.Config = Bitmap.Config.ARGB_8888
@@ -63,6 +65,7 @@ object ImageUtils {
      * @param maxHeight 最大高度
      * @return Bitmap?
      */
+    @JvmStatic
     fun getBitmap(
         path: String,
         maxWidth: Int,
@@ -84,6 +87,7 @@ object ImageUtils {
         }
     }
 
+    @JvmStatic
     fun getBitmap(
         @DrawableRes resId: Int,
         inPreferredConfig: Bitmap.Config = Bitmap.Config.ARGB_8888
@@ -94,6 +98,7 @@ object ImageUtils {
         return getBitmap(resId, maxBitmapSize, maxBitmapSize, inPreferredConfig)
     }
 
+    @JvmStatic
     fun getBitmap(
         @DrawableRes resId: Int,
         maxWidth: Int,
@@ -122,6 +127,7 @@ object ImageUtils {
      * @param maxHeight Int
      * @return Int
      */
+    @JvmStatic
     fun calculateInSampleSize(options: BitmapFactory.Options, maxWidth: Int, maxHeight: Int): Int {
         val height = options.outHeight
         val width = options.outWidth
@@ -140,6 +146,7 @@ object ImageUtils {
      * @param path 图片路径
      * @return Size
      */
+    @JvmStatic
     fun getImageSize(path: String): Size {
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
@@ -147,6 +154,7 @@ object ImageUtils {
         return Size(options.outWidth, options.outHeight)
     }
 
+    @JvmStatic
     fun save2Album(
         filePath: String,
         destDir: String = Environment.DIRECTORY_DCIM,
@@ -155,6 +163,7 @@ object ImageUtils {
         MediaAccess.write("$destDir/$destName", MediaAccess.read(filePath))
     }
 
+    @JvmStatic
     fun save2Album(
         bitmap: Bitmap,
         destDir: String = Environment.DIRECTORY_DCIM,
@@ -163,6 +172,7 @@ object ImageUtils {
         MediaAccess.write("$destDir/$destName", bitmap.toByteArray())
     }
 
+    @JvmStatic
     fun save2Album(
         data: ByteArray,
         destDir: String = Environment.DIRECTORY_DCIM,

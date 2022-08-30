@@ -18,11 +18,13 @@ import java.io.File
  */
 object AppUtils {
 
+    @JvmStatic
     @RequiresPermission(Manifest.permission.REQUEST_INSTALL_PACKAGES)
     fun installApk(filePath: String) {
         installApk(File(filePath))
     }
 
+    @JvmStatic
     @RequiresPermission(Manifest.permission.REQUEST_INSTALL_PACKAGES)
     fun installApk(file: File) {
         if (!file.exists()) {
@@ -37,6 +39,7 @@ object AppUtils {
         return installApk(uri)
     }
 
+    @JvmStatic
     @RequiresPermission(Manifest.permission.REQUEST_INSTALL_PACKAGES)
     fun installApk(uri: Uri) {
         val intent = Intent(Intent.ACTION_VIEW)
@@ -52,6 +55,7 @@ object AppUtils {
      * 卸载APK，API26以上必须申请[Manifest.permission.REQUEST_DELETE_PACKAGES]权限
      * @param pkgName 包名
      */
+    @JvmStatic
     fun uninstallApk(pkgName: String) {
         val intent = Intent(Intent.ACTION_DELETE)
         intent.data = Uri.parse("package:$pkgName")
@@ -63,6 +67,7 @@ object AppUtils {
      * 根据包名启动一个程序
      * @param packageName 包名
      */
+    @JvmStatic
     fun launchApp(packageName: String) {
         val launcherActivity = getLauncherActivity(packageName)
         if (launcherActivity.isEmpty()) return
@@ -79,6 +84,7 @@ object AppUtils {
      * @param packageName 应用包名
      * @return [packageName].launcherActivity
      */
+    @JvmStatic
     @SuppressLint("QueryPermissionsNeeded")
     fun getLauncherActivity(packageName: String): String {
         val intent = Intent(Intent.ACTION_MAIN, null)
@@ -89,6 +95,7 @@ object AppUtils {
         return if (info.size == 0) "" else info[0].activityInfo.name
     }
 
+    @JvmStatic
     fun shareText(content: String?, title: String? = null) {
         var intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
@@ -98,14 +105,17 @@ object AppUtils {
         application.startActivity(intent)
     }
 
+    @JvmStatic
     fun shareImage(vararg uris: Uri) {
         shareImage(null, null, ArrayList(uris.toList()))
     }
 
+    @JvmStatic
     fun shareImage(content: String?, title: String?, vararg uris: Uri) {
         shareImage(content, title, ArrayList(uris.toList()))
     }
 
+    @JvmStatic
     fun shareImage(content: String?, title: String?, uris: ArrayList<Uri>?) {
         var intent = Intent(Intent.ACTION_SEND_MULTIPLE)
         intent.putExtra(Intent.EXTRA_TEXT, content)

@@ -1,4 +1,4 @@
-package com.master.lib
+package com.master.lib.widget
 
 import android.app.Activity
 import android.app.Application
@@ -17,6 +17,7 @@ class ActivityStack {
     internal var currentActivity: Activity? = null
 
     companion object {
+        @JvmStatic
         val instance: ActivityStack by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { ActivityStack() }
     }
 

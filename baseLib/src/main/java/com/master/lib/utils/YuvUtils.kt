@@ -18,6 +18,7 @@ object YuvUtils {
      * @param height 图片高度
      * @return 旋转后的图片
      */
+    @JvmStatic
     fun rotateYUV420Degree90(data: ByteArray, width: Int, height: Int): ByteArray {
         val yuv = ByteArray(width * height * 3 / 2)
         var i = 0
@@ -48,6 +49,7 @@ object YuvUtils {
      * @param height 图片高度
      * @return 旋转后的图片
      */
+    @JvmStatic
     fun rotateYUV420Degree180(data: ByteArray, width: Int, height: Int): ByteArray {
         val yuv = ByteArray(width * height * 3 / 2)
         var count = 0
@@ -73,6 +75,7 @@ object YuvUtils {
      * @param height 图片高度
      * @return 旋转后的图片
      */
+    @JvmStatic
     fun rotateYUV420Degree270(data: ByteArray, width: Int, height: Int): ByteArray {
         val yuv = ByteArray(width * height * 3 / 2)
         var i = 0
@@ -103,6 +106,7 @@ object YuvUtils {
      * @param height 图片高度
      * @return 旋转后的图片
      */
+    @JvmStatic
     fun rotateYUVDegree270AndMirror(data: ByteArray, width: Int, height: Int): ByteArray {
         val yuv = ByteArray(width * height * 3 / 2)
         var i = 0
@@ -138,6 +142,7 @@ object YuvUtils {
      * @param height nv21高度
      * @return rgb图片
      */
+    @JvmStatic
     fun yuv2Rgb(data: ByteArray, width: Int, height: Int): ByteArray {
         val image = YuvImage(data, ImageFormat.NV21, width, height, null)
         val stream = ByteArrayOutputStream()
@@ -152,6 +157,7 @@ object YuvUtils {
      * @param height 高度
      * @return nv21数据
      */
+    @JvmStatic
     fun rgb2Yuv(rgb: IntArray, width: Int, height: Int): ByteArray {
         val frameSize = width * height
         var yIndex = 0

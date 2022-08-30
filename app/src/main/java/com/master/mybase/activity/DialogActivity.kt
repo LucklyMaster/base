@@ -2,7 +2,7 @@ package com.master.mybase.activity
 
 import android.os.Bundle
 import android.view.View
-import com.master.lib.MToast
+import com.master.lib.widget.MToast
 import com.master.lib.dialog.AlertDialog
 import com.master.lib.dialog.LoadingDialog
 import com.master.lib.ext.dp2pxi
