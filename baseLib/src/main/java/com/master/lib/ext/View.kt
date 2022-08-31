@@ -39,19 +39,34 @@ fun View.setOnOnceClickListener(delay: Int = 500, listener: (View: View) -> Unit
 }
 
 fun View.setWidth(width: Int) {
-    val lp = layoutParams
+    var lp = layoutParams
+    if (lp == null) {
+        lp = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+    }
     lp.width = width
     layoutParams = lp
 }
 
 fun View.setHeight(height: Int) {
-    val lp = layoutParams
+    var lp = layoutParams
+    if (lp == null) {
+        lp = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+    }
     lp.height = height
     layoutParams = lp
 }
 
 fun View.setSize(width: Int, height: Int) {
-    val lp = layoutParams
+    var lp = layoutParams
+    if (lp == null) {
+        lp = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+    }
     lp.width = width
     lp.height = height
     layoutParams = lp

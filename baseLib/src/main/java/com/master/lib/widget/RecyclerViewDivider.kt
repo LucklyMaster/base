@@ -10,6 +10,7 @@ import android.view.View
 import androidx.annotation.ColorInt
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -67,20 +68,18 @@ open class RecyclerViewDivider : ItemDecoration {
         super.getItemOffsets(outRect, view, parent, state)
         val layoutParams = view.layoutParams as RecyclerView.LayoutParams
         val itemPosition = layoutParams.viewLayoutPosition
-        var childCount = parent.adapter?.itemCount ?: 0
+        val childCount = parent.adapter?.itemCount ?: 0
+        val spanCount = getSpanCount(parent)
         when (mOrientation) {
             HORIZONTAL -> {
-                childCount -= 1
                 //最后一行不绘制
-                outRect.set(0, 0, 0, if (itemPosition != childCount) mDividerHeight else 0)
+                outRect.set(0, 0, 0, if ((itemPosition + 1) % spanCount != 0) mDividerHeight else 0)
             }
             VERTICAL -> {
-                childCount -= 1
                 //最后一列不绘制
-                outRect.set(0, 0, if (itemPosition != childCount) mDividerHeight else 0, 0)
+                outRect.set(0, 0, if ((itemPosition + 1) % spanCount != 0) mDividerHeight else 0, 0)
             }
             BOTH -> {
-                val spanCount = getSpanCount(parent)
                 val offset = spanCount.minus(1).times(mDividerHeight).div(spanCount)
                 val left = itemPosition % spanCount * (mDividerHeight - offset)
                 val right = offset - left
@@ -89,10 +88,10 @@ open class RecyclerViewDivider : ItemDecoration {
                     isLastRow(parent, itemPosition, spanCount, childCount) -> {
                         outRect.set(left, 0, right, 0)
                     }
-                    // 如果是最后一列，不绘制右边
-                    isLastColumn(parent, itemPosition, spanCount, childCount) -> {
-                        outRect.set(left, 0, right, mDividerHeight)
-                    }
+                    // // 如果是最后一列，不绘制右边
+                    // isLastColumn(parent, itemPosition, spanCount, childCount) -> {
+                    //     outRect.set(0, 0, 0, mDividerHeight)
+                    // }
                     else -> {
                         outRect.set(left, 0, right, mDividerHeight)
                     }
@@ -171,6 +170,7 @@ open class RecyclerViewDivider : ItemDecoration {
         return when (val layoutManager = parent.layoutManager) {
             is GridLayoutManager -> layoutManager.spanCount
             is StaggeredGridLayoutManager -> layoutManager.spanCount
+            is LinearLayoutManager -> layoutManager.childCount
             else -> -1
         }
     }
