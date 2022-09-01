@@ -3,6 +3,7 @@ package com.master.lib.view
 import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.TypedArray
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.text.TextUtils
@@ -14,7 +15,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.core.view.isVisible
 import com.master.lib.R
+import com.master.lib.ext.getDrawable
 import com.master.lib.ext.gone
 import com.master.lib.ext.ifHas
 import com.master.lib.ext.visible
@@ -51,7 +54,7 @@ open class CellView @JvmOverloads constructor(
             return labelView.text.toString()
         }
         set(value) {
-            labelView.text = value
+            setText(value)
         }
 
     init {
@@ -63,8 +66,7 @@ open class CellView @JvmOverloads constructor(
         if (!a.hasValue(R.styleable.CellView_android_gravity)) {
             gravity = Gravity.CENTER
         }
-        a.ifHas(R.styleable.CellView_mc_icon) { setIcon(a.getDrawable(it)) }
-        a.ifHas(R.styleable.CellView_mc_icon) { setIcon(a.getDrawable(it)) }
+        setIcon(a.getDrawable(R.styleable.CellView_mc_icon))
         a.ifHas(R.styleable.CellView_mc_iconColor) { setIconColor(a.getColorStateList(it)) }
         a.ifHas(R.styleable.CellView_mc_iconWidth) {
             setIconWidth(a.getLayoutDimension(it, 0))
@@ -146,11 +148,17 @@ open class CellView @JvmOverloads constructor(
     }
 
     fun setIcon(@DrawableRes drawable: Int) = apply {
-        iconView.setImageResource(drawable)
+        setIcon(getDrawable(drawable))
+    }
+
+    fun setIcon(bitmap: Bitmap?) = apply {
+        iconView.isVisible = bitmap != null
+        iconView.setImageBitmap(bitmap)
     }
 
     fun setIcon(drawable: Drawable?) = apply {
         iconView.setImageDrawable(drawable)
+        iconView.isVisible = drawable != null
     }
 
     fun setIconWidth(width: Int) = apply {
@@ -187,7 +195,7 @@ open class CellView @JvmOverloads constructor(
             labelView.gone()
         } else {
             labelView.visible()
-            labelView.setText(text)
+            labelView.text = text
         }
     }
 

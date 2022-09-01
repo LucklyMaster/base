@@ -278,8 +278,6 @@ open class ItemView @JvmOverloads constructor(
     private fun setIcon(a: TypedArray, styleable: Int, item: CellView) {
         if (a.hasValue(styleable)) {
             item.setIcon(a.getDrawable(styleable))
-        } else {
-            item.iconView.visibility = GONE
         }
     }
 
