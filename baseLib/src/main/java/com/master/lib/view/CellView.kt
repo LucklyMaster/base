@@ -151,14 +151,14 @@ open class CellView @JvmOverloads constructor(
         setIcon(getDrawable(drawable))
     }
 
-    fun setIcon(bitmap: Bitmap?) = apply {
-        iconView.isVisible = bitmap != null
-        iconView.setImageBitmap(bitmap)
-    }
-
     fun setIcon(drawable: Drawable?) = apply {
         iconView.setImageDrawable(drawable)
         iconView.isVisible = drawable != null
+    }
+
+    fun setIconBitmap(bitmap: Bitmap?) = apply {
+        iconView.isVisible = bitmap != null
+        iconView.setImageBitmap(bitmap)
     }
 
     fun setIconWidth(width: Int) = apply {
