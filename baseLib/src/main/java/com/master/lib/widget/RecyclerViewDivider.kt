@@ -72,8 +72,11 @@ open class RecyclerViewDivider : ItemDecoration {
         val spanCount = getSpanCount(parent)
         when (mOrientation) {
             HORIZONTAL -> {
+                val columns = childCount / spanCount + childCount % spanCount
                 //最后一行不绘制
-                outRect.set(0, 0, 0, if ((itemPosition + 1) % spanCount != 0) mDividerHeight else 0)
+                outRect.set(
+                    0, 0, 0, if (itemPosition / spanCount != columns - 1) mDividerHeight else 0
+                )
             }
             VERTICAL -> {
                 //最后一列不绘制
