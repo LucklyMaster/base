@@ -14,8 +14,9 @@ fun Context.requestPermissions(
 ) {
     MPermissions.with(this)
         .permissions(*permissions)
-        .isNeedAllGranted(isNeedAllGranted)
-        .setOnDeniedInterceptor(deniedCallback)
+        .isNeedAllGranted(isNeedAllGranted).apply {
+            deniedCallback?.let { setOnDeniedInterceptor(it) }
+        }
         .request(grantedCallback)
 }
 
@@ -53,13 +54,6 @@ fun Fragment.requestPermissions(
     requireActivity().requestPermissions(permissions, true, deniedCallback, grantedCallback)
 }
 
-fun Fragment.requestPermissions(
-    vararg permissions: String,
-
-
-
-
-    grantedCallback: OnResultCallback
-) {
+fun Fragment.requestPermissions(vararg permissions: String, grantedCallback: OnResultCallback) {
     requireActivity().requestPermissions(arrayOf(*permissions), true, null, grantedCallback)
 }

@@ -3,10 +3,9 @@ package com.master.lib.permission
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
-import android.provider.Settings
 import com.master.lib.ext.activity
 import com.master.lib.utils.AndroidVersion
+import com.master.lib.utils.PermissionPageUtils
 
 /**
  * 权限接口
@@ -47,13 +46,7 @@ interface IPermission {
     }
 
     fun getAppDetailIntent(context: Context, permission: String): Intent {
-        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-        intent.data = getPackageNameUri(context)
-        return intent
-    }
-
-    fun getPackageNameUri(context: Context): Uri? {
-        return Uri.parse("package:" + context.packageName)
+        return PermissionPageUtils.getPermissionIntent(context)
     }
 
     fun shouldShowRequestPermissionRationale(context: Context, permission: String): Boolean {
