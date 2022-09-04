@@ -10,7 +10,7 @@ import android.widget.LinearLayout
 import android.widget.OverScroller
 import androidx.core.view.NestedScrollingParent
 import androidx.core.view.ViewCompat
-import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
+import com.master.lib.ext.dp2pxi
 
 open class SmartLayout @JvmOverloads constructor(
     context: Context,
@@ -20,13 +20,32 @@ open class SmartLayout @JvmOverloads constructor(
 
     protected open var childView: View? = null
     protected open val scroller = OverScroller(context)
-    protected open var enableDrag = true
-    protected open var enableFoldModel = true
-    protected open var curState = STATE_HIDDEN
-    protected open var collapsedHeight = dp2pxi(180)
-    protected open var expandHeight = LayoutParams.WRAP_CONTENT
-    protected open var peekHeight = dp2pxi(40)
     protected open var tracker: VelocityTracker? = null
+
+    /**
+     * 是否启用拖拽
+     */
+    protected open var enableDrag = true
+
+    /**
+     * 是否启用折叠模式，不启用则没有半展开状态
+     */
+    protected open var enableFoldModel = false
+
+    /**
+     * 半展开的高度
+     */
+    protected open var halfExpandHeight = dp2pxi(180)
+
+    /**
+     * 折叠后的peek高度
+     */
+    protected open var peekHeight = dp2pxi(50)
+
+    /**
+     * 当前的状态
+     */
+    protected open var curState = -1
     protected open var maxY = 0
     protected open var minY = 0
     protected open var lastX = 0f
@@ -38,9 +57,9 @@ open class SmartLayout @JvmOverloads constructor(
     }
 
     companion object State {
-        const val STATE_COLLAPSED = 1
-        const val STATE_EXPANDED = 2
-        const val STATE_DRAGGING = 3
+        const val STATE_FOLD = 1
+        const val STATE_EXPAND_HALF = 2
+        const val STATE_EXPAND = 3
     }
 
     override fun onViewAdded(child: View?) {
@@ -49,20 +68,34 @@ open class SmartLayout @JvmOverloads constructor(
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        if (enableDrag && enableFoldModel) {
+        if (enableDrag) {
             maxY = childView?.measuredHeight ?: 0
             minY = peekHeight
             childView?.layout(
                 paddingStart, measuredHeight - peekHeight, measuredWidth - paddingEnd,
                 measuredHeight + maxY
             )
-            when (curState) {
-                STATE_COLLAPSED -> scrollTo(scrollX, collapsedHeight)
-            }
+            setState(STATE_EXPAND_HALF)
         } else {
             childView?.layout(
                 paddingStart, paddingTop, measuredWidth - paddingEnd, measuredHeight - paddingBottom
             )
+        }
+    }
+
+    open fun setState(state: Int) {
+        if (curState == state) {
+            return
+        }
+        if (!enableFoldModel && state == STATE_EXPAND_HALF) {
+            return
+        }
+        curState = state
+        when (curState) {
+            STATE_FOLD -> smoothScroll(-scrollY)
+            STATE_EXPAND_HALF -> smoothScroll(halfExpandHeight - peekHeight - scrollY)
+            STATE_EXPAND -> smoothScroll(maxY)
+            else -> smoothScroll(-scrollY)
         }
     }
 
@@ -89,20 +122,16 @@ open class SmartLayout @JvmOverloads constructor(
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 if (tracker!!.yVelocity > 1500 && !enableFoldModel) {
-                    collapsed()
+                    setState(STATE_FOLD)
                 } else {
                     finishScroll()
                 }
-
+                dispatchNestedPreFling(tracker!!.xVelocity, tracker!!.yVelocity)
                 tracker!!.clear()
                 tracker!!.recycle()
             }
         }
         return true
-    }
-
-    protected open fun collapsed() {
-        smoothScroll(minY - scrollY)
     }
 
     protected open fun smoothScroll(dy: Int) {
@@ -121,20 +150,20 @@ open class SmartLayout @JvmOverloads constructor(
             if (enableFoldModel) {
                 if (isScrollUp) {
                     when {
-                        scrollY > ((maxY - minY) - collapsedHeight) / 3 + collapsedHeight -> {
+                        scrollY > ((maxY - minY) - halfExpandHeight) / 3 + halfExpandHeight -> {
                             dy = maxY - minY - scrollY
                         }
-                        scrollY > collapsedHeight / 3f -> {
-                            dy = collapsedHeight - scrollY
+                        scrollY > halfExpandHeight / 3f -> {
+                            dy = halfExpandHeight - peekHeight - scrollY
                         }
                     }
                 } else {
                     when {
-                        scrollY > ((maxY - minY) - collapsedHeight) * 2f / 3 + collapsedHeight -> {
+                        scrollY > ((maxY - minY) - halfExpandHeight) * 2f / 3 + halfExpandHeight -> {
                             dy = maxY - minY - scrollY
                         }
-                        scrollY > collapsedHeight * 2f / 3 -> {
-                            dy = collapsedHeight - scrollY
+                        scrollY > halfExpandHeight * 2f / 3 -> {
+                            dy = halfExpandHeight - peekHeight - scrollY
                         }
                     }
                 }
@@ -158,63 +187,79 @@ open class SmartLayout @JvmOverloads constructor(
         super.scrollTo(x, newY)
     }
 
-    // override fun onStartNestedScroll(child: View, target: View, nestedScrollAxes: Int): Boolean {
-    //     return nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL && enableDrag
-    // }
-    //
-    // override fun onNestedScrollAccepted(child: View, target: View, nestedScrollAxes: Int) {
-    //     scroller.abortAnimation()
-    // }
-    //
-    // override fun onStopNestedScroll(target: View) {
-    //     finishScroll()
-    // }
-    //
-    // override fun onNestedScroll(
-    //     target: View,
-    //     dxConsumed: Int,
-    //     dyConsumed: Int,
-    //     dxUnconsumed: Int,
-    //     dyUnconsumed: Int
-    // ) {
-    //     scrollTo(scrollX, scrollY + dyUnconsumed)
-    // }
-    //
-    // override fun onNestedPreScroll(target: View, dx: Int, dy: Int, consumed: IntArray) {
-    //     if (dy > 0) {
-    //         val newY = scrollY + dy
-    //         if (newY < maxY) {
-    //             consumed[1] = dy
-    //         }
-    //         scrollTo(scrollX, newY)
-    //     }
-    // }
-    //
-    // override fun onNestedPreFling(target: View, velocityX: Float, velocityY: Float): Boolean {
-    //     // return scrollY < maxY
-    //     return false
-    // }
-    //
-    // override fun onNestedFling(
-    //     target: View,
-    //     velocityX: Float,
-    //     velocityY: Float,
-    //     consumed: Boolean
-    // ): Boolean {
-    //     val isDragging = scrollY in (minY + 1) until maxY
-    //     if (isDragging && velocityY < -1500 && !enableFoldModel) {
-    //         post {
-    //             scroller.startScroll(
-    //                 scrollX, scrollY, 0, minY - scrollY, 300
-    //             )
-    //             ViewCompat.postInvalidateOnAnimation(this)
-    //         }
-    //     }
-    //     return false
-    // }
-    //
+    /**
+     * 决定是否配合子View进行嵌套滑动
+     * @param child 当前View的直接子View
+     * @param target 启动嵌套滚动的子View
+     * @param nestedScrollAxes 滑动方向
+     * @return Boolean
+     */
+    override fun onStartNestedScroll(child: View, target: View, nestedScrollAxes: Int): Boolean {
+        return nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL && enableDrag
+    }
 
+    /**
+     * 对嵌套滚动操作的成功声明做出反应。该方法会在 [onStartNestedScroll] 返回 true 后被调用。
+     * @param child View
+     * @param target View
+     * @param nestedScrollAxes Int
+     */
+    override fun onNestedScrollAccepted(child: View, target: View, nestedScrollAxes: Int) {
+        scroller.abortAnimation()
+    }
 
-    private fun dp2pxi(dp: Float): Int = (dp * resources.displayMetrics.density + 0.5f).toInt()
-    private fun dp2pxi(dp: Int): Int = (dp * resources.displayMetrics.density + 0.5f).toInt()
+    override fun onNestedPreScroll(target: View, dx: Int, dy: Int, consumed: IntArray) {
+        if (dy > 0) {
+            val newY = scrollY + dy
+            if (newY + peekHeight < maxY) {
+                consumed[1] = dy
+            }
+            scrollTo(scrollX, newY)
+        }
+    }
+
+    override fun onNestedScroll(
+        target: View,
+        dxConsumed: Int,
+        dyConsumed: Int,
+        dxUnconsumed: Int,
+        dyUnconsumed: Int
+    ) {
+        scrollTo(scrollX, scrollY + dyUnconsumed)
+    }
+
+    override fun onStopNestedScroll(target: View) {
+        finishScroll()
+    }
+
+    override fun onNestedPreFling(target: View, velocityX: Float, velocityY: Float): Boolean {
+        if (scrollY + peekHeight < maxY) {
+            if (velocityY > 1500) {
+                if (curState == STATE_EXPAND_HALF) {
+                    // smoothScroll(maxY - peekHeight - scrollY)
+                    // smoothScroll((velocityY * 0.25f).toInt())
+                }
+            }
+            return true
+        }
+        return false
+    }
+
+    override fun onNestedFling(
+        target: View,
+        velocityX: Float,
+        velocityY: Float,
+        consumed: Boolean
+    ): Boolean {
+        val isDragging = scrollY in (minY + 1) until maxY
+        if (isDragging && velocityY < -1500 && !enableFoldModel) {
+            post {
+                scroller.startScroll(
+                    scrollX, scrollY, 0, minY - scrollY, 300
+                )
+                ViewCompat.postInvalidateOnAnimation(this)
+            }
+        }
+        return false
+    }
 }

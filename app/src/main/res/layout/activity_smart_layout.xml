@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.SmartLayoutActivity">
+
+    <com.master.lib.view.SmartLayout
+        android:id="@+id/smartLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="《国风·周南·关雎》这首短小的诗篇，在中国文学史上占据着特殊的位置。它是《诗经》的第一篇，而《诗经》是中国文学最古老的典籍。虽然从性质上判断，一些神话故事产生的年代应该还要早些，但作为书面记载，却是较迟的事情。所以差不多可以说，一翻开中国文学的历史，首先遇到的就是《关雎》。
+
+　　通常认为是一首描写男女恋爱的情歌。此诗在艺术上巧妙地采用了“兴”的表现手法。首章以雎鸟相向合鸣，相依相恋，兴起淑女陪君子的联想。以下各章，又以采荇菜这一行为兴起主人公对女子疯狂地相思与追求。全诗语言优美，善于运用双声、叠韵和重叠词，增强了诗歌的音韵美和写人状物、拟声传情的生动性。
+
+　　《关雎》的内容其实很单纯，是写一个“君子”对“淑女”的追求，写他得不到“淑女”时心里苦恼，翻来覆去睡不着觉；得到了“淑女”就很开心，叫人奏起音乐来庆贺，并以此让“淑女”快乐。作品中人物的身份十分清楚：“君子”在《诗经》的时代是对贵族的泛称，而且这位“君子”家备琴瑟钟鼓之乐，那是要有相当的地位的。以前常把这诗解释为“民间情歌”，恐怕不对头，它所描绘的应该是贵族阶层的生活。另外，说它是情爱诗当然不错，但恐怕也不是一般的爱情诗。这原来是一首婚礼上的歌曲，是男方家庭赞美新娘、祝颂婚姻美好的。《诗经·国风》中的很多歌谣，都是既具有一般的抒情意味、娱乐功能，又兼有礼仪上的实用性，只是有些诗原来派什么用处后人不清楚了，就仅当作普通的歌曲来看待。把《关雎》当作婚礼上的歌来看，从“窈窕淑女，君子好逑”，唱到“琴瑟友之”“钟鼓乐之”，也是喜气洋洋的，很合适的，
+
+　　当然这首诗本身，还是以男子追求女子的情歌的形态出现的。之所以如此，大抵与在一般婚姻关系中男方是主动的一方有关。就是在现代，一个姑娘看上个小伙，也总要等他先开口，古人更是如此。娶个新娘回来，夸她是个美丽又贤淑的好姑娘，是君子的好配偶，说自己曾经想她想得害了相思病，必定很讨新娘的欢喜。然后在一片琴瑟钟鼓之乐中，彼此的感情相互靠近，美满的婚姻就从这里开了头。即使单从诗的情绪结构来说，从见关雎而思淑女，到结成琴瑟之好，中间一番周折也是必要的：得来不易的东西，才特别可贵，特别让人高兴。
+
+　　这首诗可以被当作表现夫妇之德的典范，主要是由于有这些特点：
+
+　　首先，它所写的爱情，一开始就有明确的婚姻目的，最终又归结于婚姻的美满，不是青年男女之间短暂的邂逅、一时的激情。这种明确指向婚姻、表示负责任的爱情，更为社会所赞同。
+
+　　其次，它所写的男女双方，乃是“君子”和“淑女”，表明这是一种与美德相联系的结合。“君子”是兼有地位和德行双重意义的，而“窈窕淑女”，也是兼说体貌之美和德行之善。这里“君子”与“淑女”的结合，代表了一种婚姻理想。
+
+　　再次，是诗歌所写恋爱行为的节制性。细读可以注意到，这诗虽是写男方对女方的追求，但丝毫没有涉及双方的直接接触。“淑女”固然没有什么动作表现出来，“君子”的相思，也只是独自在那里“辗转反侧”，什么攀墙折柳之类的事情，好像完全不曾想到，爱得很守规矩。这样一种恋爱，既有真实的颇为深厚的感情（这对情诗而言是很重要的），又表露得平和而有分寸，对于读者所产生的感动，也不致过于激烈。
+
+　　以上种种特点，恐怕确实同此诗原来是贵族婚礼上的歌曲有关，那种场合，要求有一种与主人的身份地位相称的有节制的欢乐气氛。而孔子从中看到了一种具有广泛意义的中和之美，借以提倡他所尊奉的自我克制、重视道德修养的人生态度，《毛诗序》则把它推许为可以“风天下而正夫妇”的道德教材。这两者视角有些不同，但在根本上仍有一致之处。
+
+　　古之儒者重视夫妇之德，有其很深的道理。
+
+　　在第一层意义上说，家庭是社会组织的基本单元，在古代，这一基本单元的和谐稳定对于整个社会秩序的和谐稳定，意义至为重大。"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+        </androidx.core.widget.NestedScrollView>
+    </com.master.lib.view.SmartLayout>
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="180dp"
+        android:background="@color/design_default_color_primary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@color/design_default_color_secondary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:background="@color/color_disable"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
