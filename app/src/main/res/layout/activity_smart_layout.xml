@@ -7,10 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".activity.SmartLayoutActivity">
 
-    <com.master.lib.view.SmartLayout
+    <com.master.lib.view.SmartLayout2
         android:id="@+id/smartLayout2"
         android:layout_width="match_parent"
         android:layout_height="500dp"
+        android:background="#D3EFD3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -47,7 +48,7 @@
                 android:textSize="18sp" />
 
         </androidx.core.widget.NestedScrollView>
-    </com.master.lib.view.SmartLayout>
+    </com.master.lib.view.SmartLayout2>
 
     <TextView
         android:layout_width="100dp"

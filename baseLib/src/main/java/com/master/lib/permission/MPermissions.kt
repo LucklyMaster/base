@@ -142,7 +142,6 @@ class MPermissions private constructor(private val activity: FragmentActivity) {
     }
 
     fun request(callback: OnResultCallback) {
-        isNeedAllGranted.println()
         RequestFragment.request(
             activity, permissions, callback, isNeedAllGranted, onDeniedInterceptor,
             specialInterceptors
