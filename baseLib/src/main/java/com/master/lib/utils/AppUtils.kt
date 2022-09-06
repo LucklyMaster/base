@@ -133,6 +133,11 @@ object AppUtils {
      * @return Boolean
      */
     fun isInstall(packageName: String): Boolean {
-        return application.packageManager.getPackageInfo(packageName, 0) != null
+        val appInfo = try {
+            application.packageManager.getPackageInfo(packageName, 0)
+        } catch (e: Exception) {
+            null
+        }
+        return appInfo != null
     }
 }
