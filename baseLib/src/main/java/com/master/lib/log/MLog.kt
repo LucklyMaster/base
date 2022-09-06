@@ -45,8 +45,8 @@ object MLog {
         logManager?.config = config
     }
 
-    fun setLogManagerConfig(method: LogManagerConfig?.() -> Unit) = apply {
-        method.invoke(logManagerConfig)
+    fun setLogManagerConfig(method: LogManagerConfig.() -> Unit) = apply {
+        logManagerConfig?.let { method.invoke(it) }
         logManagerConfig?.let { logManager?.config = it }
     }
 
