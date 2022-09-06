@@ -15,13 +15,13 @@ data class LogManagerConfig(
     /**
      * 日志保存目录
      */
-    val logDir: String = "${application.filesDir.absolutePath}/MCLib/MLog",
+    var logDir: String = "${application.filesDir.absolutePath}/MCLib/MLog",
     /**
      * 日志文件后缀名
      */
-    val fileSuffix: String = "log",
+    var fileSuffix: String = "log",
     /**
      * 保存的天数
      */
-    val saveDays: Int = 10
+    var saveDays: Int = 10
 )

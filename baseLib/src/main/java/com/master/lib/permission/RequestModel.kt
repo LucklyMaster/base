@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
  */
 class RequestModel : ViewModel() {
 
+    var checkPermissions = true
     var isNeedAllGranted = false
     var onDeniedInterceptor: OnDeniedInterceptor? = null
     var permissionsResultCallback: OnResultCallback? = null

@@ -1,6 +1,5 @@
 package com.master.lib.log
 
-import com.master.lib.BuildConfig
 import com.master.lib.ext.Log
 import org.json.JSONArray
 import org.json.JSONObject
@@ -13,8 +12,8 @@ import org.json.JSONObject
 object MLog {
     var tag = "MLog"
         private set
-    private var debug = BuildConfig.DEBUG
-    private var saveLog = BuildConfig.DEBUG
+    private var debug = true
+    private var saveLog = true
     private val printer = MPrinter()
     private var printStrategy: IPrintStrategy = MPrintStrategy(printer)
     private var logManager: AbsLogManager? = null

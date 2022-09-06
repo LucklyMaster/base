@@ -19,6 +19,8 @@ class MPermissions private constructor(private val activity: FragmentActivity) {
      */
     private val permissions: MutableList<String> by lazy { mutableListOf() }
 
+    private var check = false
+
     /**
      * 特殊权限拦截器
      */
@@ -108,6 +110,10 @@ class MPermissions private constructor(private val activity: FragmentActivity) {
         }
     }
 
+    fun check(check: Boolean) = apply {
+        this.check = check
+    }
+
     /**
      * 是否所有权限全部授权判断为已授权
      * @param isNeedAllGranted Boolean
@@ -143,7 +149,7 @@ class MPermissions private constructor(private val activity: FragmentActivity) {
 
     fun request(callback: OnResultCallback) {
         RequestFragment.request(
-            activity, permissions, callback, isNeedAllGranted, onDeniedInterceptor,
+            activity, permissions, check, callback, isNeedAllGranted, onDeniedInterceptor,
             specialInterceptors
         )
     }

@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.master.lib.BuildConfig
 import com.master.lib.utils.AndroidVersion
 import com.master.lib.utils.DeviceUtils
 import com.master.lib.utils.XmlUtils
@@ -42,6 +41,9 @@ class RequestFragment : Fragment() {
      * 特殊权限拦截器
      */
     private var specialInterceptors = mutableMapOf<String, SpecialPermissionInterceptor>()
+
+    private var checkPermissions = true
+
     private val viewModel by lazy { ViewModelProvider(this).get(RequestModel::class.java) }
 
     /**
@@ -62,6 +64,7 @@ class RequestFragment : Fragment() {
         fun request(
             activity: FragmentActivity,
             permissions: MutableList<String>,
+            checkPermissions: Boolean,
             resultCallback: OnResultCallback?,
             isNeedAllGranted: Boolean,
             onDeniedInterceptor: OnDeniedInterceptor?,
@@ -72,6 +75,7 @@ class RequestFragment : Fragment() {
             fragment.resultCallback = resultCallback
             fragment.isNeedAllGranted = isNeedAllGranted
             fragment.onDeniedInterceptor = onDeniedInterceptor
+            fragment.checkPermissions = checkPermissions
             specialInterceptors?.let { fragment.specialInterceptors.putAll(it) }
             fragment.request(permissions)
         }
@@ -91,6 +95,7 @@ class RequestFragment : Fragment() {
             viewModel.specialInterceptors.putAll(specialInterceptors)
             viewModel.isNeedAllGranted = isNeedAllGranted
             viewModel.onDeniedInterceptor = onDeniedInterceptor
+            viewModel.checkPermissions = checkPermissions
         }
     }
 
@@ -102,7 +107,7 @@ class RequestFragment : Fragment() {
     private fun request(permissions: MutableList<String>) {
         lifecycleScope.launchWhenResumed {
             val permissionsMap = Utils.convertPermissions2CurVersion(permissions)
-            if (BuildConfig.DEBUG) {
+            if (viewModel.checkPermissions) {
                 checkPermissions(permissionsMap.keys.toList())
             }
             val requestPermissions = permissionsMap.filter { it.value }.keys.toList()
