@@ -125,4 +125,14 @@ object AppUtils {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         application.startActivity(intent)
     }
+
+    /**
+     * 应用是否安装，使用此方法需要[Manifest.permission.QUERY_ALL_PACKAGES]或在[AndroidManifest]中
+     * 添加<queries>标签
+     * @param packageName String
+     * @return Boolean
+     */
+    fun isInstall(packageName: String): Boolean {
+        return application.packageManager.getPackageInfo(packageName, 0) != null
+    }
 }
