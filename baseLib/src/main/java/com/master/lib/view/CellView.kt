@@ -66,6 +66,9 @@ open class CellView @JvmOverloads constructor(
         if (!a.hasValue(R.styleable.CellView_android_gravity)) {
             gravity = Gravity.CENTER
         }
+        iconView.scaleType = ImageView.ScaleType.values()[a.getInt(
+            R.styleable.CellView_android_scaleType, ImageView.ScaleType.CENTER.ordinal
+        )]
         setIcon(a.getDrawable(R.styleable.CellView_mc_icon))
         a.ifHas(R.styleable.CellView_mc_iconColor) { setIconColor(a.getColorStateList(it)) }
         a.ifHas(R.styleable.CellView_mc_iconWidth) {
@@ -102,7 +105,6 @@ open class CellView @JvmOverloads constructor(
         orientation = VERTICAL
         labelView.textSize = 16f
         labelView.setTextColor(Color.BLACK)
-        iconView.scaleType = ImageView.ScaleType.CENTER
         addView(iconView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
         addView(labelView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
     }

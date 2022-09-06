@@ -9,23 +9,23 @@ import android.os.Build
 import android.util.DisplayMetrics
 import android.view.WindowManager
 
-fun dp2px(dp: Float): Float = dp * displayDensity + 0.5f
-fun dp2px(dp: Int): Float = dp * displayDensity + 0.5f
-fun px2dp(px: Float): Float = px / displayDensity + 0.5f
-fun px2dp(px: Int): Float = px / displayDensity + 0.5f
-fun dp2pxi(dp: Float): Int = (dp * displayDensity + 0.5f).toInt()
-fun dp2pxi(dp: Int): Int = (dp * displayDensity + 0.5f).toInt()
-fun px2dpi(px: Float): Int = (px / displayDensity + 0.5f).toInt()
-fun px2dpi(px: Int): Int = (px / displayDensity + 0.5f).toInt()
+fun dp2px(dp: Float): Float = dp * application.displayDensity + 0.5f
+fun dp2px(dp: Int): Float = dp * application.displayDensity + 0.5f
+fun px2dp(px: Float): Float = px / application.displayDensity + 0.5f
+fun px2dp(px: Int): Float = px / application.displayDensity + 0.5f
+fun dp2pxi(dp: Float): Int = (dp * application.displayDensity + 0.5f).toInt()
+fun dp2pxi(dp: Int): Int = (dp * application.displayDensity + 0.5f).toInt()
+fun px2dpi(px: Float): Int = (px / application.displayDensity + 0.5f).toInt()
+fun px2dpi(px: Int): Int = (px / application.displayDensity + 0.5f).toInt()
 
-fun sp2px(sp: Float): Float = sp * scaledDensity + 0.5f
-fun sp2px(sp: Int): Float = sp * scaledDensity + 0.5f
-fun px2sp(px: Float) = px / scaledDensity + 0.5f
-fun px2sp(px: Int) = px / scaledDensity + 0.5f
-fun sp2pxi(sp: Float): Int = (sp * scaledDensity + 0.5f).toInt()
-fun sp2pxi(sp: Int): Int = (sp * scaledDensity + 0.5f).toInt()
-fun px2spi(px: Float) = (px / scaledDensity + 0.5f).toInt()
-fun px2spi(px: Int) = (px / scaledDensity + 0.5f).toInt()
+fun sp2px(sp: Float): Float = sp * application.scaledDensity + 0.5f
+fun sp2px(sp: Int): Float = sp * application.scaledDensity + 0.5f
+fun px2sp(px: Float) = px / application.scaledDensity + 0.5f
+fun px2sp(px: Int) = px / application.scaledDensity + 0.5f
+fun sp2pxi(sp: Float): Int = (sp * application.scaledDensity + 0.5f).toInt()
+fun sp2pxi(sp: Int): Int = (sp * application.scaledDensity + 0.5f).toInt()
+fun px2spi(px: Float) = (px / application.scaledDensity + 0.5f).toInt()
+fun px2spi(px: Int) = (px / application.scaledDensity + 0.5f).toInt()
 
 fun Context.dp2px(dp: Float): Float = dp * resources.displayMetrics.density + 0.5f
 fun Context.dp2px(dp: Int): Float = dp * resources.displayMetrics.density + 0.5f
@@ -48,25 +48,25 @@ fun Context.px2spi(px: Int) = (px / resources.displayMetrics.density + 0.5f).toI
 /**
  * 屏幕宽度
  */
-val screenWidth: Int
+val Context.screenWidth: Int
     get() {
-        return application.resources.displayMetrics.widthPixels
+        return resources.displayMetrics.widthPixels
     }
 
 /**
  * 屏幕高度，未包含系统装饰
  */
-val screenHeight: Int
+val Context.screenHeight: Int
     get() {
-        return application.resources.displayMetrics.heightPixels
+        return resources.displayMetrics.heightPixels
     }
 
 /**
  * 屏幕物理高度，即真正的高度
  */
-val screenRealHeight: Int
+val Context.screenRealHeight: Int
     get() {
-        val manager = application.getSystemService(WindowManager::class.java)
+        val manager = getSystemService(WindowManager::class.java)
         return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
             manager?.currentWindowMetrics?.bounds?.height() ?: 0
         } else {
@@ -79,47 +79,43 @@ val screenRealHeight: Int
 /**
  * 状态栏高度
  */
-val statusBarHeight: Int
+val Context.statusBarHeight: Int
     get() {
-        val resourceId = application.resources.getIdentifier(
-            "status_bar_height", "dimen", "android"
-        )
+        val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
         return application.resources.getDimensionPixelSize(resourceId)
     }
 
 /**
  * 导航栏高度
  */
-val navigationBarHeight: Int
+val Context.navigationBarHeight: Int
     get() {
-        val resourceId = application.resources.getIdentifier(
-            "navigation_bar_height", "dimen", "android"
-        )
+        val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
         return application.resources.getDimensionPixelSize(resourceId)
     }
 
 /**
  * 像素密度
  */
-val displayDensity: Float
-    get() = application.resources.displayMetrics.density
+val Context.displayDensity: Float
+    get() = resources.displayMetrics.density
 
-val scaledDensity: Float
-    get() = application.resources.displayMetrics.scaledDensity
+val Context.scaledDensity: Float
+    get() = resources.displayMetrics.scaledDensity
 
 /**
  * 屏幕方向，取值为[Configuration.ORIENTATION_LANDSCAPE]、[Configuration.ORIENTATION_PORTRAIT]、
  * [Configuration.ORIENTATION_UNDEFINED]
  */
-val orientation: Int
+val Context.orientation: Int
     get() {
-        return application.resources.configuration.orientation
+        return resources.configuration.orientation
     }
 
 /**
  * 是否是竖屏
  */
-val isPortrait: Boolean
+val Context.isPortrait: Boolean
     get() {
         return orientation == Configuration.ORIENTATION_PORTRAIT
     }
@@ -127,7 +123,7 @@ val isPortrait: Boolean
 /**
  * 是否是横屏
  */
-val isLandscape: Boolean
+val Context.isLandscape: Boolean
     get() {
         return orientation == Configuration.ORIENTATION_LANDSCAPE
     }
@@ -143,9 +139,9 @@ val packageName: String
 /**
  * 版本号
  */
-val versionCode: Long
+val Context.versionCode: Long
     get() {
-        val packageInfo = application.packageManager.getPackageInfo(application.packageName, 0)
+        val packageInfo = packageManager.getPackageInfo(packageName, 0)
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             packageInfo.longVersionCode
         } else {
@@ -156,9 +152,9 @@ val versionCode: Long
 /**
  * 版本名
  */
-val versionName: String
+val Context.versionName: String
     get() {
-        return application.packageManager.getPackageInfo(application.packageName, 0).versionName
+        return packageManager.getPackageInfo(packageName, 0).versionName
     }
 
 /**

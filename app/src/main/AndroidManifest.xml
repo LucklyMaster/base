@@ -65,7 +65,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.SpanActivity" />
-        <activity android:name=".activity.SmartLayoutActivity" />
+        <activity android:name=".activity.SheetLayoutActivity" />
     </application>
 
 </manifest>

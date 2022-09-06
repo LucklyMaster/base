@@ -65,6 +65,6 @@
             android:id="@+id/smartLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="smartLayout" />
+            android:text="sheetLayout" />
     </LinearLayout>
 </ScrollView>

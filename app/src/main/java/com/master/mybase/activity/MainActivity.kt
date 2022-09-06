@@ -51,7 +51,7 @@ class MainActivity : MyBaseActivity<ActivityMainBinding>(), View.OnClickListener
             binding.permissions -> PermissionsActivity::class.java
             binding.span -> SpanActivity::class.java
             binding.countdown -> CountdownActivity::class.java
-            binding.smartLayout -> SmartLayoutActivity::class.java
+            binding.smartLayout -> SheetLayoutActivity::class.java
             else -> MainActivity::class.java
         }
         startActivity(clazz)

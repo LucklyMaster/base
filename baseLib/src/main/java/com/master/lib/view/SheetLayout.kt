@@ -1,16 +1,19 @@
 package com.master.lib.view
 
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.VelocityTracker
 import android.view.View
-import android.widget.LinearLayout
+import android.widget.FrameLayout
 import androidx.core.view.NestedScrollingParent
 import androidx.core.view.ViewCompat
+import com.master.lib.R
 import com.master.lib.ext.dp2pxi
 import com.master.lib.ext.screenHeight
+import kotlin.math.abs
 
 /**
  * 可以用作抽屉的Layout,只能包含一个直接子View
@@ -20,8 +23,9 @@ import com.master.lib.ext.screenHeight
 open class SheetLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : LinearLayout(context, attrs, defStyleAttr), NestedScrollingParent {
+    defStyleAttr: Int = 0,
+    defStyleRes: Int = 0
+) : FrameLayout(context, attrs, defStyleAttr, defStyleRes), NestedScrollingParent {
 
     protected var childView: View? = null
 
@@ -38,7 +42,12 @@ open class SheetLayout @JvmOverloads constructor(
     /**
      * 展开后的高度
      */
-    protected var expandHeight = screenHeight / 2
+    protected var expandHeight = context.screenHeight / 2
+
+    /**
+     * 展开后高度相对于屏幕高度的比率，与[expandHeight]相比，优先级更高
+     */
+    protected var expandHeightRatio = 0.65f
 
     /**
      * 半展开的高度
@@ -53,17 +62,51 @@ open class SheetLayout @JvmOverloads constructor(
     /**
      * 当前的状态
      */
-    protected open var curState = STATE_FOLD
-    protected open var isScrollUp = false
-    protected open var minY = 0f
-    protected open var maxY = 0f
-    protected open var lastY = 0f
-    protected open var tracker: VelocityTracker? = null
+    protected var curState = STATE_FOLD
+
+    /**
+     * 动画执行的速度(px/ms)，路程/时间
+     */
+    protected var animatorSpeed = 950f / 300
+    protected var smoothAnimator: ValueAnimator? = null
+    protected var stateChangedListener: OnStateChangedListener? = null
+    protected var isScrollUp = false
+    protected var minY = 0f
+    protected var maxY = 0f
+    protected var lastY = 0f
+    protected var tracker: VelocityTracker? = null
 
     companion object State {
         const val STATE_FOLD = 1
         const val STATE_EXPAND_HALF = 2
         const val STATE_EXPAND = 3
+    }
+
+    fun interface OnStateChangedListener {
+        fun onChanged(state: Int)
+    }
+
+    init {
+        val a = context.obtainStyledAttributes(
+            attrs, R.styleable.SheetLayout, defStyleAttr, defStyleRes
+        )
+
+        enableDrag = a.getBoolean(R.styleable.SheetLayout_mc_enableDrag, enableDrag)
+        enableFoldModel = a.getBoolean(R.styleable.SheetLayout_mc_enableFoldModel, enableFoldModel)
+        expandHeight = a.getDimensionPixelOffset(
+            R.styleable.SheetLayout_mc_expandHeight, expandHeight
+        )
+        expandHeightRatio = a.getFloat(
+            R.styleable.SheetLayout_mc_expandHeightRatio, expandHeightRatio
+        )
+        halfExpandHeight = a.getDimensionPixelOffset(
+            R.styleable.SheetLayout_mc_halfExpandHeight, halfExpandHeight
+        )
+        peekHeight = a.getDimensionPixelOffset(R.styleable.SheetLayout_mc_peekHeight, peekHeight)
+        animatorSpeed = a.getFloat(R.styleable.SheetLayout_mc_animatorSpeed, animatorSpeed)
+        curState = a.getInt(R.styleable.SheetLayout_mc_initialState, curState)
+
+        a.recycle()
     }
 
     override fun onViewAdded(child: View?) {
@@ -72,10 +115,18 @@ open class SheetLayout @JvmOverloads constructor(
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val height = if (expandHeight > 0) {
-            MeasureSpec.makeMeasureSpec(expandHeight, MeasureSpec.EXACTLY)
-        } else {
-            heightMeasureSpec
+        val height = when {
+            expandHeightRatio > 0 -> {
+                MeasureSpec.makeMeasureSpec(
+                    (expandHeightRatio * context.screenHeight).toInt(), MeasureSpec.EXACTLY
+                )
+            }
+            expandHeight > 0 -> {
+                MeasureSpec.makeMeasureSpec(expandHeight, MeasureSpec.EXACTLY)
+            }
+            else -> {
+                heightMeasureSpec
+            }
         }
         super.onMeasure(widthMeasureSpec, height)
     }
@@ -87,12 +138,15 @@ open class SheetLayout @JvmOverloads constructor(
         childView?.layout(
             paddingStart, paddingTop, measuredWidth - paddingEnd, measuredHeight - paddingBottom
         )
-        setStateInternal(curState)
+        setStateInternal(curState, withAnimator = false, isFromUser = false)
     }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         super.onTouchEvent(event)
+        if (smoothAnimator?.isRunning == true || !enableDrag) {
+            return false
+        }
         when (event?.action) {
             MotionEvent.ACTION_DOWN -> {
                 tracker = VelocityTracker.obtain()
@@ -106,10 +160,10 @@ open class SheetLayout @JvmOverloads constructor(
                 lastY = event.rawY
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                if (tracker!!.yVelocity > 1500 && !enableFoldModel) {
-                    setStateInternal(STATE_FOLD)
-                } else if (tracker!!.yVelocity < -1500 && !enableFoldModel) {
-                    setStateInternal(STATE_EXPAND)
+                if (tracker!!.yVelocity > 1000 && !enableFoldModel) {
+                    setStateInternal(STATE_FOLD, true)
+                } else if (tracker!!.yVelocity < -1000 && !enableFoldModel) {
+                    setStateInternal(STATE_EXPAND, true)
                 } else {
                     finishScroll()
                 }
@@ -120,39 +174,48 @@ open class SheetLayout @JvmOverloads constructor(
         return true
     }
 
-    open fun finishScroll() {
-        val threshold = if (isScrollUp) height * 2 / 3 else height / 3
-        var dy = if (y > minY + threshold) maxY - y else minY - y
+    protected open fun finishScroll() {
         if (enableFoldModel) {
             if (isScrollUp) {
                 when {
                     y < minY + (height - halfExpandHeight) * 2 / 3 -> {
-                        dy = minY - y
+                        setStateInternal(STATE_EXPAND, true)
                     }
                     y < minY + (height - halfExpandHeight) + halfExpandHeight * 2 / 3 -> {
-                        dy = minY + (height - halfExpandHeight) - y
+                        setStateInternal(STATE_EXPAND_HALF, true)
+                    }
+                    else -> {
+                        setStateInternal(STATE_FOLD, true)
                     }
                 }
             } else {
                 when {
                     y > minY + (height - halfExpandHeight) + halfExpandHeight / 3 -> {
-                        dy = maxY - y
+                        setStateInternal(STATE_FOLD, true)
                     }
                     y > minY + (height - halfExpandHeight) / 3 -> {
-                        dy = minY + (height - halfExpandHeight).toFloat() - y
+                        setStateInternal(STATE_EXPAND_HALF, true)
+                    }
+                    else -> {
+                        setStateInternal(STATE_EXPAND, true)
                     }
                 }
             }
+        } else {
+            val threshold = if (isScrollUp) height * 2 / 3 else height / 3
+            if (y > minY + threshold) {
+                setStateInternal(STATE_FOLD, true)
+            } else {
+                setStateInternal(STATE_EXPAND, true)
+            }
         }
-        smoothScroll(dy)
     }
 
     open fun setState(state: Int) = apply {
         if (curState == state) {
             return@apply
         }
-        curState = state
-        invalidate()
+        setStateInternal(state, true)
     }
 
     open fun setPeekHeight(peekHeight: Int) = apply {
@@ -161,6 +224,10 @@ open class SheetLayout @JvmOverloads constructor(
 
     open fun setExpandHeight(expandHeight: Int) = apply {
         this.expandHeight = expandHeight
+    }
+
+    open fun setExpandHeightRatio(expandHeightRatio: Float) = apply {
+        this.expandHeightRatio = expandHeightRatio
     }
 
     open fun setHalfExpandHeight(halfExpandHeight: Int) = apply {
@@ -175,21 +242,54 @@ open class SheetLayout @JvmOverloads constructor(
         this.enableFoldModel = enableFoldModel
     }
 
-    protected open fun setStateInternal(state: Int) {
+    open fun setAnimatorSpeed(animatorSpeed: Float) = apply {
+        this.animatorSpeed = animatorSpeed
+    }
+
+    open fun setOnStateChangedListener(listener: OnStateChangedListener) = apply {
+        stateChangedListener = listener
+    }
+
+    protected open fun setStateInternal(
+        state: Int,
+        withAnimator: Boolean = false,
+        isFromUser: Boolean = true
+    ) {
         if (!enableFoldModel && state == STATE_EXPAND_HALF) {
             return
         }
         when (state) {
-            STATE_FOLD -> smoothScroll(maxY - y)
-            STATE_EXPAND_HALF -> smoothScroll(minY + halfExpandHeight - y)
-            STATE_EXPAND -> smoothScroll(minY - y)
-            else -> smoothScroll(maxY - y)
+            STATE_FOLD -> smoothScroll(maxY - y, withAnimator)
+            STATE_EXPAND_HALF -> smoothScroll(
+                minY + (height - halfExpandHeight) - y, withAnimator
+            )
+            STATE_EXPAND -> smoothScroll(minY - y, withAnimator)
+            else -> smoothScroll(maxY - y, withAnimator)
         }
+        if (curState != state) {
+            stateChangedListener?.onChanged(state)
+        }
+        curState = state
     }
 
-    private fun smoothScroll(dy: Float) {
+    protected open fun smoothScroll(dy: Float, withAnimator: Boolean = false) {
         isScrollUp = dy < 0
-        y += dy
+        if (withAnimator) {
+            if (smoothAnimator?.isRunning == true) {
+                smoothAnimator?.cancel()
+            }
+            val curY = y
+            smoothAnimator = ValueAnimator()
+            smoothAnimator!!.setFloatValues(0f, dy)
+            smoothAnimator!!.duration = (abs(dy) / animatorSpeed).toLong()
+            smoothAnimator!!.removeAllUpdateListeners()
+            smoothAnimator!!.addUpdateListener {
+                y = curY + it.animatedValue as Float
+            }
+            smoothAnimator!!.start()
+        } else {
+            y += dy
+        }
     }
 
     override fun setY(y: Float) {
@@ -203,6 +303,9 @@ open class SheetLayout @JvmOverloads constructor(
     }
 
     override fun onNestedScrollAccepted(child: View, target: View, nestedScrollAxes: Int) {
+        if (smoothAnimator?.isRunning == true) {
+            smoothAnimator?.cancel()
+        }
     }
 
     override fun onNestedPreScroll(target: View, dx: Int, dy: Int, consumed: IntArray) {
@@ -214,15 +317,6 @@ open class SheetLayout @JvmOverloads constructor(
             consumed[1] = dy
             smoothScroll(-dy.toFloat())
         }
-    }
-
-    override fun onNestedScroll(
-        target: View,
-        dxConsumed: Int,
-        dyConsumed: Int,
-        dxUnconsumed: Int,
-        dyUnconsumed: Int
-    ) {
     }
 
     override fun onNestedPreFling(target: View, velocityX: Float, velocityY: Float): Boolean {
