@@ -7,23 +7,36 @@
     android:layout_height="match_parent"
     tools:context=".activity.SmartLayoutActivity">
 
-    <com.master.lib.view.SmartLayout2
+    <com.master.lib.view.SheetLayout
         android:id="@+id/smartLayout2"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="wrap_content"
         android:background="#D3EFD3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <androidx.core.widget.NestedScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="《国风·周南·关雎》这首短小的诗篇，在中国文学史上占据着特殊的位置。它是《诗经》的第一篇，而《诗经》是中国文学最古老的典籍。虽然从性质上判断，一些神话故事产生的年代应该还要早些，但作为书面记载，却是较迟的事情。所以差不多可以说，一翻开中国文学的历史，首先遇到的就是《关雎》。
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/teal_200"
+                android:gravity="center"
+                android:text="@string/app_name"
+                android:textColor="@color/white" />
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="《国风·周南·关雎》这首短小的诗篇，在中国文学史上占据着特殊的位置。它是《诗经》的第一篇，而《诗经》是中国文学最古老的典籍。虽然从性质上判断，一些神话故事产生的年代应该还要早些，但作为书面记载，却是较迟的事情。所以差不多可以说，一翻开中国文学的历史，首先遇到的就是《关雎》。
 
 　　通常认为是一首描写男女恋爱的情歌。此诗在艺术上巧妙地采用了“兴”的表现手法。首章以雎鸟相向合鸣，相依相恋，兴起淑女陪君子的联想。以下各章，又以采荇菜这一行为兴起主人公对女子疯狂地相思与追求。全诗语言优美，善于运用双声、叠韵和重叠词，增强了诗歌的音韵美和写人状物、拟声传情的生动性。
 
@@ -44,30 +57,9 @@
 　　古之儒者重视夫妇之德，有其很深的道理。
 
 　　在第一层意义上说，家庭是社会组织的基本单元，在古代，这一基本单元的和谐稳定对于整个社会秩序的和谐稳定，意义至为重大。"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
-        </androidx.core.widget.NestedScrollView>
-    </com.master.lib.view.SmartLayout2>
-
-    <TextView
-        android:layout_width="100dp"
-        android:layout_height="180dp"
-        android:background="@color/design_default_color_primary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <TextView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:background="@color/design_default_color_secondary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <TextView
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:background="@color/color_disable"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+            </androidx.core.widget.NestedScrollView>
+        </LinearLayout>
+    </com.master.lib.view.SheetLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
