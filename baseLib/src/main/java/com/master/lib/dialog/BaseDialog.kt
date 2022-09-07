@@ -106,8 +106,8 @@ open class BaseDialog @JvmOverloads constructor(
         val attributes = window.attributes
         //根据横竖屏不同，设置不同的宽度
         if (windowWidth == ViewGroup.LayoutParams.WRAP_CONTENT) {
-            val widthScale = if (isPortrait) 0.85f else 0.6f
-            attributes.width = (screenWidth * widthScale).toInt()
+            val widthScale = if (application.isPortrait) 0.85f else 0.6f
+            attributes.width = (application.screenWidth * widthScale).toInt()
         } else {
             attributes.width = windowWidth
         }

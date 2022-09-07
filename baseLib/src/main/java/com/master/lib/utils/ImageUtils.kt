@@ -52,7 +52,7 @@ object ImageUtils {
         inPreferredConfig: Bitmap.Config = Bitmap.Config.ARGB_8888
     ): Bitmap? {
         val maxBitmapSize = sqrt(
-            screenWidth.toDouble().pow(2) + screenHeight.toDouble().pow(2)
+            application.screenWidth.toDouble().pow(2) + application.screenHeight.toDouble().pow(2)
         ).toInt()
         return getBitmap(path, maxBitmapSize, maxBitmapSize, inPreferredConfig)
     }
@@ -93,7 +93,7 @@ object ImageUtils {
         inPreferredConfig: Bitmap.Config = Bitmap.Config.ARGB_8888
     ): Bitmap? {
         val maxBitmapSize = sqrt(
-            screenWidth.toDouble().pow(2) + screenHeight.toDouble().pow(2)
+            application.screenWidth.toDouble().pow(2) + application.screenHeight.toDouble().pow(2)
         ).toInt()
         return getBitmap(resId, maxBitmapSize, maxBitmapSize, inPreferredConfig)
     }

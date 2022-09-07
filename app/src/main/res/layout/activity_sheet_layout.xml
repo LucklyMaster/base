@@ -14,23 +14,24 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:mc_expandHeightRatio="0.85">
+        app:mc_expandHeightRatio="0.55"
+        app:mc_initialState="expand">
 
-        <com.master.lib.view.ShapeLinearLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:mc_normalColor="@color/transparent"
-            app:mc_radius="20dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <TextView
+            <com.master.lib.view.ShapeTextView
                 android:id="@+id/tv_title"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/teal_200"
                 android:gravity="center"
                 android:text="@string/app_name"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                app:mc_leftTopRadius="20dp"
+                app:mc_normalColor="@color/teal_200"
+                app:mc_rightTopRadius="20dp" />
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -43,6 +44,6 @@
                     android:textColor="@color/black"
                     android:textSize="18sp" />
             </androidx.core.widget.NestedScrollView>
-        </com.master.lib.view.ShapeLinearLayout>
+        </LinearLayout>
     </com.master.lib.view.SheetLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

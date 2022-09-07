@@ -89,8 +89,8 @@ class CrashHandler private constructor() : Thread.UncaughtExceptionHandler {
     private fun collectDeviceInfo(): MutableMap<String, String> {
         val map = mutableMapOf<String, String>()
         try {
-            map["versionName"] = versionName
-            map["versionCode"] = versionCode.toString()
+            map["versionName"] = application.versionName
+            map["versionCode"] = application.versionCode.toString()
             Build::class.java.declaredFields.forEach {
                 it.isAccessible = true
                 map[it.name] = it[null]?.toString() ?: "NULL"

@@ -115,7 +115,7 @@ open class SheetLayout @JvmOverloads constructor(
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val height = when {
+        val realHeight = when {
             expandHeightRatio > 0 -> {
                 MeasureSpec.makeMeasureSpec(
                     (expandHeightRatio * context.screenHeight).toInt(), MeasureSpec.EXACTLY
@@ -128,15 +128,15 @@ open class SheetLayout @JvmOverloads constructor(
                 heightMeasureSpec
             }
         }
-        super.onMeasure(widthMeasureSpec, height)
+        super.onMeasure(widthMeasureSpec, realHeight)
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         minY = y
-        maxY = minY + measuredHeight - peekHeight
+        maxY = minY + realHeight - peekHeight
 
         childView?.layout(
-            paddingStart, paddingTop, measuredWidth - paddingEnd, measuredHeight - paddingBottom
+            paddingStart, paddingTop, measuredWidth - paddingEnd, realHeight - paddingBottom
         )
         setStateInternal(curState, withAnimator = false, isFromUser = false)
     }
@@ -174,14 +174,25 @@ open class SheetLayout @JvmOverloads constructor(
         return true
     }
 
+    val realHeight: Int
+        get() {
+            return if (expandHeightRatio > 0) {
+                (expandHeightRatio * context.screenHeight).toInt()
+            } else if (expandHeight > 0) {
+                expandHeight
+            } else {
+                realHeight
+            }
+        }
+
     protected open fun finishScroll() {
         if (enableFoldModel) {
             if (isScrollUp) {
                 when {
-                    y < minY + (height - halfExpandHeight) * 2 / 3 -> {
+                    y < minY + (realHeight - halfExpandHeight) * 2 / 3 -> {
                         setStateInternal(STATE_EXPAND, true)
                     }
-                    y < minY + (height - halfExpandHeight) + halfExpandHeight * 2 / 3 -> {
+                    y < minY + (realHeight - halfExpandHeight) + halfExpandHeight * 2 / 3 -> {
                         setStateInternal(STATE_EXPAND_HALF, true)
                     }
                     else -> {
@@ -190,10 +201,10 @@ open class SheetLayout @JvmOverloads constructor(
                 }
             } else {
                 when {
-                    y > minY + (height - halfExpandHeight) + halfExpandHeight / 3 -> {
+                    y > minY + (realHeight - halfExpandHeight) + halfExpandHeight / 3 -> {
                         setStateInternal(STATE_FOLD, true)
                     }
-                    y > minY + (height - halfExpandHeight) / 3 -> {
+                    y > minY + (realHeight - halfExpandHeight) / 3 -> {
                         setStateInternal(STATE_EXPAND_HALF, true)
                     }
                     else -> {
@@ -202,7 +213,7 @@ open class SheetLayout @JvmOverloads constructor(
                 }
             }
         } else {
-            val threshold = if (isScrollUp) height * 2 / 3 else height / 3
+            val threshold = if (isScrollUp) realHeight * 2 / 3 else realHeight / 3
             if (y > minY + threshold) {
                 setStateInternal(STATE_FOLD, true)
             } else {
@@ -261,7 +272,7 @@ open class SheetLayout @JvmOverloads constructor(
         when (state) {
             STATE_FOLD -> smoothScroll(maxY - y, withAnimator)
             STATE_EXPAND_HALF -> smoothScroll(
-                minY + (height - halfExpandHeight) - y, withAnimator
+                minY + (realHeight - halfExpandHeight) - y, withAnimator
             )
             STATE_EXPAND -> smoothScroll(minY - y, withAnimator)
             else -> smoothScroll(maxY - y, withAnimator)
