@@ -13,9 +13,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:mc_expandHeightRatio="0.55"
-        app:mc_initialState="expand">
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,6 +30,12 @@
                 app:mc_leftTopRadius="20dp"
                 app:mc_normalColor="@color/teal_200"
                 app:mc_rightTopRadius="20dp" />
+
+            <Button
+                android:id="@+id/btn_sheet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="bottomSheetDialog" />
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"

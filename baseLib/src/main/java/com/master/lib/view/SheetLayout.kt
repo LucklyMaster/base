@@ -32,42 +32,57 @@ open class SheetLayout @JvmOverloads constructor(
     /**
      * 是否启用拖拽
      */
-    protected var enableDrag = true
+    var enableDrag = true
 
     /**
      * 是否启用折叠模式，不启用则没有半展开状态
      */
-    protected var enableFoldModel = true
+    var enableFoldModel = true
 
     /**
      * 展开后的高度
      */
-    protected var expandHeight = context.screenHeight / 2
+    var expandHeight = context.screenHeight / 2
 
     /**
      * 展开后高度相对于屏幕高度的比率，与[expandHeight]相比，优先级更高
      */
-    protected var expandHeightRatio = 0.65f
+    var expandHeightRatio = 0.65f
 
     /**
      * 半展开的高度
      */
-    protected var halfExpandHeight = expandHeight / 2
+    var halfExpandHeight = expandHeight / 2
 
     /**
      * 折叠后的peek高度
      */
-    protected var peekHeight = context.dp2pxi(50)
+    var peekHeight = context.dp2pxi(50)
 
     /**
      * 当前的状态
      */
-    protected var curState = STATE_FOLD
+    var curState = STATE_FOLD
 
     /**
      * 动画执行的速度(px/ms)，路程/时间
      */
-    protected var animatorSpeed = 950f / 300
+    var animatorSpeed = 950f / 300
+
+    /**
+     * View的真正高度
+     */
+    var realHeight: Int = 0
+        get() {
+            return if (expandHeightRatio > 0) {
+                (expandHeightRatio * context.screenHeight).toInt()
+            } else if (expandHeight > 0) {
+                expandHeight
+            } else {
+                measuredHeight
+            }
+        }
+        private set
     protected var smoothAnimator: ValueAnimator? = null
     protected var stateChangedListener: OnStateChangedListener? = null
     protected var isScrollUp = false
@@ -174,17 +189,6 @@ open class SheetLayout @JvmOverloads constructor(
         return true
     }
 
-    val realHeight: Int
-        get() {
-            return if (expandHeightRatio > 0) {
-                (expandHeightRatio * context.screenHeight).toInt()
-            } else if (expandHeight > 0) {
-                expandHeight
-            } else {
-                realHeight
-            }
-        }
-
     protected open fun finishScroll() {
         if (enableFoldModel) {
             if (isScrollUp) {
@@ -220,45 +224,6 @@ open class SheetLayout @JvmOverloads constructor(
                 setStateInternal(STATE_EXPAND, true)
             }
         }
-    }
-
-    open fun setState(state: Int) = apply {
-        if (curState == state) {
-            return@apply
-        }
-        setStateInternal(state, true)
-    }
-
-    open fun setPeekHeight(peekHeight: Int) = apply {
-        this.peekHeight = peekHeight
-    }
-
-    open fun setExpandHeight(expandHeight: Int) = apply {
-        this.expandHeight = expandHeight
-    }
-
-    open fun setExpandHeightRatio(expandHeightRatio: Float) = apply {
-        this.expandHeightRatio = expandHeightRatio
-    }
-
-    open fun setHalfExpandHeight(halfExpandHeight: Int) = apply {
-        this.halfExpandHeight = halfExpandHeight
-    }
-
-    open fun enableDrag(enableDrag: Boolean) = apply {
-        this.enableDrag = enableDrag
-    }
-
-    open fun enableFoldModel(enableFoldModel: Boolean) = apply {
-        this.enableFoldModel = enableFoldModel
-    }
-
-    open fun setAnimatorSpeed(animatorSpeed: Float) = apply {
-        this.animatorSpeed = animatorSpeed
-    }
-
-    open fun setOnStateChangedListener(listener: OnStateChangedListener) = apply {
-        stateChangedListener = listener
     }
 
     protected open fun setStateInternal(
@@ -339,5 +304,44 @@ open class SheetLayout @JvmOverloads constructor(
 
     override fun onStopNestedScroll(target: View) {
         finishScroll()
+    }
+
+    open fun setState(state: Int) = apply {
+        if (curState == state) {
+            return@apply
+        }
+        setStateInternal(state, true)
+    }
+
+    open fun setPeekHeight(peekHeight: Int) = apply {
+        this.peekHeight = peekHeight
+    }
+
+    open fun setExpandHeight(expandHeight: Int) = apply {
+        this.expandHeight = expandHeight
+    }
+
+    open fun setExpandHeightRatio(expandHeightRatio: Float) = apply {
+        this.expandHeightRatio = expandHeightRatio
+    }
+
+    open fun setHalfExpandHeight(halfExpandHeight: Int) = apply {
+        this.halfExpandHeight = halfExpandHeight
+    }
+
+    open fun enableDrag(enableDrag: Boolean) = apply {
+        this.enableDrag = enableDrag
+    }
+
+    open fun enableFoldModel(enableFoldModel: Boolean) = apply {
+        this.enableFoldModel = enableFoldModel
+    }
+
+    open fun setAnimatorSpeed(animatorSpeed: Float) = apply {
+        this.animatorSpeed = animatorSpeed
+    }
+
+    open fun setOnStateChangedListener(listener: OnStateChangedListener) = apply {
+        stateChangedListener = listener
     }
 }

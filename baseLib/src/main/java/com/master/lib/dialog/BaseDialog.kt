@@ -28,7 +28,7 @@ open class BaseDialog @JvmOverloads constructor(
     context: Context, var contentView: View? = null
 ) : DialogFragment() {
 
-    protected open val mActivity: FragmentActivity
+    protected val mActivity: FragmentActivity
     protected open var dialogTheme = 0
     protected open var windowDrawable: Drawable? = null
     protected open var windowColor = Color.WHITE
