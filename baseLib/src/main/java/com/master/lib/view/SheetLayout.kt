@@ -69,20 +69,6 @@ open class SheetLayout @JvmOverloads constructor(
      */
     var animatorSpeed = 950f / 300
 
-    /**
-     * View的真正高度
-     */
-    var realHeight: Int = 0
-        get() {
-            return if (expandHeightRatio > 0) {
-                (expandHeightRatio * context.screenHeight).toInt()
-            } else if (expandHeight > 0) {
-                expandHeight
-            } else {
-                measuredHeight
-            }
-        }
-        private set
     protected var smoothAnimator: ValueAnimator? = null
     protected var stateChangedListener: OnStateChangedListener? = null
     protected var isScrollUp = false
@@ -131,6 +117,9 @@ open class SheetLayout @JvmOverloads constructor(
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val realHeight = when {
+            MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.EXACTLY -> {
+                heightMeasureSpec
+            }
             expandHeightRatio > 0 -> {
                 MeasureSpec.makeMeasureSpec(
                     (expandHeightRatio * context.screenHeight).toInt(), MeasureSpec.EXACTLY
@@ -148,10 +137,10 @@ open class SheetLayout @JvmOverloads constructor(
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         minY = y
-        maxY = minY + realHeight - peekHeight
+        maxY = minY + measuredHeight - peekHeight
 
         childView?.layout(
-            paddingStart, paddingTop, measuredWidth - paddingEnd, realHeight - paddingBottom
+            paddingStart, paddingTop, measuredWidth - paddingEnd, measuredHeight - paddingBottom
         )
         setStateInternal(curState, withAnimator = false, isFromUser = false)
     }
@@ -193,10 +182,10 @@ open class SheetLayout @JvmOverloads constructor(
         if (enableFoldModel) {
             if (isScrollUp) {
                 when {
-                    y < minY + (realHeight - halfExpandHeight) * 2 / 3 -> {
+                    y < minY + (height - halfExpandHeight) * 2 / 3 -> {
                         setStateInternal(STATE_EXPAND, true)
                     }
-                    y < minY + (realHeight - halfExpandHeight) + halfExpandHeight * 2 / 3 -> {
+                    y < minY + (height - halfExpandHeight) + halfExpandHeight * 2 / 3 -> {
                         setStateInternal(STATE_EXPAND_HALF, true)
                     }
                     else -> {
@@ -205,10 +194,10 @@ open class SheetLayout @JvmOverloads constructor(
                 }
             } else {
                 when {
-                    y > minY + (realHeight - halfExpandHeight) + halfExpandHeight / 3 -> {
+                    y > minY + (height - halfExpandHeight) + halfExpandHeight / 3 -> {
                         setStateInternal(STATE_FOLD, true)
                     }
-                    y > minY + (realHeight - halfExpandHeight) / 3 -> {
+                    y > minY + (height - halfExpandHeight) / 3 -> {
                         setStateInternal(STATE_EXPAND_HALF, true)
                     }
                     else -> {
@@ -217,7 +206,7 @@ open class SheetLayout @JvmOverloads constructor(
                 }
             }
         } else {
-            val threshold = if (isScrollUp) realHeight * 2 / 3 else realHeight / 3
+            val threshold = if (isScrollUp) height * 2 / 3 else height / 3
             if (y > minY + threshold) {
                 setStateInternal(STATE_FOLD, true)
             } else {
@@ -236,9 +225,7 @@ open class SheetLayout @JvmOverloads constructor(
         }
         when (state) {
             STATE_FOLD -> smoothScroll(maxY - y, withAnimator)
-            STATE_EXPAND_HALF -> smoothScroll(
-                minY + (realHeight - halfExpandHeight) - y, withAnimator
-            )
+            STATE_EXPAND_HALF -> smoothScroll(minY + (height - halfExpandHeight) - y, withAnimator)
             STATE_EXPAND -> smoothScroll(minY - y, withAnimator)
             else -> smoothScroll(maxY - y, withAnimator)
         }
@@ -306,11 +293,11 @@ open class SheetLayout @JvmOverloads constructor(
         finishScroll()
     }
 
-    open fun setState(state: Int) = apply {
+    open fun setState(state: Int, withAnimator: Boolean = true) = apply {
         if (curState == state) {
             return@apply
         }
-        setStateInternal(state, true)
+        setStateInternal(state, withAnimator)
     }
 
     open fun setPeekHeight(peekHeight: Int) = apply {

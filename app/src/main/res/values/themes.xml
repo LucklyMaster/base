@@ -19,4 +19,8 @@
         <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
         <item name="postSplashScreenTheme">@style/Theme.MyBase</item>
     </style>
+
+    <style name="FullScreen" parent="Theme.MyBase">
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>
