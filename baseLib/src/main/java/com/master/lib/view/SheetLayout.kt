@@ -71,6 +71,7 @@ open class SheetLayout @JvmOverloads constructor(
 
     protected var smoothAnimator: ValueAnimator? = null
     protected var stateChangedListener: OnStateChangedListener? = null
+    protected var isLayout = false
     protected var isScrollUp = false
     protected var minY = 0f
     protected var maxY = 0f
@@ -136,6 +137,9 @@ open class SheetLayout @JvmOverloads constructor(
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+        if (isLayout) {
+            return
+        }
         minY = y
         maxY = minY + measuredHeight - peekHeight
 
@@ -143,6 +147,7 @@ open class SheetLayout @JvmOverloads constructor(
             paddingStart, paddingTop, measuredWidth - paddingEnd, measuredHeight - paddingBottom
         )
         setStateInternal(curState, withAnimator = false, isFromUser = false)
+        isLayout = true
     }
 
     @SuppressLint("ClickableViewAccessibility")

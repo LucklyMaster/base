@@ -7,66 +7,61 @@
     android:layout_height="match_parent"
     tools:context=".activity.SheetLayoutActivity">
 
-    <FrameLayout
+    <com.master.lib.view.SheetLayout
+        android:id="@+id/sheetLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:mc_initialState="fold"
+        app:mc_peekHeight="100dp">
 
-        <com.master.lib.view.SheetLayout
-            android:id="@+id/sheetLayout"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="bottom"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:mc_initialState="expand"
-            app:mc_peekHeight="100dp">
+            android:orientation="vertical">
 
-            <LinearLayout
+            <com.master.lib.view.ShapeTextView
+                android:id="@+id/tv_title"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:text="@string/app_name"
+                android:textColor="@color/white"
+                app:mc_leftTopRadius="20dp"
+                app:mc_normalColor="@color/teal_200"
+                app:mc_rightTopRadius="20dp" />
 
-                <com.master.lib.view.ShapeTextView
-                    android:id="@+id/tv_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:gravity="center"
-                    android:text="@string/app_name"
-                    android:textColor="@color/white"
-                    app:mc_leftTopRadius="20dp"
-                    app:mc_normalColor="@color/teal_200"
-                    app:mc_rightTopRadius="20dp" />
+            <Button
+                android:id="@+id/btn_sheet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="bottomSheetDialog" />
 
-                <Button
-                    android:id="@+id/btn_sheet"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="bottomSheetDialog" />
+            <Button
+                android:id="@+id/btn_fold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Fold" />
 
-                <Button
-                    android:id="@+id/btn_fold"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Fold" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-                <FrameLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/recyclerView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/design_default_color_primary"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </FrameLayout>
-            </LinearLayout>
-        </com.master.lib.view.SheetLayout>
-    </FrameLayout>
+                        android:layout_height="wrap_content"
+                        android:background="@color/design_default_color_primary"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </FrameLayout>
+        </LinearLayout>
+    </com.master.lib.view.SheetLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
