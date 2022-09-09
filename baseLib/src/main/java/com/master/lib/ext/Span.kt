@@ -67,6 +67,20 @@ fun CharSequence.toStrikethroughSpan(range: IntRange): CharSequence {
 }
 
 /**
+ * 为指定[range]的文字添加下划线
+ * @receiver CharSequence
+ * @param range IntRange
+ * @return CharSequence
+ */
+fun CharSequence.toUnderlineSpan(range: IntRange): CharSequence {
+    return SpannableString(this).apply {
+        setSpan(
+            UnderlineSpan(), range.first, range.last, Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+        )
+    }
+}
+
+/**
  * 为指定[range]的文字添加点击事件
  * @param range 文字范围
  * @param textColor 文字颜色
@@ -181,34 +195,39 @@ fun CharSequence.toImageSpan(
     }
 }
 
-fun TextView.appendSizeSpan(text: String, textSize: Float) = apply {
+fun TextView.appendSizeSpan(text: CharSequence, textSize: Float) = apply {
     append(text.toSizeSpan(IntRange(0, text.length), textSize))
 }
 
-fun TextView.appendColorSpan(text: String, color: Int) = apply {
+fun TextView.appendColorSpan(text: CharSequence, color: Int) = apply {
     append(text.toColorSpan(IntRange(0, text.length), color))
 }
 
-fun TextView.appendBackgroundColorSpan(text: String, color: Int) = apply {
+fun TextView.appendBackgroundColorSpan(text: CharSequence, color: Int) = apply {
     append(text.toBackgroundColorSpan(IntRange(0, text.length), color))
 }
 
-fun TextView.appendStrikethroughSpan(text: String) = apply {
+fun TextView.appendStrikethroughSpan(text: CharSequence) = apply {
     append(text.toStrikethroughSpan(IntRange(0, text.length)))
 }
 
-fun TextView.appendClickSpan(text: String, color: Int = 0, clickListener: (View) -> Unit) = apply {
-    movementMethod = LinkMovementMethod.getInstance()
-    //去掉点击后的背景颜色
-    highlightColor = Color.TRANSPARENT
-    append(text.toClickSpan(IntRange(0, text.length), color, clickListener))
+fun TextView.appendUnderlineSpan(text: CharSequence) = apply {
+    append(text.toUnderlineSpan(IntRange(0, text.length)))
 }
 
-fun TextView.appendStyleSpan(text: String, style: Int) = apply {
+fun TextView.appendClickSpan(text: CharSequence, color: Int = 0, clickListener: (View) -> Unit) =
+    apply {
+        movementMethod = LinkMovementMethod.getInstance()
+        //去掉点击后的背景颜色
+        highlightColor = Color.TRANSPARENT
+        append(text.toClickSpan(IntRange(0, text.length), color, clickListener))
+    }
+
+fun TextView.appendStyleSpan(text: CharSequence, style: Int) = apply {
     append(text.toStyleSpan(style = style, range = IntRange(0, text.length)))
 }
 
-fun TextView.appendTypeFaceSpan(text: String, typeface: Typeface) = apply {
+fun TextView.appendTypeFaceSpan(text: CharSequence, typeface: Typeface) = apply {
     append(text.toTypeFaceSpan(IntRange(0, text.length), typeface))
 }
 

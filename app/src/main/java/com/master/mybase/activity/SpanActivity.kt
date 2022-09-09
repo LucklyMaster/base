@@ -33,7 +33,7 @@ class SpanActivity : BaseVBActivity<ActivitySpanBinding>(), View.OnClickListener
             binding.btnTwo -> {
                 binding.tvContent.text = "正在测试"
                 binding.tvContent.appendSizeSpan("富", 20f)
-                    .appendSizeSpan("文本", 16f)
+                    .appendSizeSpan("文本".toUnderlineSpan(0..2), 16f)
                     .appendColorSpan("扩展", Color.RED)
                     .appendImageSpan(
                         R.mipmap.ic_launcher, imageWidth = dp2pxi(20), imageHeight = dp2pxi(20)
