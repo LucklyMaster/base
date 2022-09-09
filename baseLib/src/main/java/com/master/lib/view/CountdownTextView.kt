@@ -20,13 +20,13 @@ open class CountdownTextView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : AppCompatTextView(context, attrs, defStyleAttr) {
 
-    protected val thread = HandlerThread(javaClass.simpleName).apply { start() }
-    protected val countDownHandler = Handler(thread.looper) { handleMessage(it) }
+    private var thread = HandlerThread(javaClass.simpleName).apply { start() }
+    private var countDownHandler = Handler(thread.looper) { handleMessage(it) }
 
     /**
      * 输出格式
      */
-    protected open var pattern = "ss"
+    open var pattern = "ss"
 
     /**
      * 根据[pattern]得到的格式化类型
@@ -36,7 +36,7 @@ open class CountdownTextView @JvmOverloads constructor(
     /**
      * 总计时毫秒数
      */
-    protected var countMills = 10 * 1000L
+    var countMills = 10 * 1000L
 
     /**
      * 用于具体操作计数的毫秒数
@@ -46,12 +46,12 @@ open class CountdownTextView @JvmOverloads constructor(
     /**
      * 每次减少的毫秒数
      */
-    protected open var interval = 1000L
+    open var interval = 1000L
 
     /**
      * 倒计时监听
      */
-    protected open var onCountDownListener: OnCountDownListener? = null
+    open var onCountDownListener: OnCountDownListener? = null
 
     /**
      * 用于输出的数字格式化为多少位数
@@ -119,7 +119,7 @@ open class CountdownTextView @JvmOverloads constructor(
         numberFormat.minimumIntegerDigits = digits
     }
 
-    open fun setListener(onCountDownListener: OnCountDownListener) = apply {
+    open fun setOnCountdownListener(onCountDownListener: OnCountDownListener) = apply {
         this.onCountDownListener = onCountDownListener
     }
 

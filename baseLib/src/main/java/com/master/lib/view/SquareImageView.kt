@@ -9,14 +9,14 @@ import androidx.appcompat.widget.AppCompatImageView
  * @author MasterChan
  * @date 2021-12-29 14:58
  */
-class SquareImageView @JvmOverloads constructor(
+open class SquareImageView @JvmOverloads constructor(
     context: Context,
     private var baseWith: Boolean = true,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : AppCompatImageView(context, attrs, defStyleAttr) {
 
-    private var isForceSquare = true
+    protected open var isForceSquare = true
 
     fun setForceSquare(isForceSquare: Boolean) = apply {
         this.isForceSquare = isForceSquare

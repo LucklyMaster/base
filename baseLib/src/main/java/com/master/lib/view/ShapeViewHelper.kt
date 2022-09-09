@@ -29,7 +29,7 @@ import kotlin.math.min
  * @date 2021-12-10 10:18
  */
 @Suppress("MemberVisibilityCanBePrivate")
-class ShapeViewHelper(val view: View, attrs: AttributeSet? = null) {
+open class ShapeViewHelper(val view: View, attrs: AttributeSet? = null) {
 
     var isCircle: Boolean
         private set

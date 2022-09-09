@@ -26,7 +26,7 @@ import kotlin.system.exitProcess
  * @author: MasterChan
  * @date: 2022-06-07 22:24
  */
-class CrashHandler private constructor() : Thread.UncaughtExceptionHandler {
+open class CrashHandler private constructor() : Thread.UncaughtExceptionHandler {
 
     private var saveCrash = BuildConfig.DEBUG
     private var saveDir = "${application.filesDir.absolutePath}/MCLib/crash"

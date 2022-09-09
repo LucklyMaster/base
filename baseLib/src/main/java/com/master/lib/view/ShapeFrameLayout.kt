@@ -10,13 +10,13 @@ import android.widget.FrameLayout
  * @date 2021-12-10 10:18
  */
 @Suppress("MemberVisibilityCanBePrivate")
-class ShapeFrameLayout @JvmOverloads constructor(
+open class ShapeFrameLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr), IShapeView {
 
-    override val shapeHelper: ShapeViewHelper by lazy { ShapeViewHelper(this, attrs) }
+    override val shapeHelper = ShapeViewHelper(this, attrs)
 
     init {
         shapeHelper.into()

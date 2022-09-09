@@ -35,8 +35,9 @@ open class CellView @JvmOverloads constructor(
     defStyleRes: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr, defStyleRes) {
 
-    val iconView = ImageView(context)
-    open val labelView = TextView(context)
+    val iconView = createIconView()
+
+    val labelView = createLabelView()
 
     var iconGravity = Gravity.TOP
         private set
@@ -99,6 +100,14 @@ open class CellView @JvmOverloads constructor(
         a.ifHas(R.styleable.CellView_maxLines) { labelView.maxLines = a.getInteger(it, 0) }
         a.ifHas(R.styleable.CellView_mc_textBackground) { setTextBackground(a.getDrawable(it)) }
         a.recycle()
+    }
+
+    protected open fun createLabelView(): TextView {
+        return TextView(context)
+    }
+
+    protected open fun createIconView(): ImageView {
+        return ImageView(context)
     }
 
     protected fun initView() {

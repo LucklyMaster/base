@@ -20,7 +20,8 @@ import kotlin.math.min
  * @author MasterChan
  * @date 2021-12-11 17:44
  */
-class ShapeImageView @JvmOverloads constructor(
+@Suppress("MemberVisibilityCanBePrivate")
+open class ShapeImageView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0

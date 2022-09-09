@@ -10,13 +10,13 @@ import androidx.constraintlayout.widget.ConstraintLayout
  * @date 2021-12-10 10:18
  */
 @Suppress("MemberVisibilityCanBePrivate")
-class ShapeConstraintLayout @JvmOverloads constructor(
+open class ShapeConstraintLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), IShapeView {
 
-    override val shapeHelper: ShapeViewHelper by lazy { ShapeViewHelper(this, attrs) }
+    override val shapeHelper = ShapeViewHelper(this, attrs)
 
     init {
         shapeHelper.into()

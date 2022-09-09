@@ -11,7 +11,7 @@ class CountdownActivity : BaseVBActivity<ActivityCountdownBinding>() {
         //10秒
         binding.tvSec.setCountMills(10 * 1000)
             .setPattern("ss")
-            .setListener { _, complete -> if (complete) binding.tvSec.start() }
+            .setOnCountdownListener { _, complete -> if (complete) binding.tvSec.start() }
             .start()
         //2分12秒
         binding.tvMinute.setCountMills(2 * 60 * 1000 + 12 * 1000)

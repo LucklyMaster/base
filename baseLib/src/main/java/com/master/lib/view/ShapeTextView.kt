@@ -10,13 +10,13 @@ import androidx.appcompat.widget.AppCompatTextView
  * @date 2021-12-10 10:18
  */
 @Suppress("MemberVisibilityCanBePrivate")
-class ShapeTextView @JvmOverloads constructor(
+open class ShapeTextView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : AppCompatTextView(context, attrs, defStyleAttr), IShapeView {
 
-    override val shapeHelper: ShapeViewHelper by lazy { ShapeViewHelper(this, attrs) }
+    override val shapeHelper = ShapeViewHelper(this, attrs)
 
     init {
         shapeHelper.into()
