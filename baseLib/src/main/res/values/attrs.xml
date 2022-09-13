@@ -334,13 +334,13 @@
         <attr name="mc_enableDrag" format="boolean" />
         <attr name="mc_enableFoldModel" format="boolean" />
         <attr name="mc_expandHeight" format="dimension" />
-        <attr name="mc_halfExpandHeight" format="dimension" />
+        <attr name="mc_displayHeight" format="dimension" />
         <attr name="mc_expandHeightRatio" format="float" />
         <attr name="mc_peekHeight" format="dimension" />
         <attr name="mc_animatorSpeed" format="float" />
-        <attr name="mc_initialState">
+        <attr name="mc_initialState" format="flags">
             <flag name="fold" value="1" />
-            <flag name="halfExpand" value="2" />
+            <flag name="display" value="2" />
             <flag name="expand" value="3" />
         </attr>
     </declare-styleable>

@@ -6,9 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gyf.immersionbar.ktx.immersionBar
 import com.master.lib.base.BaseVBActivity
 import com.master.lib.dialog.BottomSheetDialog
+import com.master.lib.enums.SheetState
 import com.master.lib.ext.Log
 import com.master.lib.ext.inflater
-import com.master.lib.view.SheetLayout
+import com.master.lib.widget.RecyclerViewDivider
 import com.master.lib.widget.ViewHolder
 import com.master.mybase.databinding.ActivitySheetLayoutBinding
 
@@ -19,13 +20,17 @@ class SheetLayoutActivity : BaseVBActivity<ActivitySheetLayoutBinding>() {
         immersionBar {
             transparentBar()
         }
-        binding.sheetLayout.setState(SheetLayout.STATE_EXPAND_HALF, false)
+        binding.sheetLayout.setState(SheetState.DISPLAY, false)
         binding.sheetLayout.addOnStateChangedListener {
             Log.d("state = $it")
         }
-        binding.btnSheet.setOnClickListener {
+        binding.sheetLayout.addOnScrollListener {
+            binding.btnSheetDialog.height = (binding.btnSheetDialog.height + it).toInt()
+        }
+        binding.btnSheetDialog.setOnClickListener {
             BottomSheetDialog(this).show()
         }
+        binding.recyclerView.addItemDecoration(RecyclerViewDivider())
         binding.recyclerView.adapter = object : RecyclerView.Adapter<ViewHolder>() {
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
                 return ViewHolder(parent.inflater(android.R.layout.simple_list_item_1))
@@ -40,7 +45,7 @@ class SheetLayoutActivity : BaseVBActivity<ActivitySheetLayoutBinding>() {
             }
         }
         binding.btnFold.setOnClickListener {
-            binding.sheetLayout.setState(SheetLayout.STATE_EXPAND_HALF, true)
+            binding.sheetLayout.setState(SheetState.DISPLAY, true)
         }
     }
 

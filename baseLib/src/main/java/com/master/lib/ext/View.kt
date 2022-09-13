@@ -38,34 +38,38 @@ fun View.setOnOnceClickListener(delay: Int = 500, listener: (View: View) -> Unit
     }
 }
 
-fun View.setWidth(width: Int) {
+fun View.setWidth(
+    width: Int,
+    defaultWidth: Int = ViewGroup.LayoutParams.WRAP_CONTENT,
+    defaultHeight: Int = ViewGroup.LayoutParams.WRAP_CONTENT
+) {
     var lp = layoutParams
     if (lp == null) {
-        lp = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
-        )
+        lp = ViewGroup.LayoutParams(defaultWidth, defaultHeight)
     }
     lp.width = width
     layoutParams = lp
 }
 
-fun View.setHeight(height: Int) {
+fun View.setHeight(
+    height: Int, defaultWidth: Int = ViewGroup.LayoutParams.WRAP_CONTENT,
+    defaultHeight: Int = ViewGroup.LayoutParams.WRAP_CONTENT
+) {
     var lp = layoutParams
     if (lp == null) {
-        lp = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
-        )
+        lp = ViewGroup.LayoutParams(defaultWidth, defaultHeight)
     }
     lp.height = height
     layoutParams = lp
 }
 
-fun View.setSize(width: Int, height: Int) {
+fun View.setSize(
+    width: Int, height: Int, defaultWidth: Int = ViewGroup.LayoutParams.WRAP_CONTENT,
+    defaultHeight: Int = ViewGroup.LayoutParams.WRAP_CONTENT
+) {
     var lp = layoutParams
     if (lp == null) {
-        lp = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
-        )
+        lp = ViewGroup.LayoutParams(defaultWidth, defaultHeight)
     }
     lp.width = width
     lp.height = height

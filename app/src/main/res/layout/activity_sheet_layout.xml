@@ -15,8 +15,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:mc_initialState="fold"
-        app:mc_peekHeight="100dp">
+        app:mc_displayHeight="300dp"
+        app:mc_initialState="display"
+        app:mc_peekHeight="150dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,7 +27,7 @@
             <com.master.lib.view.ShapeTextView
                 android:id="@+id/tv_title"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="70dp"
                 android:gravity="center"
                 android:text="@string/app_name"
                 android:textColor="@color/white"
@@ -35,7 +36,7 @@
                 app:mc_rightTopRadius="20dp" />
 
             <Button
-                android:id="@+id/btn_sheet"
+                android:id="@+id/btn_sheet_dialog"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="bottomSheetDialog" />
@@ -48,16 +49,16 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerView"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:background="@color/design_default_color_primary"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
