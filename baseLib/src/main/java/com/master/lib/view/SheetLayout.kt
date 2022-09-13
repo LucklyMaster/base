@@ -70,7 +70,7 @@ open class SheetLayout @JvmOverloads constructor(
     var animatorSpeed = 950f / 300
 
     protected var smoothAnimator: ValueAnimator? = null
-    protected var stateChangedListener: OnStateChangedListener? = null
+    protected var stateChangedListeners = mutableListOf<OnStateChangedListener>()
     protected var isLayout = false
     protected var isScrollUp = false
     protected var minY = 0f
@@ -235,7 +235,7 @@ open class SheetLayout @JvmOverloads constructor(
             else -> smoothScroll(maxY - y, withAnimator)
         }
         if (curState != state) {
-            stateChangedListener?.onChanged(state)
+            stateChangedListeners.forEach { it.onChanged(state) }
         }
         curState = state
     }
@@ -333,7 +333,11 @@ open class SheetLayout @JvmOverloads constructor(
         this.animatorSpeed = animatorSpeed
     }
 
-    open fun setOnStateChangedListener(listener: OnStateChangedListener) = apply {
-        stateChangedListener = listener
+    open fun addOnStateChangedListener(listener: OnStateChangedListener) = apply {
+        stateChangedListeners.add(listener)
+    }
+
+    open fun removeOnStateChangedListener(listener: OnStateChangedListener) = apply {
+        stateChangedListeners.remove(listener)
     }
 }

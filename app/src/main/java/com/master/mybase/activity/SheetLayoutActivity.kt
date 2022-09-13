@@ -20,7 +20,7 @@ class SheetLayoutActivity : BaseVBActivity<ActivitySheetLayoutBinding>() {
             transparentBar()
         }
         binding.sheetLayout.setState(SheetLayout.STATE_EXPAND_HALF, false)
-        binding.sheetLayout.setOnStateChangedListener {
+        binding.sheetLayout.addOnStateChangedListener {
             Log.d("state = $it")
         }
         binding.btnSheet.setOnClickListener {
