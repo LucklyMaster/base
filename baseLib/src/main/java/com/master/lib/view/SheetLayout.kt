@@ -12,7 +12,6 @@ import androidx.core.view.NestedScrollingParent
 import androidx.core.view.ViewCompat
 import com.master.lib.R
 import com.master.lib.enums.SheetState
-import com.master.lib.ext.dp2pxi
 import com.master.lib.ext.screenHeight
 import kotlin.math.abs
 
@@ -58,7 +57,7 @@ open class SheetLayout @JvmOverloads constructor(
     /**
      * 折叠后的peek高度
      */
-    var peekHeight = context.dp2pxi(50)
+    var peekHeight = 0
 
     /**
      * 当前的状态
@@ -107,7 +106,7 @@ open class SheetLayout @JvmOverloads constructor(
         peekHeight = a.getDimensionPixelOffset(R.styleable.SheetLayout_mc_peekHeight, peekHeight)
         animatorSpeed = a.getFloat(R.styleable.SheetLayout_mc_animatorSpeed, animatorSpeed)
         curState = SheetState.convert2State(
-            a.getInt(R.styleable.SheetLayout_mc_initialState, SheetState.FOLD.ordinal)
+            a.getInt(R.styleable.SheetLayout_mc_sheetState, SheetState.FOLD.ordinal)
         )
 
         a.recycle()

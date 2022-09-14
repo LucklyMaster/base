@@ -25,9 +25,11 @@ import com.master.lib.ext.*
  * @date 2021-12-14 14:30
  */
 open class BaseDialog @JvmOverloads constructor(
-    context: Context, var contentView: View? = null
+    context: Context, dialogView: View? = null
 ) : DialogFragment() {
 
+    protected var contentView: View? = dialogView
+        private set
     protected val mActivity: FragmentActivity
     protected open var dialogTheme = 0
     protected open var windowDrawable: Drawable? = null
@@ -45,6 +47,7 @@ open class BaseDialog @JvmOverloads constructor(
     protected open var yOffset = 0
     protected open var cancellable = true
     protected open var canceledOnTouchOutside = true
+    protected open var showListener: DialogInterface.OnShowListener? = null
     protected open var dismissListener: DialogInterface.OnDismissListener? = null
     protected open var cancelListener: DialogInterface.OnCancelListener? = null
 
@@ -76,6 +79,7 @@ open class BaseDialog @JvmOverloads constructor(
         }
         dialog?.setCanceledOnTouchOutside(canceledOnTouchOutside)
         dialog?.setCancelable(cancellable)
+        dialog?.setOnShowListener { showListener?.onShow(this@BaseDialog) }
         dialog?.window?.apply {
             decorView.setPadding(0)
             setBackgroundDrawable(backgroundDrawable)
@@ -128,16 +132,20 @@ open class BaseDialog @JvmOverloads constructor(
 
     override fun onDismiss(dialog: android.content.DialogInterface) {
         super.onDismiss(dialog)
-        dismissListener?.onDismiss(requireDialog())
+        dismissListener?.onDismiss(this)
     }
 
     override fun onCancel(dialog: android.content.DialogInterface) {
         super.onCancel(dialog)
-        cancelListener?.onCancel(requireDialog())
+        cancelListener?.onCancel(this)
     }
 
     override fun getTheme(): Int {
         return dialogTheme
+    }
+
+    fun setContentView(contentView: View?) {
+        this.contentView = contentView
     }
 
     fun setTheme(@StyleRes dialogTheme: Int) = apply {
@@ -158,6 +166,10 @@ open class BaseDialog @JvmOverloads constructor(
 
     fun setOnCancelListener(listener: DialogInterface.OnCancelListener?) = apply {
         cancelListener = listener
+    }
+
+    fun setOnShowListener(listener: DialogInterface.OnShowListener?) = apply {
+        showListener = listener
     }
 
     fun setWindowColor(@ColorInt color: Int) = apply {

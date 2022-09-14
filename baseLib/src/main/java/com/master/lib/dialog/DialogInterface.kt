@@ -11,14 +11,18 @@ import android.widget.Button
 interface DialogInterface {
 
     fun interface OnClickListener {
-        fun onClick(dialog: Dialog, button: Button)
+        fun onClick(dialog: BaseDialog, button: Button)
+    }
+
+    fun interface OnShowListener {
+        fun onShow(dialog: BaseDialog)
     }
 
     fun interface OnDismissListener {
-        fun onDismiss(dialog: Dialog)
+        fun onDismiss(dialog: BaseDialog)
     }
 
     fun interface OnCancelListener {
-        fun onCancel(dialog: Dialog)
+        fun onCancel(dialog: BaseDialog)
     }
 }

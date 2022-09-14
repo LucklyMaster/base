@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:mc_displayHeight="300dp"
-        app:mc_initialState="display"
+        app:mc_sheetState="display"
         app:mc_peekHeight="150dp">
 
         <LinearLayout

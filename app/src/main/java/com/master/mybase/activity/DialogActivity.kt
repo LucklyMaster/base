@@ -31,6 +31,7 @@ class DialogActivity : MyBaseActivity<ActivityDialogBinding>() {
             .setMessage("Message")
             .setPositiveText("确认")
             .create()
+            .setAmount(0.4F)
             .setOnDismissListener { MToast.show("dismiss") }
             .show()
     }
