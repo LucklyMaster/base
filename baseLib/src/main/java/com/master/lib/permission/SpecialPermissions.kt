@@ -13,11 +13,14 @@ object SpecialPermissions {
     const val REQUEST_INSTALL_PACKAGES = Manifest.permission.REQUEST_INSTALL_PACKAGES
     const val SYSTEM_ALERT_WINDOW = Manifest.permission.SYSTEM_ALERT_WINDOW
     const val WRITE_SETTINGS = Manifest.permission.WRITE_SETTINGS
+    const val REQUEST_IGNORE_BATTERY_OPTIMIZATIONS =
+        Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+
     val list: List<String>
         get() {
             return listOf(
                 MANAGE_EXTERNAL_STORAGE, REQUEST_INSTALL_PACKAGES, SYSTEM_ALERT_WINDOW,
-                WRITE_SETTINGS
+                WRITE_SETTINGS, REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
             )
         }
 }

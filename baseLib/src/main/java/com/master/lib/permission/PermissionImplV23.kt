@@ -23,6 +23,10 @@ open class PermissionImplV23 : IPermission {
                     true
                 }
             }
+            //电池优化
+            if (SpecialPermissions.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS == permission) {
+                return PermissionsUtils.isIgnoringBatteryOptimizations()
+            }
         }
         //Android12蓝牙权限
         if (!AndroidVersion.isAndroid12()) {
@@ -78,13 +82,21 @@ open class PermissionImplV23 : IPermission {
         return super.isNeverAsk(context, permission)
     }
 
-    override fun getAppDetailIntent(context: Context, permission: String): Intent {
-        val intent = super.getAppDetailIntent(context, permission)
-        intent.action = when (permission) {
-            SpecialPermissions.SYSTEM_ALERT_WINDOW -> Settings.ACTION_MANAGE_OVERLAY_PERMISSION
-            SpecialPermissions.WRITE_SETTINGS -> Settings.ACTION_MANAGE_WRITE_SETTINGS
-            else -> intent.action
+    override fun getPermissionDetailIntent(context: Context, permission: String): Intent {
+        return when (permission) {
+            SpecialPermissions.SYSTEM_ALERT_WINDOW -> {
+                val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+                intent.setData(getPackageNameUri(context))
+            }
+            SpecialPermissions.WRITE_SETTINGS -> {
+                val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
+                intent.setData(getPackageNameUri(context))
+            }
+            SpecialPermissions.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS -> {
+                val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
+                intent.setData(getPackageNameUri(context))
+            }
+            else -> super.getPermissionDetailIntent(context, permission)
         }
-        return intent
     }
 }

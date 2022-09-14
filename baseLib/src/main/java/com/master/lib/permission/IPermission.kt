@@ -3,6 +3,8 @@ package com.master.lib.permission
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.provider.Settings
 import com.master.lib.ext.activity
 import com.master.lib.utils.AndroidVersion
 import com.master.lib.utils.PermissionPageUtils
@@ -26,7 +28,7 @@ interface IPermission {
 
     fun isAllGranted(context: Context, permissions: List<String>): Boolean {
         for (permission in permissions) {
-            if (!Utils.isGranted(context, permission)) {
+            if (!PermissionsUtils.isGranted(context, permission)) {
                 return false
             }
         }
@@ -45,8 +47,18 @@ interface IPermission {
         )
     }
 
-    fun getAppDetailIntent(context: Context, permission: String): Intent {
+    fun getPermissionDetailIntent(context: Context, permission: String): Intent {
         return PermissionPageUtils.getPermissionIntent(context)
+    }
+
+    fun getAppDetailIntent(context: Context, permission: String): Intent {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        intent.data = getPackageNameUri(context)
+        return intent
+    }
+
+    fun getPackageNameUri(context: Context): Uri? {
+        return Uri.parse("package:" + context.packageName)
     }
 
     fun shouldShowRequestPermissionRationale(context: Context, permission: String): Boolean {

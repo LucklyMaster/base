@@ -4,7 +4,6 @@ import android.app.ActivityManager
 import android.app.ActivityManager.RunningAppProcessInfo
 import com.master.lib.ext.application
 
-
 /**
  * AppUtils
  * @author: MasterChan

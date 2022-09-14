@@ -1,16 +1,18 @@
 package com.master.lib.permission
 
 import android.Manifest
-import com.master.lib.permission.Utils.Delegate.getDelegate
+import android.os.PowerManager
+import com.master.lib.ext.application
+import com.master.lib.ext.packageName
+import com.master.lib.permission.PermissionsUtils.Delegate.getDelegate
 import com.master.lib.utils.AndroidVersion
-
 
 /**
  * 权限处理相关的工具类
  * @author: MasterChan
  * @date: 2022-07-25 16:15
  */
-internal object Utils : IPermission by getDelegate() {
+object PermissionsUtils : IPermission by getDelegate() {
 
     private object Delegate {
         fun getDelegate(): IPermission {
@@ -33,7 +35,7 @@ internal object Utils : IPermission by getDelegate() {
      * @param permissions List<String>
      * @return Map<String, Boolean> value为false表示不是当前版本权限
      */
-    fun convertPermissions2CurVersion(permissions: List<String>): Map<String, Boolean> {
+    internal fun convertPermissions2CurVersion(permissions: List<String>): Map<String, Boolean> {
         val map = permissions.associateWith { true }.toMutableMap()
         //Android12新增3个蓝牙权限
         if (!AndroidVersion.isAndroid12()) {
@@ -79,5 +81,14 @@ internal object Utils : IPermission by getDelegate() {
             }
         }
         return map
+    }
+
+    /**
+     * 是否忽略电池优化
+     * @return Boolean
+     */
+    fun isIgnoringBatteryOptimizations(): Boolean {
+        return application.getSystemService(PowerManager::class.java)
+            .isIgnoringBatteryOptimizations(packageName)
     }
 }

@@ -5,7 +5,6 @@ import android.content.Intent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.master.lib.ext.application
-import com.master.lib.ext.println
 
 /**
  * MPermissions
@@ -79,22 +78,27 @@ class MPermissions private constructor(private val activity: FragmentActivity) {
 
         @JvmStatic
         fun isGranted(permission: String): Boolean {
-            return Utils.isGranted(application, permission)
+            return PermissionsUtils.isGranted(application, permission)
         }
 
         @JvmStatic
         fun isAllGranted(permissions: List<String>): Boolean {
-            return Utils.isAllGranted(application, permissions)
+            return PermissionsUtils.isAllGranted(application, permissions)
         }
 
         @JvmStatic
         fun isNeverAsk(permission: String): Boolean {
-            return Utils.isNeverAsk(application, permission)
+            return PermissionsUtils.isNeverAsk(application, permission)
         }
 
         @JvmStatic
-        fun getAppDetailIntent(permission: String): Intent {
-            return Utils.getAppDetailIntent(application, permission)
+        fun getAppDetailIntent(): Intent {
+            return PermissionsUtils.getAppDetailIntent(application, "")
+        }
+
+        @JvmStatic
+        fun getPermissionDetailIntent(): Intent {
+            return PermissionsUtils.getPermissionDetailIntent(application, "")
         }
     }
 
@@ -120,7 +124,6 @@ class MPermissions private constructor(private val activity: FragmentActivity) {
      * @return MPermissions
      */
     fun isNeedAllGranted(isNeedAllGranted: Boolean) = apply {
-        isNeedAllGranted.println()
         this.isNeedAllGranted = isNeedAllGranted
     }
 

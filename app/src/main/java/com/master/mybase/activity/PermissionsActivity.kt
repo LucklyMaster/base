@@ -6,6 +6,7 @@ import android.view.View
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.master.lib.dialog.AlertDialog
 import com.master.lib.ext.logD
+import com.master.lib.ext.requestPermissions
 import com.master.lib.ext.toast
 import com.master.lib.permission.MPermissions
 import com.master.mybase.databinding.ActivityPermissionsBinding
@@ -17,7 +18,7 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
         setOnViewClickListeners(this) {
             arrayOf(
                 btnStorge, btnPackage, btnAudio, btnBluetooth, btnAllFile, btnAlertWindow,
-                btnDetail, btnCamera
+                btnDetail, btnCamera, btnBattery
             )
         }
     }
@@ -126,8 +127,18 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
                         toast(if (it.isAllGranted) "success" else "failed")
                     }
             }
+            binding.btnBattery -> {
+                // requestPermissions(Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS) {
+                //     it.logD()
+                //     toast(if (it.isAllGranted) "success" else "failed")
+                // }
+                MPermissions.with(this).permissions(Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).request{
+                    it.logD()
+                    toast(if (it.isAllGranted) "success" else "failed")
+                }
+            }
             binding.btnDetail -> {
-                startActivity(MPermissions.getAppDetailIntent(""))
+                startActivity(MPermissions.getAppDetailIntent())
             }
         }
     }

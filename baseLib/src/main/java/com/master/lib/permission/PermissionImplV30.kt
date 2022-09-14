@@ -25,8 +25,8 @@ open class PermissionImplV30 : PermissionImplV29() {
         return super.isNeverAsk(context, permission)
     }
 
-    override fun getAppDetailIntent(context: Context, permission: String): Intent {
-        val intent = super.getAppDetailIntent(context, permission)
+    override fun getPermissionDetailIntent(context: Context, permission: String): Intent {
+        val intent = super.getPermissionDetailIntent(context, permission)
         if (SpecialPermissions.MANAGE_EXTERNAL_STORAGE == permission) {
             intent.action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
         }

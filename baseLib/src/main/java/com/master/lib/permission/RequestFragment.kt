@@ -106,7 +106,7 @@ class RequestFragment : Fragment() {
 
     private fun request(permissions: MutableList<String>) {
         lifecycleScope.launchWhenResumed {
-            val permissionsMap = Utils.convertPermissions2CurVersion(permissions)
+            val permissionsMap = PermissionsUtils.convertPermissions2CurVersion(permissions)
             if (viewModel.checkPermissions) {
                 checkPermissions(permissionsMap.keys.toList())
             }
@@ -115,7 +115,7 @@ class RequestFragment : Fragment() {
                 viewModel.permissions.addAll(requestPermissions)
             }
             //如果权限已经全部申请，直接回调结果
-            if (Utils.isAllGranted(requireContext(), requestPermissions)) {
+            if (PermissionsUtils.isAllGranted(requireContext(), requestPermissions)) {
                 dispatchCallback()
             } else {
                 //拆分出特殊权限
@@ -161,7 +161,7 @@ class RequestFragment : Fragment() {
 
     private suspend fun requestSpecialPermissions(permissions: List<String>) {
         permissions.forEach { permission ->
-            if (Utils.isGranted(requireContext(), permission)) {
+            if (PermissionsUtils.isGranted(requireContext(), permission)) {
                 return@forEach
             }
             if (!specialPermissionIntercept(permission)) {
@@ -170,13 +170,13 @@ class RequestFragment : Fragment() {
             suspendCoroutine {
                 try {
                     activityResultHelper.launch(
-                        Utils.getAppDetailIntent(requireContext(), permission)
+                        PermissionsUtils.getPermissionDetailIntent(requireContext(), permission)
                     ) {
                         it.resume(onSpecialPermissionsResultCallback(this))
                     }
                 } catch (e: Exception) {
                     activityResultHelper.launch(
-                        Utils.getAppDetailIntent(requireContext(), "")
+                        PermissionsUtils.getPermissionDetailIntent(requireContext(), "")
                     ) {
                         it.resume(onSpecialPermissionsResultCallback(this))
                     }
@@ -205,13 +205,13 @@ class RequestFragment : Fragment() {
         val deniedList = mutableListOf<String>()
         val neverAskList = mutableListOf<String>()
         viewModel.permissions.forEach {
-            val isGranted = Utils.isGranted(requireContext(), it)
+            val isGranted = PermissionsUtils.isGranted(requireContext(), it)
             if (isGranted) {
                 grantedList.add(it)
             } else {
                 deniedList.add(it)
             }
-            if (Utils.isNeverAsk(requireContext(), it)) {
+            if (PermissionsUtils.isNeverAsk(requireContext(), it)) {
                 neverAskList.add(it)
             }
         }

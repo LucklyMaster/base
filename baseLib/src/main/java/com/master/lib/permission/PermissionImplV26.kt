@@ -25,11 +25,13 @@ open class PermissionImplV26 : PermissionImplV23() {
         }
     }
 
-    override fun getAppDetailIntent(context: Context, permission: String): Intent {
-        val intent = super.getAppDetailIntent(context, permission)
-        if (SpecialPermissions.REQUEST_INSTALL_PACKAGES == permission) {
-            intent.action = Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES
+    override fun getPermissionDetailIntent(context: Context, permission: String): Intent {
+        return when (permission) {
+            SpecialPermissions.REQUEST_INSTALL_PACKAGES -> {
+                val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
+                intent.setData(getPackageNameUri(context))
+            }
+            else -> super.getPermissionDetailIntent(context, permission)
         }
-        return intent
     }
 }
