@@ -71,7 +71,7 @@ open class BottomSheetDialog(context: Context, contentView: View? = null) :
 
     protected open fun initSheetLayout() {
         sheetLayout!!.enableDrag(enableDrag)
-            .enableDrag(enableDrag)
+            .enableFoldModel(enableFoldModel)
             .setPeekHeight(peekHeight)
             .setDisplayHeight(displayHeight)
             .setExpandHeight(expandHeight)
