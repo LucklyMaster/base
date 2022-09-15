@@ -105,11 +105,11 @@
                 app:mc_textWidth="100dp" />
 
             <com.master.lib.view.EditCellView
-                android:onClick="toggleEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:inputType="numberDecimal"
+                android:onClick="toggleEdit"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -172,14 +172,13 @@
                 android:onClick="editTextClick"
                 app:mc_iconPadding="0dp"
                 app:mc_leftTopRadius="20dp"
-                app:mc_middleEditable="true"
+                app:mc_leftText="1234567890"
+                app:mc_textMaxWidth="100dp"
                 app:mc_middleItemLayoutGravity="center"
                 app:mc_middleMarginStart="20dp"
-                app:mc_middleText=" "
-                app:mc_middleTextBackground="#00f"
+                app:mc_middleText="1111111111111111111111111111111"
+                app:mc_middleTextBackground="@null"
                 app:mc_middleTextGravity="start"
-                app:mc_middleTextWidth="100dp"
-                app:mc_normalColor="#669D66"
                 app:mc_rightBottomRadius="20dp"
                 app:mc_rightMarginEnd="0dp"
                 app:mc_rightText="设置》" />

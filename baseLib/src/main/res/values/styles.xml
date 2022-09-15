@@ -19,7 +19,6 @@
         <item name="mc_rightMarginTop">0dp</item>
         <item name="mc_rightMarginBottom">0dp</item>
         <item name="mc_iconPadding">0dp</item>
-        <item name="mc_textMaxWidth">100dp</item>
         <item name="mc_ellipsize">end</item>
         <item name="mc_iconUseRipple">true</item>
         <item name="mc_iconRippleColor">@color/color_ripple</item>

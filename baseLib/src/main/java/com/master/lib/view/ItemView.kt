@@ -143,9 +143,9 @@ open class ItemView @JvmOverloads constructor(
         setTextColor(a, R.styleable.ItemView_mc_rightTextColor, rightItem)
 
         /**text background**/
-        setTextBackground(a, R.styleable.ItemView_mc_leftTextBackground, leftItem)
-        setTextBackground(a, R.styleable.ItemView_mc_middleTextBackground, middleItem)
-        setTextBackground(a, R.styleable.ItemView_mc_rightTextBackground, rightItem)
+        leftItem.setTextBackground(a.getDrawable(R.styleable.ItemView_mc_leftTextBackground))
+        middleItem.setTextBackground(a.getDrawable(R.styleable.ItemView_mc_leftTextBackground))
+        rightItem.setTextBackground(a.getDrawable(R.styleable.ItemView_mc_leftTextBackground))
 
         /**text size**/
         if (a.hasValue(R.styleable.ItemView_mc_textSize)) {

@@ -3,10 +3,8 @@ package com.master.lib.view
 import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
-import android.widget.EditText
 import com.master.lib.R
 import com.master.lib.ext.ifHas
-import com.master.lib.ext.isEditable
 
 /**
  * ShapeItemView
@@ -81,14 +79,14 @@ class ShapeItemView @JvmOverloads constructor(
     }
 
     fun setLeftEditable(editable: Boolean) = apply {
-        (leftItem.labelView as EditText).isEditable = editable
+        leftItem.setEditable(editable)
     }
 
     fun setMiddleEditable(editable: Boolean) = apply {
-        (leftItem.labelView as EditText).isEditable = editable
+        middleItem.setEditable(editable)
     }
 
     fun setRightEditable(editable: Boolean) = apply {
-        (leftItem.labelView as EditText).isEditable = editable
+        rightItem.setEditable(editable)
     }
 }
