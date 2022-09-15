@@ -46,7 +46,12 @@ open class SimpleDeniedInterceptor : OnDeniedInterceptor {
                 }
                 .setOnPositiveClickListener { dialog ->
                     dialog.dismiss()
-                    activity.startActivityForResult(MPermissions.getAppDetailIntent()) {
+                    val intent = if (SpecialPermissions.list.contains(permission)) {
+                        MPermissions.getAppDetailIntent()
+                    } else {
+                        MPermissions.getPermissionDetailIntent()
+                    }
+                    activity.startActivityForResult(intent) {
                         it.resume(Unit)
                     }
                 }

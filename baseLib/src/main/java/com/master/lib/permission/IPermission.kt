@@ -48,7 +48,11 @@ interface IPermission {
     }
 
     fun getPermissionDetailIntent(context: Context, permission: String): Intent {
-        return PermissionPageUtils.getPermissionIntent(context)
+        return if (SpecialPermissions.list.contains(permission)) {
+            getAppDetailIntent(context, permission)
+        } else {
+            PermissionPageUtils.getPermissionIntent(context)
+        }
     }
 
     fun getAppDetailIntent(context: Context, permission: String): Intent {
