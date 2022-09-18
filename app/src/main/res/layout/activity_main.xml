@@ -62,6 +62,12 @@
             android:text="倒计时" />
 
         <Button
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="分割线" />
+
+        <Button
             android:id="@+id/smartLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
