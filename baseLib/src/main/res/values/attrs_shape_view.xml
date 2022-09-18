@@ -371,4 +371,36 @@
         <attr name="mc_forceSquare" />
         <attr name="mc_squareBy" />
     </declare-styleable>
+
+    <declare-styleable name="ShapeCellView">
+        <attr name="mc_isCircle" />
+        <attr name="mc_useRipple" />
+        <attr name="mc_rippleColor" />
+        <attr name="mc_normalColor" />
+        <attr name="mc_effectColor" />
+        <attr name="mc_disableColor" />
+        <attr name="mc_normalDrawable" />
+        <attr name="mc_effectDrawable" />
+        <attr name="mc_disableDrawable" />
+        <attr name="mc_strokeWidth" />
+        <attr name="mc_strokeColor" />
+        <attr name="mc_dashWidth" />
+        <attr name="mc_dashGap" />
+        <attr name="mc_shapeWidth" />
+        <attr name="mc_shapeHeight" />
+        <attr name="mc_radius" />
+        <attr name="mc_leftTopRadius" />
+        <attr name="mc_leftBottomRadius" />
+        <attr name="mc_rightTopRadius" />
+        <attr name="mc_rightBottomRadius" />
+        <attr name="mc_effectMode" />
+        <attr name="mc_gradientType" />
+        <attr name="mc_gradientAngle" />
+        <attr name="mc_gradientRadius" />
+        <attr name="mc_gradientCenterX" />
+        <attr name="mc_gradientCenterY" />
+        <attr name="mc_gradientStartColor" />
+        <attr name="mc_gradientCenterColor" />
+        <attr name="mc_gradientEndColor" />
+    </declare-styleable>
 </resources>

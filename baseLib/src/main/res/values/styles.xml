@@ -10,7 +10,7 @@
         <item name="mc_leftMarginStart">0dp</item>
         <item name="mc_leftMarginTop">0dp</item>
         <item name="mc_leftMarginBottom">0dp</item>
-        <item name="mc_middleItemLayoutGravity">start|center_vertical</item>
+        <item name="mc_middleItemLayoutGravity">center</item>
         <item name="mc_middleMarginStart">0dp</item>
         <item name="mc_middleMarginTop">0dp</item>
         <item name="mc_middleMarginBottom">0dp</item>

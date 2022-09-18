@@ -15,7 +15,7 @@ import com.master.lib.ext.setDigits
  * @author: MasterChan
  * @date: 2022-07-13 00:00
  */
-open class EditCellView @JvmOverloads constructor(
+open class EditableCellView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,

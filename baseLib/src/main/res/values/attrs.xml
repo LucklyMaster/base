@@ -243,6 +243,10 @@
         <attr name="mc_leftTextMinWidth" format="dimension" />
         <attr name="mc_middleTextMinWidth" format="dimension" />
         <attr name="mc_rightTextMinWidth" format="dimension" />
+        <!--maxLines-->
+        <attr name="mc_leftMaxLines" format="integer" />
+        <attr name="mc_middleMaxLines" format="integer" />
+        <attr name="mc_rightMaxLines" format="integer" />
         <!--text ellipsize-->
         <attr name="mc_ellipsize" />
         <!--item margin-->

@@ -3,7 +3,7 @@ package com.master.mybase.activity
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import com.master.lib.view.EditCellView
+import com.master.lib.view.EditableCellView
 import com.master.mybase.databinding.ActivityShapeViewBinding
 
 class ShapeViewActivity : MyBaseActivity<ActivityShapeViewBinding>() {
@@ -21,7 +21,7 @@ class ShapeViewActivity : MyBaseActivity<ActivityShapeViewBinding>() {
     }
 
     fun toggleEdit(view: View) {
-        val cellView = view as EditCellView
+        val cellView = view as EditableCellView
         cellView.setEditable(!cellView.isEditable)
     }
 }

@@ -8,6 +8,7 @@ import android.graphics.Paint
 import android.graphics.drawable.*
 import android.text.TextUtils
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.GravityInt
@@ -60,7 +61,9 @@ open class ItemView @JvmOverloads constructor(
             attrs, R.styleable.ItemView, defStyleAttr, defStyleRes
         )
 
-        setMiddleItemLayoutGravity(a.getInt(R.styleable.ItemView_mc_middleItemLayoutGravity, 0))
+        setMiddleItemLayoutGravity(
+            a.getInt(R.styleable.ItemView_mc_middleItemLayoutGravity, Gravity.CENTER)
+        )
         /**icon gravity**/
         if (a.hasValue(R.styleable.ItemView_mc_iconGravity)) {
             setIconGravity(a.getInt(R.styleable.ItemView_mc_iconGravity, 0))
@@ -165,6 +168,11 @@ open class ItemView @JvmOverloads constructor(
         setHintText(a, R.styleable.ItemView_mc_leftTextHint, leftItem)
         setHintText(a, R.styleable.ItemView_mc_middleTextHint, middleItem)
         setHintText(a, R.styleable.ItemView_mc_rightTextHint, rightItem)
+
+        /**maxLines**/
+        leftItem.labelView.maxLines = a.getInt(R.styleable.ItemView_mc_leftMaxLines, 1)
+        middleItem.labelView.maxLines = a.getInt(R.styleable.ItemView_mc_middleMaxLines, 1)
+        rightItem.labelView.maxLines = a.getInt(R.styleable.ItemView_mc_rightMaxLines, 1)
 
         /**text ellipsize**/
         if (a.hasValue(R.styleable.ItemView_mc_ellipsize)) {

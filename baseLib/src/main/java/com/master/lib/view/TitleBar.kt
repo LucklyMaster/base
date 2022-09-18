@@ -7,7 +7,7 @@ import com.master.lib.R
 import com.master.lib.ext.activity
 
 /**
- * TitleBar
+ * 在[ItemView]的基础上修改了布局方式，使[middleItem]居中布局
  * @author MasterChan
  * @date 2021-12-09 18:37
  */
