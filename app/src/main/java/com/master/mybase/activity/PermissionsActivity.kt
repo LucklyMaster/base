@@ -18,7 +18,7 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
         setOnViewClickListeners(this) {
             arrayOf(
                 btnStorge, btnPackage, btnAudio, btnBluetooth, btnAllFile, btnAlertWindow,
-                btnDetail, btnCamera, btnBattery
+                btnDetail, btnCamera, btnBattery, btnLocation
             )
         }
     }
@@ -128,13 +128,22 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
                     }
             }
             binding.btnBattery -> {
-                // requestPermissions(Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS) {
-                //     it.logD()
-                //     toast(if (it.isAllGranted) "success" else "failed")
-                // }
-                MPermissions.with(this).permissions(Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).request{
+                requestPermissions(Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS) {
                     it.logD()
                     toast(if (it.isAllGranted) "success" else "failed")
+                }
+            }
+            binding.btnLocation -> {
+                requestPermissions(
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) {
+                    it.logD()
+                    toast(if (it.isAllGranted) "success" else "failed")
+                    requestPermissions(Manifest.permission.ACCESS_BACKGROUND_LOCATION) {
+                        it.logD()
+                        toast(if (it.isAllGranted) "success" else "failed")
+                    }
                 }
             }
             binding.btnDetail -> {
