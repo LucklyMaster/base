@@ -1,3 +1,4 @@
+/*
 package com.master.lib.widget
 
 import android.content.Context
@@ -14,11 +15,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 
+*/
 /**
  * RecyclerView的分割线
  * @author MasterChan
  * @date 2021-12-24 13:41
- */
+ *//*
+
 open class RecyclerViewDivider2 : ItemDecoration {
 
     protected lateinit var drawable: Drawable
@@ -108,11 +111,13 @@ open class RecyclerViewDivider2 : ItemDecoration {
         }
     }
 
-    /**
+    */
+/**
      * 绘制横向的分割线
      * @param canvas Canvas
      * @param parent RecyclerView
-     */
+     *//*
+
     protected open fun drawHorizontal(canvas: Canvas, parent: RecyclerView) {
         val childSize = parent.childCount
         for (i in 0 until childSize) {
@@ -141,11 +146,13 @@ open class RecyclerViewDivider2 : ItemDecoration {
         }
     }
 
-    /**
+    */
+/**
      * 绘制竖向的分割线
      * @param canvas Canvas
      * @param parent RecyclerView
-     */
+     *//*
+
     protected open fun drawVertical(canvas: Canvas, parent: RecyclerView) {
         val childSize = parent.childCount
         for (i in 0 until childSize) {
@@ -163,12 +170,14 @@ open class RecyclerViewDivider2 : ItemDecoration {
         }
     }
 
-    /**
+    */
+/**
      * 获取当RecyclerView的layoutManager是[GridLayoutManager]或[StaggeredGridLayoutManager]
      * 时的spanCount
      * @param parent RecyclerView
      * @return Int
-     */
+     *//*
+
     protected open fun getSpanCount(parent: RecyclerView): Int {
         return when (val layoutManager = parent.layoutManager) {
             is GridLayoutManager -> layoutManager.spanCount
@@ -228,14 +237,16 @@ open class RecyclerViewDivider2 : ItemDecoration {
         }
     }
 
-    /**
+    */
+/**
      * 判断当前的item是否是最后一列
      * @param parent RecyclerView
      * @param itemPosition ItemView的位置
      * @param spanCount 一行有几列
      * @param count ItemView的数量
      * @return Boolean
-     */
+     *//*
+
     protected open fun isLastColumn(
         parent: RecyclerView, itemPosition: Int, spanCount: Int, count: Int
     ): Boolean {
@@ -278,14 +289,16 @@ open class RecyclerViewDivider2 : ItemDecoration {
         }
     }
 
-    /**
+    */
+/**
      * 判断当前的item是否是最后一行
      * @param parent RecyclerView
      * @param itemPosition ItemView的位置
      * @param spanCount 一行有几列
      * @param count ItemView的数量
      * @return Boolean
-     */
+     *//*
+
     protected open fun isLastRow(
         parent: RecyclerView, itemPosition: Int, spanCount: Int, count: Int
     ): Boolean {
@@ -327,4 +340,4 @@ open class RecyclerViewDivider2 : ItemDecoration {
             else -> false
         }
     }
-}
+}*/
