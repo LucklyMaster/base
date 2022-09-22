@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import android.view.VelocityTracker
 import android.view.View
 import android.widget.FrameLayout
+import androidx.core.animation.doOnEnd
 import androidx.core.view.NestedScrollingParent
 import androidx.core.view.ViewCompat
 import com.master.lib.R
@@ -169,7 +170,7 @@ open class SheetLayout @JvmOverloads constructor(
                 tracker!!.addMovement(event)
                 tracker!!.computeCurrentVelocity(1000)
                 val dy = event.rawY - lastY
-                smoothScroll(dy)
+                smoothScroll(SheetState.DRAGGING, dy)
                 lastY = event.rawY
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
@@ -233,17 +234,16 @@ open class SheetLayout @JvmOverloads constructor(
             return
         }
         when (state) {
-            SheetState.FOLD -> smoothScroll(maxY - y, withAnimator)
-            SheetState.DISPLAY -> smoothScroll(minY + (height - displayHeight) - y, withAnimator)
-            SheetState.EXPAND -> smoothScroll(minY - y, withAnimator)
+            SheetState.DRAGGING -> {}
+            SheetState.FOLD -> smoothScroll(state, maxY - y, withAnimator)
+            SheetState.DISPLAY -> smoothScroll(
+                state, minY + (height - displayHeight) - y, withAnimator
+            )
+            SheetState.EXPAND -> smoothScroll(state, minY - y, withAnimator)
         }
-        if (curState != state) {
-            stateChangedListeners.forEach { it.onChanged(state) }
-        }
-        curState = state
     }
 
-    protected open fun smoothScroll(dy: Float, withAnimator: Boolean = false) {
+    protected open fun smoothScroll(state: SheetState, dy: Float, withAnimator: Boolean = false) {
         isScrollUp = dy < 0
         if (withAnimator) {
             if (smoothAnimator?.isRunning == true) {
@@ -257,9 +257,19 @@ open class SheetLayout @JvmOverloads constructor(
             smoothAnimator!!.addUpdateListener {
                 y = curY + it.animatedValue as Float
             }
+            smoothAnimator!!.doOnEnd {
+                if (curState != state) {
+                    curState = state
+                    stateChangedListeners.forEach { it.onChanged(state) }
+                }
+            }
             smoothAnimator!!.start()
         } else {
             y += dy
+            if (curState != state) {
+                curState = state
+                stateChangedListeners.forEach { it.onChanged(state) }
+            }
         }
     }
 
@@ -284,11 +294,11 @@ open class SheetLayout @JvmOverloads constructor(
     override fun onNestedPreScroll(target: View, dx: Int, dy: Int, consumed: IntArray) {
         if (y > minY) {
             consumed[1] = dy
-            smoothScroll(-dy.toFloat())
+            smoothScroll(SheetState.DRAGGING, -dy.toFloat())
         }
         if (y == minY && !target.canScrollVertically(-1) && !isScrollUp) {
             consumed[1] = dy
-            smoothScroll(-dy.toFloat())
+            smoothScroll(SheetState.DRAGGING, -dy.toFloat())
         }
     }
 

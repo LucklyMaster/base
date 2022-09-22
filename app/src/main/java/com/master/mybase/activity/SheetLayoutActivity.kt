@@ -9,6 +9,7 @@ import com.master.lib.dialog.BottomSheetDialog
 import com.master.lib.enums.SheetState
 import com.master.lib.ext.Log
 import com.master.lib.ext.inflater
+import com.master.lib.ext.toast
 import com.master.lib.widget.RecyclerViewDivider
 import com.master.lib.widget.ViewHolder
 import com.master.mybase.R
@@ -43,6 +44,7 @@ class SheetLayoutActivity : BaseVBActivity<ActivitySheetLayoutBinding>() {
 
             override fun onBindViewHolder(holder: ViewHolder, position: Int) {
                 holder.setText(android.R.id.text1, position.toString())
+                holder.itemView.setOnClickListener { toast(position.toString()) }
             }
 
             override fun getItemCount(): Int {
