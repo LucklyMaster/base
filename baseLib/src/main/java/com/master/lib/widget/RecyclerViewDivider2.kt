@@ -1,4 +1,3 @@
-/*
 package com.master.lib.widget
 
 import android.content.Context
@@ -12,19 +11,17 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 
-*/
 /**
  * RecyclerView的分割线
  * @author MasterChan
  * @date 2021-12-24 13:41
- *//*
+ */
 
-open class RecyclerViewDivider2 : ItemDecoration {
+open class RecyclerViewDivider2 : RecyclerView.ItemDecoration {
 
-    protected lateinit var drawable: Drawable
+    protected var drawable: Drawable
     protected var dividerHeight = 0
     protected var orientation = 0
         private set
@@ -86,6 +83,9 @@ open class RecyclerViewDivider2 : ItemDecoration {
         val spanCount = getSpanCount(parent)
         when (orientation) {
             HORIZONTAL -> {
+                if (isFirstRow(parent, itemPosition, spanCount, childCount)) {
+
+                }
                 if (itemPosition == 0 && isIncludeFirstRow) {
                     outRect.set(0, dividerHeight, 0, dividerHeight)
                 }
@@ -111,12 +111,11 @@ open class RecyclerViewDivider2 : ItemDecoration {
         }
     }
 
-    */
-/**
+    /**
      * 绘制横向的分割线
      * @param canvas Canvas
      * @param parent RecyclerView
-     *//*
+     */
 
     protected open fun drawHorizontal(canvas: Canvas, parent: RecyclerView) {
         val childSize = parent.childCount
@@ -146,12 +145,11 @@ open class RecyclerViewDivider2 : ItemDecoration {
         }
     }
 
-    */
-/**
+    /**
      * 绘制竖向的分割线
      * @param canvas Canvas
      * @param parent RecyclerView
-     *//*
+     */
 
     protected open fun drawVertical(canvas: Canvas, parent: RecyclerView) {
         val childSize = parent.childCount
@@ -170,13 +168,12 @@ open class RecyclerViewDivider2 : ItemDecoration {
         }
     }
 
-    */
-/**
+    /**
      * 获取当RecyclerView的layoutManager是[GridLayoutManager]或[StaggeredGridLayoutManager]
      * 时的spanCount
      * @param parent RecyclerView
      * @return Int
-     *//*
+     */
 
     protected open fun getSpanCount(parent: RecyclerView): Int {
         return when (val layoutManager = parent.layoutManager) {
@@ -187,6 +184,7 @@ open class RecyclerViewDivider2 : ItemDecoration {
         }
     }
 
+    // TODO: 重写第一行第一列
     protected open fun isFirstRow(
         parent: RecyclerView,
         itemPosition: Int,
@@ -237,107 +235,87 @@ open class RecyclerViewDivider2 : ItemDecoration {
         }
     }
 
-    */
-/**
-     * 判断当前的item是否是最后一列
-     * @param parent RecyclerView
-     * @param itemPosition ItemView的位置
-     * @param spanCount 一行有几列
-     * @param count ItemView的数量
-     * @return Boolean
-     *//*
-
-    protected open fun isLastColumn(
-        parent: RecyclerView, itemPosition: Int, spanCount: Int, count: Int
-    ): Boolean {
-        var childCount = count
-        return when (val layoutManager = parent.layoutManager) {
-            is GridLayoutManager -> {
-                val orientation = layoutManager.orientation
-                if (orientation == StaggeredGridLayoutManager.VERTICAL) {
-                    (itemPosition + 1) % spanCount == 0
-                } else {
-                    if (childCount == spanCount) {
-                        true
-                    } else {
-                        childCount -= childCount % spanCount
-                        itemPosition >= childCount
-                    }
-                }
-            }
-            is StaggeredGridLayoutManager -> {
-                val orientation = layoutManager.orientation
-                if (orientation == StaggeredGridLayoutManager.VERTICAL) {
-                    (itemPosition + 1) % spanCount == 0
-                } else {
-                    if (childCount == spanCount) {
-                        true
-                    } else {
-                        childCount -= childCount % spanCount
-                        itemPosition >= childCount
-                    }
-                }
-            }
-            is LinearLayoutManager -> {
-                if (layoutManager.orientation == RecyclerView.VERTICAL) {
-                    true
-                } else {
-                    itemPosition == childCount - 1
-                }
-            }
-            else -> false
-        }
-    }
-
-    */
-/**
+    /**
      * 判断当前的item是否是最后一行
      * @param parent RecyclerView
      * @param itemPosition ItemView的位置
      * @param spanCount 一行有几列
-     * @param count ItemView的数量
+     * @param childCount ItemView的数量
      * @return Boolean
-     *//*
-
+     */
     protected open fun isLastRow(
-        parent: RecyclerView, itemPosition: Int, spanCount: Int, count: Int
+        parent: RecyclerView,
+        itemPosition: Int,
+        spanCount: Int,
+        childCount: Int
     ): Boolean {
-        var childCount = count
         return when (val layoutManager = parent.layoutManager) {
             is GridLayoutManager -> {
                 val orientation = layoutManager.orientation
                 if (orientation == GridLayoutManager.VERTICAL) {
-                    if (childCount == spanCount) {
-                        true
-                    } else {
-                        childCount -= childCount % spanCount
-                        itemPosition >= childCount
-                    }
+                    isInBottomEdge(childCount, spanCount, itemPosition)
                 } else {
-                    (itemPosition + 1) % spanCount == 0
+                    isInRightEdge(spanCount, itemPosition)
+                }
+            }
+            is StaggeredGridLayoutManager -> {
+                val orientation = layoutManager.orientation
+                if (orientation == GridLayoutManager.VERTICAL) {
+                    isInBottomEdge(childCount, spanCount, itemPosition)
+                } else {
+                    isInRightEdge(spanCount, itemPosition)
+                }
+            }
+            is LinearLayoutManager -> {
+                isInBottomEdge(childCount, spanCount, itemPosition)
+            }
+            else -> false
+        }
+    }
+
+    /**
+     * 判断当前的item是否是最后一列
+     * @param parent RecyclerView
+     * @param itemPosition ItemView的位置
+     * @param spanCount 一行有几列
+     * @param childCount ItemView的数量
+     * @return Boolean
+     */
+    protected open fun isLastColumn(
+        parent: RecyclerView, itemPosition: Int, spanCount: Int, childCount: Int
+    ): Boolean {
+        return when (val layoutManager = parent.layoutManager) {
+            is GridLayoutManager -> {
+                val orientation = layoutManager.orientation
+                if (orientation == StaggeredGridLayoutManager.VERTICAL) {
+                    isInRightEdge(spanCount, itemPosition)
+                } else {
+                    isInBottomEdge(childCount, spanCount, itemPosition)
                 }
             }
             is StaggeredGridLayoutManager -> {
                 val orientation = layoutManager.orientation
                 if (orientation == StaggeredGridLayoutManager.VERTICAL) {
-                    if (childCount == spanCount) {
-                        true
-                    } else {
-                        childCount -= childCount % spanCount
-                        itemPosition >= childCount
-                    }
+                    isInRightEdge(spanCount, itemPosition)
                 } else {
-                    (itemPosition + 1) % spanCount == 0
+                    isInBottomEdge(childCount, spanCount, itemPosition)
                 }
             }
             is LinearLayoutManager -> {
-                if (layoutManager.orientation == RecyclerView.VERTICAL) {
-                    itemPosition == childCount - 1
-                } else {
-                    true
-                }
+                isInRightEdge(spanCount, itemPosition)
             }
             else -> false
         }
     }
-}*/
+
+    private fun isInRightEdge(spanCount: Int, itemPosition: Int): Boolean {
+        return (itemPosition + 1) % spanCount == 0
+    }
+
+    private fun isInBottomEdge(childCount: Int, spanCount: Int, itemPosition: Int): Boolean {
+        //一共多少行
+        val columns = childCount / spanCount + if (childCount % spanCount > 0) 1 else 0
+        //判断当前item是否是最后一行的item
+        return itemPosition >= (columns - 1) * spanCount
+    }
+}
