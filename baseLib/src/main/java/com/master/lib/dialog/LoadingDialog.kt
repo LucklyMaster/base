@@ -1,6 +1,5 @@
 package com.master.lib.dialog
 
-import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.Drawable
@@ -17,13 +16,17 @@ import com.master.lib.ext.dp2pxi
  * @author: MasterChan
  * @date: 2022-08-04 21:30
  */
-class LoadingDialog(context: Context) : BaseDialog(context, R.layout.mc_dialog_loading) {
+class LoadingDialog : BaseDialog() {
 
     override var windowWidth = dp2pxi(160)
     override var windowHeight = dp2pxi(160)
 
     private val loadingView: ProgressBar by lazy { contentView!!.findViewById(R.id.pb_loading) }
     private val textView: TextView by lazy { contentView!!.findViewById(R.id.tv_text) }
+
+    init {
+        setContentView(R.layout.mc_dialog_loading)
+    }
 
     fun setText(@StringRes textRes: Int) = apply {
         textView.setText(textRes)

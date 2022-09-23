@@ -2,10 +2,10 @@ package com.master.mybase.activity
 
 import android.os.Bundle
 import android.view.View
-import com.master.lib.widget.MToast
 import com.master.lib.dialog.AlertDialog
 import com.master.lib.dialog.LoadingDialog
 import com.master.lib.ext.dp2pxi
+import com.master.lib.widget.MToast
 import com.master.mybase.R
 import com.master.mybase.databinding.ActivityDialogBinding
 
@@ -23,7 +23,7 @@ class DialogActivity : MyBaseActivity<ActivityDialogBinding>() {
             .setAmount(0F)
             .setContentBlur(dp2pxi(60))
             .setOnDismissListener { MToast.show("dismiss") }
-            .show()
+            .show(this)
     }
 
     fun alertDialogClick2(view: View) {
@@ -33,7 +33,7 @@ class DialogActivity : MyBaseActivity<ActivityDialogBinding>() {
             .create()
             .setAmount(0.4F)
             .setOnDismissListener { MToast.show("dismiss") }
-            .show()
+            .show(this)
     }
 
     fun alertDialogClick3(view: View) {
@@ -43,7 +43,7 @@ class DialogActivity : MyBaseActivity<ActivityDialogBinding>() {
             .setPositiveText("确认")
             .create()
             .setOnDismissListener { MToast.show("dismiss") }
-            .show()
+            .show(this)
     }
 
     fun alertDialogClick4(view: View) {
@@ -54,7 +54,7 @@ class DialogActivity : MyBaseActivity<ActivityDialogBinding>() {
             .create()
             .setHeight(dp2pxi(300))
             .setOnDismissListener { MToast.show("dismiss") }
-            .show()
+            .show(this)
     }
 
     fun alertDialogClick5(view: View) {
@@ -67,7 +67,7 @@ class DialogActivity : MyBaseActivity<ActivityDialogBinding>() {
             }
             .create()
             .setOnDismissListener { MToast.show("dismiss") }
-            .show()
+            .show(this)
     }
 
     fun alertDialogClick6(view: View) {
@@ -82,10 +82,10 @@ class DialogActivity : MyBaseActivity<ActivityDialogBinding>() {
             .create()
             .setWindowBehindBlur(dp2pxi(60))
             .setOnDismissListener { MToast.show("dismiss") }
-            .show()
+            .show(this)
     }
 
     fun alertDialogClick7(view: View) {
-        LoadingDialog(this).setText("正在加载...").show()
+        LoadingDialog().setText("正在加载...").show(this)
     }
 }

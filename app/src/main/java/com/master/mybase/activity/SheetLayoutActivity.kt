@@ -30,11 +30,12 @@ class SheetLayoutActivity : BaseVBActivity<ActivitySheetLayoutBinding>() {
             binding.btnSheetDialog.height = (binding.btnSheetDialog.height + it).toInt()
         }
         binding.btnSheetDialog.setOnClickListener {
-            BottomSheetDialog(this, R.layout.dialog_bottom_sheet).setAnimatorSpeed(4f)
+            BottomSheetDialog().setAnimatorSpeed(4f)
                 .setExpandHeightRatio(0.8f)
                 .setState(SheetState.EXPAND)
+                .setContentView(R.layout.dialog_bottom_sheet)
                 .setAmount(0.7f)
-                .show()
+                .show(this)
         }
         binding.recyclerView.addItemDecoration(RecyclerViewDivider())
         binding.recyclerView.adapter = object : RecyclerView.Adapter<ViewHolder>() {

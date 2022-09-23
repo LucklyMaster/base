@@ -60,7 +60,7 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
                             }
                             .create()
                             .setCancellable(false)
-                            .show()
+                            .show(this)
                     }
                     .addSpecialPermissionInterceptor(Manifest.permission.SYSTEM_ALERT_WINDOW) {
                         AlertDialog.Builder(context)
@@ -77,7 +77,7 @@ class PermissionsActivity : MyBaseActivity<ActivityPermissionsBinding>(), View.O
                             }
                             .create()
                             .setCancellable(false)
-                            .show()
+                            .show(this)
                     }
                     .request {
                         it.logD()

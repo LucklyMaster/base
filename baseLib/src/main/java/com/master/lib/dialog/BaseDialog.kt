@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.*
 import android.view.WindowManager.LayoutParams.FLAG_BLUR_BEHIND
 import androidx.annotation.ColorInt
+import androidx.annotation.LayoutRes
 import androidx.annotation.StyleRes
 import androidx.core.view.setPadding
 import androidx.fragment.app.DialogFragment
@@ -20,17 +21,14 @@ import com.master.lib.R
 import com.master.lib.ext.*
 
 /**
- * BaseDialog
+ * BaseDialog，[Context]未空时，调用[show]方法必须显示指定[FragmentManager]
  * @author MasterChan
  * @date 2021-12-14 14:30
  */
-open class BaseDialog @JvmOverloads constructor(
-    context: Context, dialogView: View? = null
-) : DialogFragment() {
+open class BaseDialog : DialogFragment() {
 
-    protected var contentView: View? = dialogView
+    protected var contentView: View? = null
         private set
-    protected val mActivity: FragmentActivity
     protected open var dialogTheme = 0
     protected open var windowDrawable: Drawable? = null
     protected open var windowColor = Color.WHITE
@@ -50,16 +48,6 @@ open class BaseDialog @JvmOverloads constructor(
     protected open var showListener: DialogInterface.OnShowListener? = null
     protected open var dismissListener: DialogInterface.OnDismissListener? = null
     protected open var cancelListener: DialogInterface.OnCancelListener? = null
-
-    constructor(context: Context, layoutRes: Int) : this(
-        context, LayoutInflater.from(context).inflate(layoutRes, null)
-    )
-
-    init {
-        val activityContext = context.activity
-        require(activityContext is FragmentActivity) { "the Context must be a FragmentActivity" }
-        mActivity = activityContext
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -130,6 +118,10 @@ open class BaseDialog @JvmOverloads constructor(
         window.attributes = attributes
     }
 
+    fun <T> findViewById(id: Int): T {
+        return contentView!!.findViewById(id)
+    }
+
     override fun onDismiss(dialog: android.content.DialogInterface) {
         super.onDismiss(dialog)
         dismissListener?.onDismiss(this)
@@ -142,6 +134,10 @@ open class BaseDialog @JvmOverloads constructor(
 
     override fun getTheme(): Int {
         return dialogTheme
+    }
+
+    fun setContentView(@LayoutRes layoutRes: Int) = apply {
+        setContentView(LayoutInflater.from(application).inflate(layoutRes, null))
     }
 
     fun setContentView(contentView: View?) {
@@ -240,12 +236,15 @@ open class BaseDialog @JvmOverloads constructor(
         windowElevation = elevation
     }
 
-    open fun show(tag: String? = "default") = apply {
-        show(mActivity.supportFragmentManager, tag)
+    open fun show(context: Context, tag: String? = "default") = apply {
+        val activity = context as FragmentActivity
+        show(activity.supportFragmentManager, tag)
     }
 
-    open fun showNow(tag: String? = "default") = apply {
-        showNow(mActivity.supportFragmentManager, tag)
+
+    open fun showNow(context: Context, tag: String? = "default") = apply {
+        val activity = context as FragmentActivity
+        showNow(activity.supportFragmentManager, tag)
     }
 
     override fun show(manager: FragmentManager, tag: String?) {

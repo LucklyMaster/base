@@ -57,7 +57,7 @@ open class SimpleDeniedInterceptor : OnDeniedInterceptor {
                 }
                 .create()
                 .setCanceledOnTouchOutside(false)
-                .show()
+                .show(activity)
         }
 
     protected open suspend fun onDenied(context: Context, response: PermissionResponse) {

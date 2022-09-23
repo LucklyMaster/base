@@ -5,6 +5,7 @@ import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.util.TypedValue
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -14,13 +15,13 @@ import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.master.lib.R
 import com.master.lib.dialog.AlertDialog.Companion.TYPE_ITEM
 import com.master.lib.dialog.AlertDialog.Companion.TYPE_MULTI_CHOICE
 import com.master.lib.dialog.AlertDialog.Companion.TYPE_SINGLE_CHOICE
+import com.master.lib.ext.*
 import com.master.lib.widget.RecyclerViewDivider
 import com.master.lib.widget.ViewHolder
-import com.master.lib.R
-import com.master.lib.ext.*
 
 /**
  * AlertDialog
@@ -28,20 +29,36 @@ import com.master.lib.ext.*
  * @date 2021-12-14 10:51
  */
 @Suppress("MemberVisibilityCanBePrivate")
-open class AlertDialog private constructor(context: Context) :
-    BaseDialog(context, R.layout.mc_dialog_alert) {
+open class AlertDialog : BaseDialog() {
 
-    val titleView: TextView = contentView!!.findViewById(R.id.tv_title)
-    val messageView: TextView = contentView!!.findViewById(R.id.tv_message)
-    val positiveButton: Button = contentView!!.findViewById(R.id.btn_positive)
-    val negativeButton: Button = contentView!!.findViewById(R.id.btn_negative)
-    val neutralButton: Button = contentView!!.findViewById(R.id.btn_neutral)
-    val viewContainer: FrameLayout = contentView!!.findViewById(R.id.view_container)
-    private val titleSpace: Space = contentView!!.findViewById(R.id.titleSpace)
-    private val scrollView: ScrollView = contentView!!.findViewById(R.id.scrollView)
-    private val btnContainer: LinearLayout = contentView!!.findViewById(R.id.container_btn)
-    private val btnDivider: View = contentView!!.findViewById(R.id.btnDivider)
-    private val titleDivider: View = contentView!!.findViewById(R.id.titleDivider)
+    val titleView: TextView
+    val messageView: TextView
+    val positiveButton: Button
+    val negativeButton: Button
+    val neutralButton: Button
+    val viewContainer: FrameLayout
+    private val titleSpace: Space
+    private val scrollView: ScrollView
+    private val btnContainer: LinearLayout
+    private val btnDivider: View
+    private val titleDivider: View
+
+    init {
+        setContentView(
+            LayoutInflater.from(application).inflate(R.layout.mc_dialog_alert, null)
+        )
+        titleView = findViewById(R.id.tv_title)
+        messageView = findViewById(R.id.tv_message)
+        positiveButton = findViewById(R.id.btn_positive)
+        negativeButton = findViewById(R.id.btn_negative)
+        neutralButton = findViewById(R.id.btn_neutral)
+        viewContainer = findViewById(R.id.view_container)
+        titleSpace = findViewById(R.id.titleSpace)
+        scrollView = findViewById(R.id.scrollView)
+        btnContainer = findViewById(R.id.container_btn)
+        btnDivider = findViewById(R.id.btnDivider)
+        titleDivider = findViewById(R.id.titleDivider)
+    }
 
     /**
      * dialog的button点击事件，包括[positiveButton]、[negativeButton]、[neutralButton]
@@ -500,12 +517,12 @@ open class AlertDialog private constructor(context: Context) :
         }
 
         fun create(): AlertDialog {
-            return AlertDialog(context).apply { setDialogInternal(this) }
+            return AlertDialog().apply { setDialogInternal(this) }
         }
 
         fun show(tag: String = "default"): AlertDialog {
             val dialog = create()
-            dialog.show(tag)
+            dialog.show(context, tag)
             return dialog
         }
 

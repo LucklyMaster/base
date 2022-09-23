@@ -1,6 +1,5 @@
 package com.master.lib.dialog
 
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
@@ -9,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.master.lib.R
 import com.master.lib.enums.SheetState
+import com.master.lib.ext.application
 import com.master.lib.ext.screenHeight
 import com.master.lib.ext.screenWidth
 import com.master.lib.view.SheetLayout
@@ -19,10 +19,9 @@ import com.master.lib.view.SheetLayout
  * @date: 2022-09-07 21:03
  */
 @Suppress("MemberVisibilityCanBePrivate")
-open class BottomSheetDialog(context: Context, contentView: View? = null) :
-    BaseDialog(context, contentView) {
+open class BottomSheetDialog : BaseDialog() {
 
-    override var windowWidth = context.screenWidth
+    override var windowWidth = application.screenWidth
     override var windowColor = Color.TRANSPARENT
     override var windowGravity = Gravity.BOTTOM
 
@@ -30,7 +29,7 @@ open class BottomSheetDialog(context: Context, contentView: View? = null) :
 
     var enableDrag = true
     var enableFoldModel = true
-    var expandHeight = context.screenHeight / 2
+    var expandHeight = application.screenHeight / 2
     var expandHeightRatio = 0.65f
     var displayHeight = expandHeight / 2
     var peekHeight = 0
@@ -43,10 +42,6 @@ open class BottomSheetDialog(context: Context, contentView: View? = null) :
     protected open val onFoldDismissListener = SheetLayout.OnStateChangedListener {
         if (it == SheetState.FOLD) dismiss()
     }
-
-    constructor(context: Context, layoutRes: Int) : this(
-        context, LayoutInflater.from(context).inflate(layoutRes, null)
-    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
