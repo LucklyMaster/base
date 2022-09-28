@@ -46,11 +46,6 @@ open class SheetLayout @JvmOverloads constructor(
     var expandHeight = context.screenHeight / 2
 
     /**
-     * 展开后高度相对于屏幕高度的比率，与[expandHeight]相比，优先级更高
-     */
-    var expandHeightRatio = 0.65f
-
-    /**
      * 半展开的高度
      */
     var displayHeight = expandHeight / 2
@@ -98,9 +93,6 @@ open class SheetLayout @JvmOverloads constructor(
         expandHeight = a.getDimensionPixelOffset(
             R.styleable.SheetLayout_mc_expandHeight, expandHeight
         )
-        expandHeightRatio = a.getFloat(
-            R.styleable.SheetLayout_mc_expandHeightRatio, expandHeightRatio
-        )
         displayHeight = a.getDimensionPixelOffset(
             R.styleable.SheetLayout_mc_displayHeight, displayHeight
         )
@@ -119,23 +111,11 @@ open class SheetLayout @JvmOverloads constructor(
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val realHeight = when {
-            MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.EXACTLY -> {
-                heightMeasureSpec
-            }
-            expandHeightRatio > 0 -> {
-                MeasureSpec.makeMeasureSpec(
-                    (expandHeightRatio * context.screenHeight).toInt(), MeasureSpec.EXACTLY
-                )
-            }
-            expandHeight > 0 -> {
-                MeasureSpec.makeMeasureSpec(expandHeight, MeasureSpec.EXACTLY)
-            }
-            else -> {
-                heightMeasureSpec
-            }
+        var height = heightMeasureSpec
+        if (expandHeight != 0) {
+            height = MeasureSpec.makeMeasureSpec(expandHeight, MeasureSpec.EXACTLY)
         }
-        super.onMeasure(widthMeasureSpec, realHeight)
+        super.onMeasure(widthMeasureSpec, height)
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
@@ -326,10 +306,6 @@ open class SheetLayout @JvmOverloads constructor(
 
     open fun setExpandHeight(expandHeight: Int) = apply {
         this.expandHeight = expandHeight
-    }
-
-    open fun setExpandHeightRatio(expandHeightRatio: Float) = apply {
-        this.expandHeightRatio = expandHeightRatio
     }
 
     open fun setDisplayHeight(displayHeight: Int) = apply {

@@ -31,7 +31,6 @@ class SheetLayoutActivity : BaseVBActivity<ActivitySheetLayoutBinding>() {
         }
         binding.btnSheetDialog.setOnClickListener {
             BottomSheetDialog().setAnimatorSpeed(4f)
-                .setExpandHeightRatio(0.8f)
                 .setState(SheetState.EXPAND)
                 .setContentView(R.layout.dialog_bottom_sheet)
                 .setAmount(0.7f)

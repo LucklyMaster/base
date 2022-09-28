@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import com.master.lib.R
 import com.master.lib.enums.SheetState
 import com.master.lib.ext.application
-import com.master.lib.ext.screenHeight
 import com.master.lib.ext.screenWidth
 import com.master.lib.view.SheetLayout
 
@@ -26,12 +25,12 @@ open class BottomSheetDialog : BaseDialog() {
     override var windowGravity = Gravity.BOTTOM
 
     var sheetLayout: SheetLayout? = null
+    private var layoutRes = 0
 
     var enableDrag = true
     var enableFoldModel = true
-    var expandHeight = application.screenHeight / 2
-    var expandHeightRatio = 0.65f
-    var displayHeight = expandHeight / 2
+    var expandHeight = 0
+    var displayHeight = 0
     var peekHeight = 0
     var curState = SheetState.FOLD
     var animatorSpeed = 950f / 300
@@ -52,7 +51,9 @@ open class BottomSheetDialog : BaseDialog() {
         val root = layoutInflater.inflate(R.layout.mc_layout_bottom_sheet, null) as ViewGroup
         sheetLayout = root.findViewById(R.id.sheetLayout)
         initSheetLayout()
-        if (contentView != null) {
+        if (layoutRes != 0) {
+            LayoutInflater.from(requireContext()).inflate(layoutRes, sheetLayout)
+        } else if (contentView != null) {
             sheetLayout!!.addView(contentView)
         }
         setContentView(root)
@@ -70,7 +71,6 @@ open class BottomSheetDialog : BaseDialog() {
             .setPeekHeight(peekHeight)
             .setDisplayHeight(displayHeight)
             .setExpandHeight(expandHeight)
-            .setExpandHeightRatio(expandHeightRatio)
             .setAnimatorSpeed(animatorSpeed)
             .addOnStateChangedListener(onFoldDismissListener)
         if (fromBottomWithAnimator) {
@@ -80,6 +80,10 @@ open class BottomSheetDialog : BaseDialog() {
         }
         onStateChangedListener?.let { sheetLayout!!.addOnStateChangedListener(it) }
         onScrollListener?.let { sheetLayout!!.addOnScrollListener(it) }
+    }
+
+    override fun setContentView(layoutRes: Int) = apply {
+        this.layoutRes = layoutRes
     }
 
     open fun setState(state: SheetState) = apply {
@@ -92,10 +96,6 @@ open class BottomSheetDialog : BaseDialog() {
 
     open fun setExpandHeight(expandHeight: Int) = apply {
         this.expandHeight = expandHeight
-    }
-
-    open fun setExpandHeightRatio(expandHeightRatio: Float) = apply {
-        this.expandHeightRatio = expandHeightRatio
     }
 
     open fun setDisplayHeight(displayHeight: Int) = apply {

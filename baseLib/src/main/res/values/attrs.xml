@@ -339,7 +339,6 @@
         <attr name="mc_enableFoldModel" format="boolean" />
         <attr name="mc_expandHeight" format="dimension" />
         <attr name="mc_displayHeight" format="dimension" />
-        <attr name="mc_expandHeightRatio" format="float" />
         <attr name="mc_peekHeight" format="dimension" />
         <attr name="mc_animatorSpeed" format="float" />
         <attr name="mc_sheetState" format="flags">

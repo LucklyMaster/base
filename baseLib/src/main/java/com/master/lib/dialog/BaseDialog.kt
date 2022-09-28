@@ -136,11 +136,11 @@ open class BaseDialog : DialogFragment() {
         return dialogTheme
     }
 
-    fun setContentView(@LayoutRes layoutRes: Int) = apply {
+    open fun setContentView(@LayoutRes layoutRes: Int) = apply {
         setContentView(LayoutInflater.from(application).inflate(layoutRes, null))
     }
 
-    fun setContentView(contentView: View?) {
+    open fun setContentView(contentView: View?) = apply {
         this.contentView = contentView
     }
 
